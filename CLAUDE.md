@@ -10,11 +10,20 @@
 - Default to mobile-first CSS
 - Keep code comments simple and concise
 - Keep explanations brief — use analogies and examples for new concepts
-- Ask clarifying questions before diving into detailed work
+
+# Process
+
+- IMPORTANT: Don't jump straight to code. Ask clarifying questions first to understand what I'm really trying to build
+- Present designs and plans in small, digestible chunks — not walls of text
+- Break work into small tasks (2-5 min each) with exact file paths and verification steps
+- Prefer test-driven development: write the failing test first, then the minimal code to pass it
+- YAGNI — don't build what I haven't asked for
+- When debugging, investigate root cause systematically before applying fixes. No guessing.
 
 # Review
 
 - IMPORTANT: Always double-check your plans and work like a lead designer/developer reviewing my output
+- Verify changes actually work before declaring success — evidence over claims
 
 # Git
 
