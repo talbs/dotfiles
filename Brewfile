@@ -1,3 +1,4 @@
+tap "oven-sh/bun"
 # Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
 # GitHub command-line tool
@@ -14,5 +15,7 @@ brew "jq"
 brew "lazygit"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
+brew "oven-sh/bun/bun"
 # Command-line interface for 1Password
 cask "1password-cli"
