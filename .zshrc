@@ -1,0 +1,27 @@
+# Path
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+# Oh My Zsh
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="robbyrussell"
+DISABLE_MAGIC_FUNCTIONS="true"
+DISABLE_AUTO_TITLE="true"
+plugins=(git macos web-search brew github zsh-syntax-highlighting zsh-autosuggestions)
+source $ZSH/oh-my-zsh.sh
+
+# Tools
+eval "$(mise activate zsh)"
+eval "$(atuin init zsh)"
+
+# Editor
+export EDITOR='cursor'
+export VISUAL='cursor'
+
+# GPG
+export GPG_TTY=$(tty)
+
+# Aliases
+alias lg='lazygit'
+alias ll='ls -lFh'
+alias la='ls -lAFh'
+alias ff='find . -type f -name'
