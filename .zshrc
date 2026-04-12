@@ -25,3 +25,10 @@ alias lg='lazygit'
 alias ll='ls -lFh'
 alias la='ls -lAFh'
 alias ff='find . -type f -name'
+# pnpm
+export PNPM_HOME="/Users/brian/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
