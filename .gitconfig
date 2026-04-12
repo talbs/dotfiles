@@ -1,0 +1,26 @@
+[user]
+  name = Brian Talbot
+  email = hi.talbs@gmail.com
+
+[init]
+  defaultBranch = main
+
+[push]
+  default = current
+
+[pull]
+  rebase = true
+
+[branch]
+  autosetupmerge = true
+  autosetuprebase = always
+
+[core]
+  editor = cursor --wait
+  excludesfile = ~/.gitignore_global
+
+[color]
+  ui = true
+
+[alias]
+  gbrs = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
