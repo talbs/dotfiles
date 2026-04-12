@@ -10,6 +10,13 @@
 - Default to mobile-first CSS
 - Keep code comments simple and concise
 - Keep explanations brief — use analogies and examples for new concepts
+- Code first, explain after
+
+# Design Preferences
+
+- Clean and minimal by default
+- System font stacks as fallbacks; favor lesser-known alternatives over the usual open source standards (Inter, Roboto, etc.)
+- Library and framework choices vary by project — ask, don't assume
 
 # Process
 
