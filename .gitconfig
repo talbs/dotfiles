@@ -1,6 +1,7 @@
 [user]
   name = Brian Talbot
   email = hi.talbs@gmail.com
+	signingkey = /Users/brian/.ssh/id_ed25519_github
 
 [init]
   defaultBranch = main
@@ -24,3 +25,7 @@
 
 [alias]
   gbrs = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
+[gpg]
+	format = ssh
+[commit]
+	gpgsign = true
