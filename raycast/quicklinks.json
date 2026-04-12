@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Google Search",
+    "link": "https://www.google.com/search?q={Query}",
+    "alias": "gg"
+  },
+  {
+    "name": "GitHub Search",
+    "link": "https://github.com/search?q={Query}&type=repositories",
+    "alias": "gh"
+  },
+  {
+    "name": "MDN Docs",
+    "link": "https://developer.mozilla.org/en-US/search?q={Query}",
+    "alias": "mdn"
+  },
+  {
+    "name": "Can I Use",
+    "link": "https://caniuse.com/?search={Query}",
+    "alias": "ciu"
+  },
+  {
+    "name": "npm Search",
+    "link": "https://www.npmjs.com/search?q={Query}",
+    "alias": "npm"
+  },
+  {
+    "name": "Stack Overflow",
+    "link": "https://stackoverflow.com/search?q={Query}",
+    "alias": "so"
+  },
+  {
+    "name": "My GitHub",
+    "link": "https://github.com/talbs",
+    "alias": "ghme"
+  },
+  {
+    "name": "Localhost",
+    "link": "http://localhost:3000",
+    "alias": "lh"
+  },
+  {
+    "name": "Claude",
+    "link": "https://claude.ai",
+    "alias": "cc"
+  },
+  {
+    "name": "Projects",
+    "link": "~/Projects",
+    "alias": "proj"
+  },
+  {
+    "name": "Dotfiles",
+    "link": "~/.dotfiles",
+    "alias": "dot"
+  },
+  {
+    "name": "Downloads",
+    "link": "~/Downloads",
+    "alias": "dl"
+  }
+]

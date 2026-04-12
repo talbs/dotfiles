@@ -1,0 +1,62 @@
+[
+  {
+    "name": "Email",
+    "keyword": ";email",
+    "text": "hi.talbs@gmail.com"
+  },
+  {
+    "name": "HTML5 Boilerplate",
+    "keyword": ";html5",
+    "text": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\">\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n  <title>{cursor}</title>\n</head>\n<body>\n\n</body>\n</html>"
+  },
+  {
+    "name": "Meta Tags",
+    "keyword": ";meta",
+    "text": "<meta name=\"description\" content=\"{cursor}\">\n<meta property=\"og:title\" content=\"\">\n<meta property=\"og:description\" content=\"\">\n<meta property=\"og:image\" content=\"\">"
+  },
+  {
+    "name": "Lorem Ipsum",
+    "keyword": ";lorem",
+    "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+  },
+  {
+    "name": "PR Template",
+    "keyword": ";pr",
+    "text": "## Summary\n\n{cursor}\n\n## Changes\n\n- \n\n## Testing\n\n- "
+  },
+  {
+    "name": "LGTM",
+    "keyword": ";lgtm",
+    "text": "Looks good to me! 👍"
+  },
+  {
+    "name": "Thanks",
+    "keyword": ";ty",
+    "text": "Thanks so much!"
+  },
+  {
+    "name": "On My Way",
+    "keyword": ";otw",
+    "text": "On my way!"
+  },
+  {
+    "name": "You Got It Dude",
+    "keyword": ";ygid",
+    "text": "You got it, dude!"
+  },
+  {
+    "name": "Getting Gifts",
+    "keyword": ";gifts",
+    "text": "👀 good. Getting 🎁🎁🎁"
+  },
+  {
+    "name": "Stahp",
+    "keyword": ";stahp",
+    "text": "stahp"
+  },
+  {
+    "name": "Totes Magotes",
+    "keyword": ";totes",
+    "text": "totes magotes"
+  }
+]
