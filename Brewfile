@@ -9,12 +9,18 @@ brew "git"
 brew "git-lfs"
 # GNU Privacy Guard (OpenPGP)
 brew "gnupg"
+# Simple, fast alternative to find
+brew "fd"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
 # Simple terminal UI for git commands
 brew "lazygit"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
+# Fast recursive search, used by Cursor under the hood
+brew "ripgrep"
+# Display directory trees
+brew "tree"
 # Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
 brew "oven-sh/bun/bun"
 # Command-line interface for 1Password
