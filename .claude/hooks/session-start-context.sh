@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
 # SessionStart context loader.
-# Gates: cwd must be a git repo AND contain CLAUDE.md or AGENTS.md.
+# Gates: cwd must be inside a git repo whose root has CLAUDE.md or AGENTS.md.
 # Output: a markdown block with branch state, recent commits, open PRs,
 # and the most recent plan file (last 3 days). Injected via additionalContext.
 
 set -uo pipefail
 
 git rev-parse --is-inside-work-tree >/dev/null 2>&1 || exit 0
-[[ -f CLAUDE.md || -f AGENTS.md ]] || exit 0
 
 repo_root=$(git rev-parse --show-toplevel 2>/dev/null)
+[ -n "$repo_root" ] || exit 0
+[[ -f "$repo_root/CLAUDE.md" || -f "$repo_root/AGENTS.md" ]] || exit 0
+
 repo_name=$(basename "$repo_root")
 branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 dirty_count=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
@@ -27,7 +29,7 @@ fi
 plan_block=""
 plans_dir="$HOME/.claude/plans"
 if [ -d "$plans_dir" ]; then
-  recent_plan=$(find "$plans_dir" -maxdepth 1 -name '*.md' -mtime -3 2>/dev/null | head -1)
+  recent_plan=$(find "$plans_dir" -maxdepth 1 -name '*.md' -mtime -3 -print0 2>/dev/null | xargs -0 ls -t 2>/dev/null | head -1)
   if [ -n "$recent_plan" ]; then
     plan_block="- $(basename "$recent_plan") (modified $(stat -f '%Sm' -t '%Y-%m-%d %H:%M' "$recent_plan" 2>/dev/null))"
   fi
