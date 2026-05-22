@@ -31,6 +31,7 @@ link "mise/config.toml"     "$HOME/.config/mise/config.toml"
 link "CLAUDE.md"            "$HOME/.claude/CLAUDE.md"
 link "claude-settings.json" "$HOME/.claude/settings.json"
 link ".claude/hooks"        "$HOME/.claude/hooks"
+link ".claude/commands"     "$HOME/.claude/commands"
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Homebrew
