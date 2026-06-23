@@ -29,7 +29,7 @@ link ".editorconfig"        "$HOME/.editorconfig"
 link "mise/config.toml"     "$HOME/.config/mise/config.toml"
 link "CLAUDE.md"            "$HOME/.claude/CLAUDE.md"
 link "claude-settings.json" "$HOME/.claude/settings.json"
-link "cursor/settings.json" "$HOME/Library/Application Support/Cursor/User/settings.json"
+link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Homebrew
 if command -v brew &>/dev/null; then
