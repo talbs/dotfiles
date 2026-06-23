@@ -17,7 +17,7 @@ brew "jq"
 brew "lazygit"
 # Polyglot runtime manager (asdf rust clone)
 brew "mise"
-# Fast recursive search, used by Cursor under the hood
+# Fast recursive search
 brew "ripgrep"
 # Display directory trees
 brew "tree"
@@ -25,17 +25,18 @@ brew "tree"
 brew "oven-sh/bun/bun"
 # Command-line interface for 1Password
 cask "1password-cli"
+# Editor
+cask "visual-studio-code"
 vscode "aaron-bond.better-comments"
 vscode "adpyke.codesnap"
-vscode "chouzz.vscode-better-align"
+vscode "anthropic.claude-code"
 vscode "dracula-theme.theme-dracula"
 vscode "eamodio.gitlens"
 vscode "editorconfig.editorconfig"
 vscode "esbenp.prettier-vscode"
 vscode "ginfuru.better-nunjucks"
-vscode "gruntfuggly.todo-tree"
+vscode "github.copilot"
+vscode "github.copilot-chat"
 vscode "kamikillerto.vscode-colorize"
-vscode "markwylde.vscode-filesize"
 vscode "oderwat.indent-rainbow"
-vscode "shopify.theme-check-vscode"
 vscode "yzhang.markdown-all-in-one"
