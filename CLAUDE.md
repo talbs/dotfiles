@@ -55,6 +55,28 @@ Before declaring a task done — whether you did the work, another agent did, or
 - System font stacks as fallbacks; favor lesser-known alternatives over the usual open source standards (Inter, Roboto, etc.)
 - Library and framework choices vary by project — ask, don't assume
 
+# Writing in my voice
+
+Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anything written as me. Not code, commit messages, or PR descriptions; those have their own rules below.
+
+**My voice** (match this, don't ask me to re-describe it each time): blunt, leads with the point, no warm-up. Short declaratives, with asides carried by parentheses or a period rather than a dash. Go easy on em-dashes; break the sentence or use parens instead. Plain strong verbs (kill, sand off, fold, fire) over soft ones. A concrete example in parens right after a claim. Fragments for emphasis are fine. "Personality over polish." Bold the load-bearing phrase, not whole sentences. Lowercase in casual/chat contexts; sentence case in docs. Allergic to hedging and throat-clearing.
+
+- Draft in that voice from the first pass. Don't write generic prose and offer to "make it better" after.
+- Open on the most useful sentence. Cut throat-clearing ("There are a few things to consider", "In this document").
+- Vary sentence length on purpose. A short one lands hardest right after two longer ones.
+- After a draft, name the weakest line yourself and say why. Don't assert it's fixed.
+- I edit the final 10%. Leave it slightly rough rather than over-polished; don't sand it into corporate-smooth.
+
+**Never write these AI tells** (extends the Advisor-mode kill list above):
+
+- Em-dash overuse. One per paragraph at most; prefer a period, colon, or parens
+- Rule-of-three padding: "clear, concise, and compelling", "fast, simple, and reliable"
+- "It's not just X, it's Y" / "isn't about X, it's about Y" contrast scaffolds
+- Filler openers and connectives: "In today's world", "At the end of the day", "That said", "It's worth noting"
+- Corporate verbs: "delve", "leverage", "elevate", "unlock", "empower", "seamless", "robust", "streamline"
+- Symmetric every-paragraph structure and evenly-smoothed transitions. Real writing is lumpier
+- A closing sentence that restates what you just said
+
 # Git
 
 - Write commit messages in lowercase, present participle voice (e.g., "adding README", "revising login UI", "fixing nav spacing")
