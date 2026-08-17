@@ -30,12 +30,13 @@ Personal development environment configuration for macOS.
 | File                   | Description                                                          |
 | ---------------------- | -------------------------------------------------------------------- |
 | `install.sh`           | One-command setup — symlinks configs, runs Brew bundle               |
+| `prune-extensions.sh`  | Removes VS Code extensions not in the Brewfile (dry-run by default)  |
 | `.gitconfig`           | Git preferences (rebase, aliases, VS Code as editor, rerere)         |
 | `.gitignore_global`    | Global gitignore for macOS, editors, `.warp/`, `.claude/`            |
 | `.zshrc`               | Plain zsh for Warp — mise, atuin, completions, plugins, aliases      |
 | `.prettierrc`          | Global Prettier formatting rules                                     |
 | `.editorconfig`        | Universal editor defaults                                            |
-| `Brewfile`             | Homebrew packages, CLI tools (fd, ripgrep, tree), VS Code exts       |
+| `Brewfile`             | Homebrew packages, CLI tools, and the canonical VS Code extension list |
 | `CLAUDE.md`            | Global preferences for Claude Code                                   |
 | `claude-settings.json` | Claude Code settings — wires hooks, plugins, preferences             |
 | `.claude/hooks/`       | Claude Code hook scripts (safety guard, session context, formatters) |
