@@ -17,7 +17,7 @@
   autosetuprebase = always
 
 [core]
-  editor = cursor --wait
+  editor = code --wait
   excludesfile = ~/.gitignore_global
 
 [color]

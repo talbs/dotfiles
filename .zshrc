@@ -14,8 +14,8 @@ eval "$(mise activate zsh)"
 eval "$(atuin init zsh)"
 
 # Editor
-export EDITOR='cursor'
-export VISUAL='cursor'
+export EDITOR='code'
+export VISUAL='code'
 
 # GPG
 export GPG_TTY=$(tty)
