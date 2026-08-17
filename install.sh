@@ -14,7 +14,8 @@ link() {
     echo "  backing up $dst -> $dst.backup"
     mv "$dst" "$dst.backup"
   fi
-  ln -sf "$src" "$dst"
+  # -n so re-runs replace a directory symlink instead of nesting inside it
+  ln -sfn "$src" "$dst"
   echo "  $dst -> $src"
 }
 
@@ -29,6 +30,7 @@ link ".editorconfig"        "$HOME/.editorconfig"
 link "mise/config.toml"     "$HOME/.config/mise/config.toml"
 link "CLAUDE.md"            "$HOME/.claude/CLAUDE.md"
 link "claude-settings.json" "$HOME/.claude/settings.json"
+link ".claude/hooks"        "$HOME/.claude/hooks"
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Homebrew
