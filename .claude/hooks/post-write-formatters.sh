@@ -53,7 +53,8 @@ case "$ext" in
       (cd "$mix_root" && mix format "$file") >/dev/null 2>&1 || true
     fi
     ;;
-  js|jsx|mjs|cjs|ts|tsx|mts|cts|css|scss|less|html|vue|svelte|json|jsonc|json5|md|markdown|mdx|yaml|yml|graphql|gql)
+  # .njk and .liquid are absent on purpose — prettier needs plugins for those.
+  js|jsx|mjs|cjs|ts|tsx|mts|cts|css|scss|less|html|hbs|vue|svelte|json|jsonc|json5|md|markdown|mdx|yaml|yml|graphql|gql)
     run_prettier "$file"
     ;;
 esac
