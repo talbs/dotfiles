@@ -1,6 +1,10 @@
 tap "oven-sh/bun"
 # Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
+# Fish-like fast/unobtrusive autosuggestions for zsh
+brew "zsh-autosuggestions"
+# Fish shell like syntax highlighting for zsh
+brew "zsh-syntax-highlighting"
 # GitHub command-line tool
 brew "gh"
 # Distributed revision control system
