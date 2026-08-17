@@ -48,8 +48,8 @@ Personal development environment configuration for macOS.
 | Step | Command / Action                                           |
 | ---- | ---------------------------------------------------------- |
 | 1    | Install [Homebrew](https://brew.sh)                        |
-| 2    | `git clone git@github.com:talbs/dotfiles.git ~/.dotfiles`  |
-| 3    | `cd ~/.dotfiles && ./install.sh`                           |
+| 2    | `git clone git@github.com:talbs/dotfiles.git ~/Projects/talbs/dotfiles` |
+| 3    | `cd ~/Projects/talbs/dotfiles && ./install.sh`             |
 | 4    | Sign into Copilot and the Claude Code extension in VS Code |
 | 5    | Import Raycast snippets and quicklinks from `raycast/`     |
 
