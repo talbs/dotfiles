@@ -40,7 +40,7 @@ Before declaring a task done — whether you did the work, another agent did, or
 
 # Coding preferences
 
-- Use pnpm, not npm
+- Match the package manager to the repo's lockfile — npm across Font Awesome and Web Awesome
 - Soft tabs, two space indents
 - Prefer semantic HTML
 - Default to mobile-first CSS
