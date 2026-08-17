@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # PostToolUse Write|Edit hook.
 # Routes by extension:
-#   .ex/.exs/.heex → mix format (if mix.exs found up the tree)
-#   *              → prettier (preserves prior behavior, handles filenames with spaces)
+#   .ex/.exs/.heex → mix format, run from the mix project root
+#   web formats    → prettier
+# Anything else exits without work — this runs on every Write and Edit, so an
+# unmatched extension must not cost a process spawn.
 
 set -uo pipefail
 
@@ -26,9 +28,22 @@ find_up() {
 
 run_prettier() {
   local target="$1"
-  if command -v npx >/dev/null 2>&1; then
-    npx prettier --write "$target" >/dev/null 2>&1 || true
+  local pkg_root
+  local -a bin=()
+
+  pkg_root=$(find_up package.json)
+  if [ -n "$pkg_root" ] && [ -x "$pkg_root/node_modules/.bin/prettier" ]; then
+    bin=("$pkg_root/node_modules/.bin/prettier")
+  elif command -v prettier >/dev/null 2>&1; then
+    bin=(prettier)
+  elif command -v npx >/dev/null 2>&1; then
+    # --no-install so a missing prettier fails fast instead of downloading one
+    bin=(npx --no-install prettier)
+  else
+    return 0
   fi
+
+  "${bin[@]}" --write "$target" >/dev/null 2>&1 || true
 }
 
 case "$ext" in
@@ -38,7 +53,7 @@ case "$ext" in
       (cd "$mix_root" && mix format "$file") >/dev/null 2>&1 || true
     fi
     ;;
-  *)
+  js|jsx|mjs|cjs|ts|tsx|mts|cts|css|scss|less|html|vue|svelte|json|jsonc|json5|md|markdown|mdx|yaml|yml|graphql|gql)
     run_prettier "$file"
     ;;
 esac

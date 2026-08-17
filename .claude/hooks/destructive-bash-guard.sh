@@ -23,6 +23,11 @@ patterns=(
   'kubectl[[:space:]]+delete'
   'docker[[:space:]]+system[[:space:]]+prune'
   'sudo[[:space:]]+rm[[:space:]]'
+  # Project wrappers hide their damage behind a flag, so match on the flag.
+  # devenv: -X purge and -R reset-search are both documented as irreversible.
+  '\./dev[[:space:]][^|;&]*(--purge|--destroy-vm|--destroy-project|--reset-search|--reset-db|--prune)'
+  '\./dev[[:space:]][^|;&]*-(X|D|R|P)([[:space:]]|$)'
+  '(\./)?bin/reset(-db)?([[:space:]]|$)'
 )
 
 joined=$(IFS='|'; echo "${patterns[*]}")
