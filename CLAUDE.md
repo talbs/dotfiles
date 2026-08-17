@@ -1,6 +1,6 @@
 # About Me
 
-Claude Code reads this file globally. Cursor does not — it uses `~/.cursor/rules/` instead (see `work-profile.mdc`).
+Claude Code reads this file globally.
 
 - Product designer who codes, primarily in HTML, CSS, and templating languages
 
