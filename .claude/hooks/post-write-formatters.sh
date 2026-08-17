@@ -33,8 +33,9 @@ run_prettier() {
 
 case "$ext" in
   ex|exs|heex)
-    if find_up mix.exs >/dev/null && command -v mix >/dev/null 2>&1; then
-      (cd "$file_dir" && mix format "$file") >/dev/null 2>&1 || true
+    mix_root=$(find_up mix.exs)
+    if [ -n "$mix_root" ] && command -v mix >/dev/null 2>&1; then
+      (cd "$mix_root" && mix format "$file") >/dev/null 2>&1 || true
     fi
     ;;
   *)

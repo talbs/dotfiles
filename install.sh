@@ -14,7 +14,8 @@ link() {
     echo "  backing up $dst -> $dst.backup"
     mv "$dst" "$dst.backup"
   fi
-  ln -sf "$src" "$dst"
+  # -n so re-runs replace a directory symlink instead of nesting inside it
+  ln -sfn "$src" "$dst"
   echo "  $dst -> $src"
 }
 
