@@ -32,7 +32,7 @@ Personal development environment configuration for macOS.
 | `install.sh`           | One-command setup — symlinks configs, runs Brew bundle               |
 | `.gitconfig`           | Git preferences (rebase, aliases, VS Code as editor, rerere)         |
 | `.gitignore_global`    | Global gitignore for macOS, editors, `.warp/`, `.claude/`            |
-| `.zshrc`               | Oh My Zsh config, trimmed for Warp (mise, atuin, aliases)            |
+| `.zshrc`               | Plain zsh for Warp — mise, atuin, completions, plugins, aliases      |
 | `.prettierrc`          | Global Prettier formatting rules                                     |
 | `.editorconfig`        | Universal editor defaults                                            |
 | `Brewfile`             | Homebrew packages, CLI tools (fd, ripgrep, tree), VS Code exts       |
