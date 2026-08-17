@@ -347,13 +347,21 @@ Most of a machine setup is parallel. This part is not.
 3. **1Password + CLI**, signed in. Enable the SSH agent for auth keys.
 4. **SSH key** — generate ed25519 **at `~/.ssh/id_ed25519`**, the exact path `git/gitconfig` expects. Store it in 1Password. Test with `ssh -T git@github.com`.
 5. **Register the same key twice on GitHub** — once as an Authentication key, once as a **Signing** key. Two separate entries in Settings → SSH and GPG keys, one public key. Skipping the second means commits sign locally but never show Verified.
-6. **Clone dotfiles** to `~/Projects/talbs/dotfiles`, run `./install.sh work --dry-run`, read the output, then `./install.sh work`.
-7. **Open Warp**, confirm mise activation and atuin history in a fresh session.
-8. **mise** — `mise install`, then verify `node --version` reports 24.
-9. **Clone the JS repos.** In `webawesome-app`, confirm mise auto-switches to 22.13.0, then `npm install && npm start`. This is the first real proof the machine works.
-10. **devenv last** — clone `FortAwesome/devenv`, then `./dev -v`. Budget hours. It pulls a lot of images.
+6. **Test the key before cloning anything.** Nothing is set up yet, so pass the config inline and throw the repo away afterwards:
 
-**Step 10 depends on OrbStack already being on PATH from step 6.** This is the highest-stakes ordering in the document; see Hazards.
+   ```bash
+   D=$(mktemp -d) && git -C "$D" init -q && GIT_CONFIG_GLOBAL=/dev/null git -C "$D" -c user.name="Brian Talbot" -c user.email="hi.talbs@gmail.com" -c gpg.format=ssh -c user.signingkey="$HOME/.ssh/id_ed25519.pub" -c commit.gpgsign=true commit -q --allow-empty -m "signing test" && { git -C "$D" cat-file commit HEAD | grep -q "BEGIN SSH SIGNATURE" && echo "signing works"; }; rm -rf "$D"
+   ```
+
+   Check for the signature with `grep`, not `head` — `gpgsig` is the fourth header line at the earliest, after `tree`, `author`, and `committer`.
+
+7. **Clone dotfiles** to `~/Projects/talbs/dotfiles`, run `./install.sh work --dry-run`, read the output, then `./install.sh work`. Re-run the signing check here without the inline flags — that is what tests `git/gitconfig` itself.
+8. **Open Warp**, confirm mise activation and atuin history in a fresh session.
+9. **mise** — `mise install`, then verify `node --version` reports 24.
+10. **Clone the JS repos.** In `webawesome-app`, confirm mise auto-switches to 22.13.0, then `npm install && npm start`. This is the first real proof the machine works.
+11. **devenv last** — clone `FortAwesome/devenv`, then `./dev -v`. Budget hours. It pulls a lot of images.
+
+**Step 11 depends on OrbStack already being on PATH from step 7.** This is the highest-stakes ordering in the document; see Hazards.
 
 ## Hazards
 
@@ -365,7 +373,7 @@ The current machine has the tap from before that policy landed, so it still work
 
 **devenv will install Docker Desktop if you let it.** `devenv-prereqs.sh` calls `install-docker.sh` when `command -v docker` fails *or* reports below `DOCKER_VERSION=26.0.0` from `versions.conf`. That script `curl`s a ~700MB DMG and `sudo cp`s Docker.app into `/Applications` — which is how Docker.app got onto the current machine. OrbStack's docker CLI reports 29.4.0, so the check passes and the installer never fires. **Install OrbStack before running `./dev`.**
 
-**devenv cannot be dry-run in a VM or container.** `install-docker.sh` calls `check-virtualization.sh` and hard-exits on detection. Step 10 can only be validated on real hardware.
+**devenv cannot be dry-run in a VM or container.** `install-docker.sh` calls `check-virtualization.sh` and hard-exits on detection. Step 11 can only be validated on real hardware.
 
 **OrbStack is not brew-managed on the current machine.** It was installed by hand, which is why `brew list --cask` never showed it. `Brewfile.work` fixes that going forward.
 
