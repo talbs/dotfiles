@@ -11,8 +11,6 @@ brew "gh"
 brew "git"
 # Git extension for versioning large files
 brew "git-lfs"
-# GNU Privacy Guard (OpenPGP)
-brew "gnupg"
 # Simple, fast alternative to find
 brew "fd"
 # Lightweight and flexible command-line JSON processor

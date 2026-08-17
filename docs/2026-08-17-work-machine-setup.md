@@ -9,34 +9,42 @@ The repo currently assumes one personal machine. It grows a second profile inste
 
 ## Decisions
 
-| Area | Decision | Why |
-| --- | --- | --- |
-| Runtime manager | mise, replacing asdf | asdf 0.14 here is the shell-script era. mise activates from `.tool-versions` automatically, which matters because runtime switching never appears in 4,669 commands of shell history — it should be invisible. |
-| Terminal | Warp | Staying put. Already in daily use, and its blocks and command history are established workflow habit. Switching buys nothing the current setup lacks, and costs a migration plus new config to maintain. |
-| Shell | plain zsh + atuin, no prompt framework | oh-my-zsh's git plugin ships 169 aliases. Measured usage of `gst`/`gco`/`gp`/`ga`/`gcm`/`gd`/`gl`: zero. Workflow is `lazygit` (787 uses) and raw `git` (403). The framework is pure startup cost. No starship either — Warp renders its own prompt, so a second prompt renderer is redundant work at every shell start. |
-| Editor | VS Code | Cursor is retired on both machines, not just work. Claude Code becomes the primary AI coding surface. |
-| Xcode | Command Line Tools only | Full Xcode is ~15GB and nothing here needs it. |
-| Container runtime | OrbStack, no Docker Desktop | Already proven — the current machine runs devenv on OrbStack today. |
-| Virtualization | Vagrant via the plain `vagrant` cask | `hashicorp/tap` is now flagged Untrusted by Homebrew and refuses to load. See Hazards. |
-| Git identity | `includeIf` by directory | Fixes both machines with one file. Work identity applies inside FA and Shoelace checkouts regardless of which Mac they sit on. |
-| Commit signing | New GPG key, work-only | Chosen. See Open decisions — the repo's `.gitconfig` already disagrees. |
-| Apps | Minimum viable, add on demand | Only what blocks day-one work gets installed. Everything else waits until first reach. |
-| Node package manager | npm | Every JS repo in play ships `package-lock.json`. Measured: npm 580, pnpm 0, bun 0, yarn 0. |
+| Area                 | Decision                                | Why                                                                                                                                                                                                                                                                                                     |
+| -------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Runtime manager      | mise, replacing asdf                    | asdf 0.14 here is the shell-script era. mise activates from `.tool-versions` automatically, which matters because runtime switching never appears in 4,669 commands of shell history — it should be invisible.                                                                                          |
+| Terminal             | Warp                                    | Staying put. Already in daily use, and its blocks and command history are established workflow habit. Switching buys nothing the current setup lacks, and costs a migration plus new config to maintain.                                                                                                |
+| Shell                | plain zsh + atuin, no prompt framework  | oh-my-zsh's git plugin ships 169 aliases. Measured usage of `gst`/`gco`/`gp`/`ga`/`gcm`/`gd`/`gl`: zero. Workflow is `lazygit` (787 uses) and raw `git` (403). The framework is pure startup cost. No starship either — Warp renders its own prompt, so a second prompt renderer is redundant work.       |
+| Editor               | VS Code                                 | Cursor is retired on both machines, not just work. Claude Code becomes the primary AI coding surface.                                                                                                                                                                                                   |
+| Xcode                | Command Line Tools only                 | Full Xcode is ~15GB and nothing here needs it.                                                                                                                                                                                                                                                          |
+| Container runtime    | OrbStack, no Docker Desktop             | Already proven — the current machine runs devenv on OrbStack today.                                                                                                                                                                                                                                     |
+| Virtualization       | Vagrant via the plain `vagrant` cask    | `hashicorp/tap` is now flagged Untrusted by Homebrew and refuses to load. See Hazards.                                                                                                                                                                                                                  |
+| Git identity         | One email on both machines              | `hi.talbs@gmail.com` everywhere, so contribution credit lands on a single GitHub account. Directory-scoped identity is dropped.                                                                                                                                                                         |
+| Commit signing       | SSH, `~/.ssh/id_ed25519.pub`            | Already the repo's decision from PR #2. No UID matching, no GPG Keychain, no key expiry.                                                                                                                                                                                                                |
+| Apps                 | Minimum viable, add on demand           | Only what blocks day-one work gets installed. Everything else waits until first reach.                                                                                                                                                                                                                  |
+| Node package manager | npm                                     | Every JS repo in play ships `package-lock.json`. Measured: npm 580, pnpm 0, bun 0, yarn 0.                                                                                                                                                                                                              |
 
-### Open decisions
+### One identity, everywhere
 
-**Commit signing conflicts with itself.** The decision above is a new GPG key. But `dotfiles/.gitconfig` in this repo already carries:
+The goal is contribution credit across every project, which is an **author email** question, not a signing one. GitHub attributes commits by matching the author email against a verified email on the account; the signature only produces the Verified badge.
 
-```
-[gpg]
-  format = ssh
-[user]
-  signingkey = /Users/brian/.ssh/id_ed25519_github
-```
+Commit history on this machine shows four identities in play:
 
-Both cannot ship. GPG keeps GPG Keychain, `pinentry-mac`, `GPG_TTY`, and key expiry; SSH signing drops all four and reuses the auth key already in 1Password. The spec below writes the GPG path because that was the call. Flipping to SSH is a two-line change in `git/identity.work` — do it before implementation, not after.
+| Email                   | Where                                                        |
+| ----------------------- | ------------------------------------------------------------ |
+| `hi.talbs@gmail.com`    | 118 in webawesome-app, 505 in fontawesome, 13 in web-awesome |
+| `brian@fortawesome.com` | 263 in fontawesome, 15 in web-awesome                        |
+| `talbs@fortawesome.com` | 43 in fontawesome                                            |
+| `brian@awesome.me`      | the new work address                                         |
 
-**pnpm in `CLAUDE.md`.** The global preferences file says "Use pnpm, not npm." In the FA and WA repos that is actively harmful — pnpm generates a competing lockfile alongside the committed `package-lock.json`. Recommend making that line project-conditional, or cutting it. Not blocking, but it will misdirect every Claude Code session on the new machine until it's fixed.
+Recent webawesome-app commits, through 2026-07-29, are all `hi.talbs@gmail.com`. That is the account credit should accrue to, so a single `user.email` applies on both machines and directory-scoped identity is dropped entirely — it was solving for per-repo emails, which is the fragmentation being eliminated.
+
+SSH signing follows from the same goal. GPG only grants Verified when the committer email matches a UID on the key, so a single identity plus GPG means maintaining UIDs; SSH signing has no such coupling, and it drops GPG Keychain, `pinentry-mac`, and key expiry. The repo already made this call in PR #2.
+
+Verified: `user.signingkey = ~/.ssh/id_ed25519.pub` with `gpg.format = ssh` produces a real `SSH SIGNATURE` block in the commit object, validating as good for `hi.talbs@gmail.com`.
+
+**Retroactive credit, worth doing separately.** Adding `brian@fortawesome.com`, `talbs@fortawesome.com`, and `brian@awesome.me` as verified emails on the GitHub account retroactively attributes the ~320 commits currently authored under them. That is an account settings change, not a dotfiles one.
+
+**Standardize the key filename.** The config references `~/.ssh/id_ed25519.pub`, so generating the new machine's key at that exact path makes the config work with no edit.
 
 ## What does not come across
 
@@ -54,7 +62,7 @@ Carried on the current machine, deliberately dropped:
 
 ## Repo structure
 
-The only genuine difference between the two machines is the Brewfile. Identity is handled by `includeIf`, and the mise config is identical. A `profiles/` tree for one file would be ceremony, so the split is additive instead: work is base plus extras, never a separate copy.
+The only genuine difference between the two machines is the Brewfile. Identity is now identical on both, and so is the mise config. A `profiles/` tree for one file would be ceremony, so the split is additive instead: work is base plus extras, never a separate copy.
 
 ```
 dotfiles/
@@ -63,9 +71,7 @@ dotfiles/
   Brewfile.work           # + vagrant, orbstack, awscli
   Brewfile.personal       # + personal-only casks
   git/
-    gitconfig             # no user.email anywhere in it
-    identity.work         # brian@awesome.me + work signing key
-    identity.personal     # hi.talbs@gmail.com + DD06856FBC8F19D3
+    gitconfig             # one identity, both machines
     gitignore_global
   zsh/
     zshrc                 # sources the rest, nothing else
@@ -117,39 +123,23 @@ Identity is deliberately absent. It arrives via directory-scoped includes, which
   branches = for-each-ref --sort='-authordate:iso8601' --format=' %(authordate:relative)%09%(refname:short)' refs/heads
   fixup = !sh -c \"git rebase -i $(git merge-base HEAD ${1:-origin/main})\" -
 
-[includeIf "gitdir:~/Projects/FortAwesome/"]
-  path = ~/.config/git/identity.work
-[includeIf "gitdir:~/Projects/shoelace-style/"]
-  path = ~/.config/git/identity.work
-[includeIf "gitdir:~/Projects/talbs/"]
-  path = ~/.config/git/identity.personal
-```
-
-Note `origin/main` in the `fixup` alias — the current version still says `origin/master`.
-
-### git/identity.work
-
-```ini
-[user]
-  name = Brian Talbot
-  email = brian@awesome.me
-  signingkey = <new-work-gpg-key-id>
-[commit]
-  gpgsign = true
-```
-
-### git/identity.personal
-
-```ini
 [user]
   name = Brian Talbot
   email = hi.talbs@gmail.com
-  signingkey = DD06856FBC8F19D3
+  signingkey = ~/.ssh/id_ed25519.pub
+[gpg]
+  format = ssh
 [commit]
   gpgsign = true
 ```
 
-This one matters on the *current* machine too. It is signing FA commits as `hi.talbs@gmail.com` today, and it will still hold `FortAwesome/` checkouts after it becomes personal.
+Two things to know about that block.
+
+`signingkey` points at the **public** key and uses `~`, not an absolute path. The version currently on `main` says `/Users/brian/.ssh/id_ed25519_github` — a file that does not exist. With `gpgsign = true` that is not a warning, it is a hard failure: `fatal: failed to write commit object`, and every commit aborts. Anyone running `install.sh` before this fix could not commit at all.
+
+Local verification of SSH signatures needs `gpg.ssh.allowedSignersFile`; without it `git log --show-signature` reports no signature even though one is present. GitHub's Verified badge does not depend on it, so it is optional — add it if you want `git verify-commit` to work offline.
+
+Note `origin/main` in the `fixup` alias — the current version still says `origin/master`.
 
 ### Brewfile (shared)
 
@@ -164,8 +154,6 @@ brew "git"
 brew "git-lfs"
 brew "gh"
 brew "lazygit"
-brew "gnupg"
-brew "pinentry-mac"
 
 # Runtimes
 brew "mise"
@@ -182,7 +170,7 @@ cask "1password"
 cask "1password-cli"
 ```
 
-`pinentry-mac` is here only because the GPG signing decision requires it. It leaves with a switch to SSH signing.
+No `gnupg` or `pinentry-mac` — SSH signing needs neither, and `ssh-keygen` ships with macOS.
 
 ### Brewfile.work
 
@@ -252,7 +240,6 @@ source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zs
 
 export EDITOR="code --wait"
 export VISUAL="code --wait"
-export GPG_TTY=$(tty)
 
 # 1Password CLI plugins, if configured
 [[ -f ~/.config/op/plugins.sh ]] && source ~/.config/op/plugins.sh
@@ -282,28 +269,28 @@ Takes a profile, is idempotent, and can be dry-run. The current version has neit
 
 Behaviour:
 
-1. Accept `work` or `personal` as `$1`. Exit with usage if absent — no default, because guessing wrong writes the wrong git identity.
+1. Accept `work` or `personal` as `$1`. Exit with usage if absent — no default, because the profile decides which Brewfile runs.
 2. Support `--dry-run`, printing every link and brew action without performing any.
 3. Symlink shared files, backing up any existing non-symlink to `.backup` first.
-4. Symlink `git/identity.<profile>` to `~/.config/git/identity.<profile>` — and only that one, so a work machine never carries the personal identity file.
-5. Run `brew bundle --file Brewfile`, then `brew bundle --file Brewfile.<profile>`.
-6. Be safe to re-run. Every step checks before acting.
+4. Run `brew bundle --file Brewfile`, then `brew bundle --file Brewfile.<profile>`.
+5. Be safe to re-run. Every step checks before acting.
+
+Git identity is not part of the profile — it is the same on both machines, so `git/gitconfig` carries it directly.
 
 Link map:
 
-| Source | Destination |
-| --- | --- |
-| `git/gitconfig` | `~/.gitconfig` |
-| `git/gitignore_global` | `~/.gitignore_global` |
-| `git/identity.<profile>` | `~/.config/git/identity.<profile>` |
-| `zsh/zshrc` | `~/.zshrc` |
-| `zsh/{path,aliases,tools}.zsh` | `~/.config/zsh/` |
-| `mise/config.toml` | `~/.config/mise/config.toml` |
-| `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
-| `claude/settings.json` | `~/.claude/settings.json` |
-| `vscode/settings.json` | `~/Library/Application Support/Code/User/settings.json` |
-| `editorconfig` | `~/.editorconfig` |
-| `prettierrc` | `~/.prettierrc` |
+| Source                         | Destination                                             |
+| ------------------------------ | ------------------------------------------------------- |
+| `git/gitconfig`                | `~/.gitconfig`                                          |
+| `git/gitignore_global`         | `~/.gitignore_global`                                   |
+| `zsh/zshrc`                    | `~/.zshrc`                                              |
+| `zsh/{path,aliases,tools}.zsh` | `~/.config/zsh/`                                        |
+| `mise/config.toml`             | `~/.config/mise/config.toml`                            |
+| `claude/CLAUDE.md`             | `~/.claude/CLAUDE.md`                                   |
+| `claude/settings.json`         | `~/.claude/settings.json`                               |
+| `vscode/settings.json`         | `~/Library/Application Support/Code/User/settings.json` |
+| `editorconfig`                 | `~/.editorconfig`                                       |
+| `prettierrc`                   | `~/.prettierrc`                                         |
 
 Note the VS Code destination — `Code/User/`, not `Cursor/User/` as the current script has it.
 
@@ -311,16 +298,16 @@ Note the VS Code destination — `Code/User/`, not `Cursor/User/` as the current
 
 The restructure moves existing files rather than rewriting them. Use `git mv` so history follows.
 
-| Now | Becomes |
-| --- | --- |
-| `.gitconfig` | `git/gitconfig`, with identity stripped out |
-| `.gitignore_global` | `git/gitignore_global` |
-| `.zshrc` | split into `zsh/{zshrc,path,aliases,tools}.zsh` |
-| `.editorconfig` | `editorconfig` |
-| `.prettierrc` | `prettierrc` |
-| `CLAUDE.md` | `claude/CLAUDE.md` |
-| `claude-settings.json` | `claude/settings.json` |
-| `Brewfile` | `Brewfile` + `Brewfile.work`, split |
+| Now                    | Becomes                                         |
+| ---------------------- | ----------------------------------------------- |
+| `.gitconfig`           | `git/gitconfig`, signing key path corrected     |
+| `.gitignore_global`    | `git/gitignore_global`                          |
+| `.zshrc`               | split into `zsh/{zshrc,path,aliases,tools}.zsh` |
+| `.editorconfig`        | `editorconfig`                                  |
+| `.prettierrc`          | `prettierrc`                                    |
+| `CLAUDE.md`            | `claude/CLAUDE.md`                              |
+| `claude-settings.json` | `claude/settings.json`                          |
+| `Brewfile`             | `Brewfile` + `Brewfile.work`, split             |
 
 Dropping the leading dot on `editorconfig` and `prettierrc` keeps every source file visible in the repo while the symlink restores the dot at the destination. The same pattern already applies to `git/` and `zsh/`.
 
@@ -358,8 +345,8 @@ Most of a machine setup is parallel. This part is not.
 1. **Xcode Command Line Tools** — `xcode-select --install`. Nothing else installs before this.
 2. **Homebrew** — from brew.sh.
 3. **1Password + CLI**, signed in. Enable the SSH agent for auth keys.
-4. **SSH auth key** — generate ed25519, store in 1Password, add to GitHub. Test with `ssh -T git@github.com`.
-5. **New work GPG key** — generate, upload the public key to GitHub, record the key ID in `git/identity.work`.
+4. **SSH key** — generate ed25519 **at `~/.ssh/id_ed25519`**, the exact path `git/gitconfig` expects. Store it in 1Password. Test with `ssh -T git@github.com`.
+5. **Register the same key twice on GitHub** — once as an Authentication key, once as a **Signing** key. Two separate entries in Settings → SSH and GPG keys, one public key. Skipping the second means commits sign locally but never show Verified.
 6. **Clone dotfiles** to `~/Projects/talbs/dotfiles`, run `./install.sh work --dry-run`, read the output, then `./install.sh work`.
 7. **Open Warp**, confirm mise activation and atuin history in a fresh session.
 8. **mise** — `mise install`, then verify `node --version` reports 24.
@@ -396,7 +383,7 @@ Test in a throwaway macOS user account on the current machine:
 2. Log in as that user. Homebrew is shared at `/opt/homebrew`, but the home directory is empty — which is exactly the condition being tested.
 3. Clone the repo, run `./install.sh work --dry-run`, read every line.
 4. Run `./install.sh work` for real. Fix what breaks, commit, re-run until a cold run is clean.
-5. Verify: Warp opens a clean zsh session, `mise doctor` is clean, `git config user.email` is empty at `~` and `brian@awesome.me` inside a `~/Projects/FortAwesome/` checkout.
+5. Verify: Warp opens a clean zsh session, `mise doctor` is clean, and `git config user.email` returns `hi.talbs@gmail.com` everywhere.
 6. Log out, delete the account.
 
 This exercises real Homebrew, real casks, and real macOS defaults. It cannot validate devenv — that needs the virtualization check to pass — but devenv self-installs its own prerequisites anyway, so it is the part least in need of rehearsal.
@@ -415,8 +402,9 @@ Already dead, install nowhere: Fig, FontExplorer X Pro, Hyper, Thaw, Tunnelblick
 
 The machine is done when all of these are true:
 
-- `git config user.email` returns nothing at `~`, `brian@awesome.me` inside `~/Projects/FortAwesome/`, and `hi.talbs@gmail.com` inside `~/Projects/talbs/`.
-- A commit in an FA repo shows Verified on GitHub.
+- `git config user.email` returns `hi.talbs@gmail.com` in every repo, on both machines.
+- A test commit succeeds and `git cat-file commit HEAD` contains an `SSH SIGNATURE` block.
+- A commit in an FA repo shows Verified on GitHub and appears on the `talbs` contribution graph.
 - `webawesome-app` starts on Node 22.13.0 without a version manager command being typed.
 - `./dev -v` brings up devenv and `https://fa.test:4443` loads.
 - `docker context show` returns `orbstack`, and `/Applications/Docker.app` does not exist.
