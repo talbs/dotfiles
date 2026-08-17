@@ -1,4 +1,3 @@
-tap "oven-sh/bun"
 # Improved shell history for zsh, bash, fish and nushell
 brew "atuin"
 # Fish-like fast/unobtrusive autosuggestions for zsh
@@ -23,8 +22,6 @@ brew "mise"
 brew "ripgrep"
 # Display directory trees
 brew "tree"
-# Incredibly fast JavaScript runtime, bundler, transpiler and package manager - all in one.
-brew "oven-sh/bun/bun"
 # Command-line interface for 1Password
 cask "1password-cli"
 # Editor
