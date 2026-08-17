@@ -21,9 +21,6 @@ source "$(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.z
 export EDITOR='code'
 export VISUAL='code'
 
-# GPG
-export GPG_TTY=$(tty)
-
 # Aliases
 alias lg='lazygit'
 alias ll='ls -lFh'
