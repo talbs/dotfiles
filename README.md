@@ -40,7 +40,7 @@ Personal development environment configuration for macOS.
 | `claude-settings.json` | Claude Code settings — wires hooks, plugins, preferences             |
 | `.claude/hooks/`       | Claude Code hook scripts (safety guard, session context, formatters) |
 | `vscode/settings.json` | VS Code editor settings                                              |
-| `mise/config.toml`     | Global tool versions (Node, pnpm)                                    |
+| `mise/config.toml`     | Global tool versions (Node)                                          |
 | `raycast/`             | Importable snippets and quicklinks                                   |
 
 ## Setup on a Fresh Mac
