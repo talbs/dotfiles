@@ -12,8 +12,8 @@ The repo currently assumes one personal machine. It grows a second profile inste
 | Area | Decision | Why |
 | --- | --- | --- |
 | Runtime manager | mise, replacing asdf | asdf 0.14 here is the shell-script era. mise activates from `.tool-versions` automatically, which matters because runtime switching never appears in 4,669 commands of shell history — it should be invisible. |
-| Terminal | Ghostty | Native, GPU-accelerated, actively developed, free. Cask verified at 1.3.1. |
-| Shell | plain zsh + starship + atuin | oh-my-zsh's git plugin ships 169 aliases. Measured usage of `gst`/`gco`/`gp`/`ga`/`gcm`/`gd`/`gl`: zero. Workflow is `lazygit` (787 uses) and raw `git` (403). The framework is pure startup cost. |
+| Terminal | Warp | Staying put. Already in daily use, and its blocks and command history are established workflow habit. Switching buys nothing the current setup lacks, and costs a migration plus new config to maintain. |
+| Shell | plain zsh + atuin, no prompt framework | oh-my-zsh's git plugin ships 169 aliases. Measured usage of `gst`/`gco`/`gp`/`ga`/`gcm`/`gd`/`gl`: zero. Workflow is `lazygit` (787 uses) and raw `git` (403). The framework is pure startup cost. No starship either — Warp renders its own prompt, so a second prompt renderer is redundant work at every shell start. |
 | Editor | VS Code | Cursor is retired on both machines, not just work. Claude Code becomes the primary AI coding surface. |
 | Xcode | Command Line Tools only | Full Xcode is ~15GB and nothing here needs it. |
 | Container runtime | OrbStack, no Docker Desktop | Already proven — the current machine runs devenv on OrbStack today. |
@@ -45,7 +45,7 @@ Carried on the current machine, deliberately dropped:
 - **asdf** and its `~/.asdf/installs` tree — 23 Node versions, 10 Erlang, 10 Elixir, 8 Python.
 - **`NODEJS_CHECK_SIGNATURES=no`** — an asdf-nodejs plugin workaround. Meaningless under mise.
 - **Fig residue** — `source ~/fig-export/dotfiles/dotfile.zsh`, plus Kiro CLI pre/post blocks bracketing both `.zshrc` and `.zprofile`. Fig is a dead product.
-- **Duplicate tooling** — mcfly alongside atuin; starship, pure, and spaceship all installed with only one in use.
+- **Duplicate tooling** — mcfly alongside atuin; starship, pure, and spaceship all installed, none of them kept.
 - **`legit` git aliases** — `switch`, `sprout`, `harvest`, `unpublish`, `graft`, `sync`, `publish`. The tool is abandoned; the aliases are broken shims.
 - **FA-only aliases** — `bd`, `bdf`, `binreset`, `seed`. Measured usage: zero each.
 - **`NODE_OPTIONS="--max-old-space-size=8192"`** — likely a bandaid for a Node 16/18-era build. Left out. Add it back only if a build actually OOMs.
@@ -73,7 +73,6 @@ dotfiles/
     aliases.zsh
     tools.zsh
   mise/config.toml
-  starship.toml
   claude/
     CLAUDE.md
     settings.json
@@ -156,7 +155,6 @@ This one matters on the *current* machine too. It is signing FA commits as `hi.t
 
 ```ruby
 # Shell
-brew "starship"
 brew "atuin"
 brew "zsh-autosuggestions"
 brew "zsh-syntax-highlighting"
@@ -179,7 +177,7 @@ brew "jq"
 brew "tree"
 
 # Terminal and secrets
-cask "ghostty"
+cask "warp"
 cask "1password"
 cask "1password-cli"
 ```
@@ -244,8 +242,7 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # Completions
 autoload -Uz compinit && compinit
 
-# Prompt, runtimes, history
-eval "$(starship init zsh)"
+# Runtimes and history — Warp draws the prompt, so nothing does here
 eval "$(mise activate zsh)"
 eval "$(atuin init zsh)"
 
@@ -302,7 +299,6 @@ Link map:
 | `zsh/zshrc` | `~/.zshrc` |
 | `zsh/{path,aliases,tools}.zsh` | `~/.config/zsh/` |
 | `mise/config.toml` | `~/.config/mise/config.toml` |
-| `starship.toml` | `~/.config/starship.toml` |
 | `claude/CLAUDE.md` | `~/.claude/CLAUDE.md` |
 | `claude/settings.json` | `~/.claude/settings.json` |
 | `vscode/settings.json` | `~/Library/Application Support/Code/User/settings.json` |
@@ -328,11 +324,10 @@ The restructure moves existing files rather than rewriting them. Use `git mv` so
 
 Dropping the leading dot on `editorconfig` and `prettierrc` keeps every source file visible in the repo while the symlink restores the dot at the destination. The same pattern already applies to `git/` and `zsh/`.
 
-Three items need decisions the restructure does not make for them:
+Two items need decisions the restructure does not make for them:
 
 - **Cursor is retired entirely** — not work-only, both machines. `cursor/settings.json` moves to `vscode/settings.json` and `cursor-rules.md` is deleted; the `migrate-to-vscode` branch already does both. No profile carries Cursor, and nothing generates `~/.cursor/rules/`. Exactly one stale reference survives that no branch cleans — the `CLAUDE.md` line explaining the Cursor split, which arrives with the voice stack. (`{cursor}` in `raycast/snippets.json` is Raycast's text-cursor placeholder, and `.cursor/` in `.gitignore_global` is worth keeping to catch stray dotdirs. Neither is an editor reference.)
 - **`raycast/`** is unaddressed above because Raycast is on the add-on-demand list. Leave the directory in place and link it from the personal profile only, until Raycast earns a spot on the work machine.
-- **`starship.toml` does not exist yet.** The tree and link map assume it. It needs writing — a minimal config is fine, but it is net-new work, not a move.
 
 ### `docs/` is gitignored
 
@@ -366,7 +361,7 @@ Most of a machine setup is parallel. This part is not.
 4. **SSH auth key** — generate ed25519, store in 1Password, add to GitHub. Test with `ssh -T git@github.com`.
 5. **New work GPG key** — generate, upload the public key to GitHub, record the key ID in `git/identity.work`.
 6. **Clone dotfiles** to `~/Projects/talbs/dotfiles`, run `./install.sh work --dry-run`, read the output, then `./install.sh work`.
-7. **Open Ghostty**, confirm starship prompt, mise activation, and atuin history.
+7. **Open Warp**, confirm mise activation and atuin history in a fresh session.
 8. **mise** — `mise install`, then verify `node --version` reports 24.
 9. **Clone the JS repos.** In `webawesome-app`, confirm mise auto-switches to 22.13.0, then `npm install && npm start`. This is the first real proof the machine works.
 10. **devenv last** — clone `FortAwesome/devenv`, then `./dev -v`. Budget hours. It pulls a lot of images.
@@ -401,7 +396,7 @@ Test in a throwaway macOS user account on the current machine:
 2. Log in as that user. Homebrew is shared at `/opt/homebrew`, but the home directory is empty — which is exactly the condition being tested.
 3. Clone the repo, run `./install.sh work --dry-run`, read every line.
 4. Run `./install.sh work` for real. Fix what breaks, commit, re-run until a cold run is clean.
-5. Verify: Ghostty opens, starship renders, `mise doctor` is clean, `git config user.email` is empty at `~` and `brian@awesome.me` inside a `~/Projects/FortAwesome/` checkout.
+5. Verify: Warp opens a clean zsh session, `mise doctor` is clean, `git config user.email` is empty at `~` and `brian@awesome.me` inside a `~/Projects/FortAwesome/` checkout.
 6. Log out, delete the account.
 
 This exercises real Homebrew, real casks, and real macOS defaults. It cannot validate devenv — that needs the virtualization check to pass — but devenv self-installs its own prerequisites anyway, so it is the part least in need of rehearsal.
