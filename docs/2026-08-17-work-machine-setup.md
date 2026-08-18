@@ -49,8 +49,8 @@ Verified: `user.signingkey = ~/.ssh/id_ed25519_signing.pub` with `gpg.format = s
 So the config names a pointer, not a key. `signingkey` is always `~/.ssh/id_ed25519_signing.pub`, and each machine symlinks that to its own real key:
 
 ```sh
-ln -sfn id_ed25519_lane8 ~/.ssh/id_ed25519_signing
-ln -sfn id_ed25519_lane8.pub ~/.ssh/id_ed25519_signing.pub
+ln -sfn id_ed25519_nightskies ~/.ssh/id_ed25519_signing
+ln -sfn id_ed25519_nightskies.pub ~/.ssh/id_ed25519_signing.pub
 ```
 
 Per-machine keys, one shared config, no per-machine edit. `install.sh` warns when the pointer is missing rather than letting the first commit fail with an opaque error.
@@ -354,7 +354,7 @@ Most of a machine setup is parallel. This part is not.
 1. **Xcode Command Line Tools** — `xcode-select --install`. Nothing else installs before this.
 2. **Homebrew** — from brew.sh.
 3. **1Password + CLI**, signed in. Enable the SSH agent for auth keys.
-4. **SSH key** — generate a machine-specific ed25519 named for the machine; this one uses `~/.ssh/id_ed25519_lane8`. Give it a passphrase, store it in 1Password, and symlink `~/.ssh/id_ed25519_signing{,.pub}` to it so the shared `.gitconfig` resolves. Test with `ssh -T git@github.com`. `AddKeysToAgent` and `UseKeychain` in `~/.ssh/config` mean you type the passphrase once.
+4. **SSH key** — generate a machine-specific ed25519 named for the machine; this one uses `~/.ssh/id_ed25519_nightskies`. Give it a passphrase, store it in 1Password, and symlink `~/.ssh/id_ed25519_signing{,.pub}` to it so the shared `.gitconfig` resolves. Test with `ssh -T git@github.com`. `AddKeysToAgent` and `UseKeychain` in `~/.ssh/config` mean you type the passphrase once.
 5. **Register the same key twice on GitHub** — once as an Authentication key, once as a **Signing** key. Two separate entries in Settings → SSH and GPG keys, one public key. Skipping the second means commits sign locally but never show Verified.
 6. **Test the key before cloning anything.** Nothing is set up yet, so pass the config inline and throw the repo away afterwards:
 
