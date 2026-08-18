@@ -26,14 +26,19 @@ brew "tree"
 cask "1password-cli"
 # Editor
 cask "visual-studio-code"
-vscode "aaron-bond.better-comments"
-vscode "adpyke.codesnap"
+
+# Extensions: minimum viable, add on demand. This list is the source of truth —
+# Settings Sync is off for extensions, and prune-extensions.sh removes anything
+# installed that is not listed here.
+# Primary AI coding surface
 vscode "anthropic.claude-code"
-vscode "dracula-theme.theme-dracula"
-vscode "eamodio.gitlens"
-vscode "editorconfig.editorconfig"
+# Repo ships .prettierrc, and the post-write hook shells out to prettier
 vscode "esbenp.prettier-vscode"
+# Repo ships .editorconfig
+vscode "editorconfig.editorconfig"
+# Every JS repo in play lints
+vscode "dbaeumer.vscode-eslint"
+# Templating is a primary language here
 vscode "ginfuru.better-nunjucks"
-vscode "kamikillerto.vscode-colorize"
-vscode "oderwat.indent-rainbow"
-vscode "yzhang.markdown-all-in-one"
+# One deliberate theme instead of five competing ones
+vscode "dracula-theme.theme-dracula"
