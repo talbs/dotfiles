@@ -2,13 +2,44 @@
 set -e
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
+PROFILE=""
+DRY_RUN=""
 
-echo "linking dotfiles from $DOTFILES"
+usage() {
+  echo "usage: ./install.sh work|personal [--dry-run]"
+  exit 1
+}
+
+for arg in "$@"; do
+  case "$arg" in
+    work | personal) PROFILE="$arg" ;;
+    --dry-run) DRY_RUN="yes" ;;
+    *)
+      echo "unknown argument: $arg"
+      usage
+      ;;
+  esac
+done
+
+# No default profile — guessing wrong installs the wrong machine's software
+[ -n "$PROFILE" ] || usage
+
+if [ -n "$DRY_RUN" ]; then
+  echo "DRY RUN — nothing will be written"
+fi
+echo "linking dotfiles from $DOTFILES (profile: $PROFILE)"
 
 # Symlink helper: backs up existing file, then links
 link() {
   local src="$DOTFILES/$1"
   local dst="$2"
+  if [ -n "$DRY_RUN" ]; then
+    if [ -e "$dst" ] && [ ! -L "$dst" ]; then
+      echo "  would back up $dst -> $dst.backup"
+    fi
+    echo "  would link $dst -> $src"
+    return
+  fi
   mkdir -p "$(dirname "$dst")"
   if [ -e "$dst" ] && [ ! -L "$dst" ]; then
     echo "  backing up $dst -> $dst.backup"
@@ -45,14 +76,28 @@ if [ ! -e "$HOME/.ssh/id_ed25519_signing.pub" ]; then
 elif [ ! -e "$HOME/.ssh/allowed_signers" ]; then
   # Derived, not authored — regenerating beats remembering to hand-write it
   email=$(git config --file "$DOTFILES/.gitconfig" user.email)
-  printf '%s %s\n' "$email" "$(cat "$HOME/.ssh/id_ed25519_signing.pub")" > "$HOME/.ssh/allowed_signers"
-  echo "  wrote ~/.ssh/allowed_signers for $email"
+  if [ -n "$DRY_RUN" ]; then
+    echo "  would write ~/.ssh/allowed_signers for $email"
+  else
+    printf '%s %s\n' "$email" "$(cat "$HOME/.ssh/id_ed25519_signing.pub")" > "$HOME/.ssh/allowed_signers"
+    echo "  wrote ~/.ssh/allowed_signers for $email"
+  fi
 fi
 
-# Homebrew
+# Homebrew — shared base first, then the profile's extras
 if command -v brew &>/dev/null; then
-  echo "running brew bundle..."
-  brew bundle --file="$DOTFILES/Brewfile"
+  for bundle in "$DOTFILES/Brewfile" "$DOTFILES/Brewfile.$PROFILE"; do
+    if [ ! -f "$bundle" ]; then
+      echo "no $(basename "$bundle") — skipping"
+      continue
+    fi
+    if [ -n "$DRY_RUN" ]; then
+      echo "would run: brew bundle --file=$(basename "$bundle")"
+    else
+      echo "running brew bundle --file=$(basename "$bundle")..."
+      brew bundle --file="$bundle"
+    fi
+  done
 else
   echo "homebrew not found — install from https://brew.sh first"
 fi

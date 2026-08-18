@@ -1,22 +1,24 @@
 #!/bin/bash
 set -e
 
-# Uninstalls every VS Code extension not listed in the Brewfile.
+# Uninstalls every VS Code extension not listed in any Brewfile.
 # Dry-run by default; pass --apply to actually remove.
 
 DOTFILES="$(cd "$(dirname "$0")" && pwd)"
-BREWFILE="$DOTFILES/Brewfile"
 APPLY=""
-[ "${1:-}" = "--apply" ] && APPLY="yes"
+if [ "${1:-}" = "--apply" ]; then
+  APPLY="yes"
+fi
 
 command -v code >/dev/null || { echo "code CLI not on PATH"; exit 1; }
 
-keep=$(grep '^vscode "' "$BREWFILE" | sed 's/^vscode "//; s/"$//' | tr 'A-Z' 'a-z' | sort)
+# Every Brewfile, not just the base — a profile-only extension is still kept
+keep=$(cat "$DOTFILES"/Brewfile "$DOTFILES"/Brewfile.* 2>/dev/null | grep '^vscode "' | sed 's/^vscode "//; s/"$//' | tr 'A-Z' 'a-z' | sort -u)
 installed=$(code --list-extensions | tr 'A-Z' 'a-z' | sort)
 remove=$(comm -13 <(echo "$keep") <(echo "$installed"))
 
 if [ -z "$remove" ]; then
-  echo "nothing to prune — installed extensions already match the Brewfile"
+  echo "nothing to prune — installed extensions already match the Brewfiles"
   exit 0
 fi
 
