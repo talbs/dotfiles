@@ -19,7 +19,7 @@ The repo currently assumes one personal machine. It grows a second profile inste
 | Container runtime    | OrbStack, no Docker Desktop             | Already proven — the current machine runs devenv on OrbStack today.                                                                                                                                                                                                                                     |
 | Virtualization       | Vagrant via the plain `vagrant` cask    | `hashicorp/tap` is now flagged Untrusted by Homebrew and refuses to load. See Hazards.                                                                                                                                                                                                                  |
 | Git identity         | One email on both machines              | `hi.talbs@gmail.com` everywhere, so contribution credit lands on a single GitHub account. Directory-scoped identity is dropped.                                                                                                                                                                         |
-| Commit signing       | SSH, `~/.ssh/id_ed25519.pub`            | Already the repo's decision from PR #2. No UID matching, no GPG Keychain, no key expiry.                                                                                                                                                                                                                |
+| Commit signing       | SSH, one key per machine                | Already the repo's decision from PR #2. No UID matching, no GPG Keychain, no key expiry. This machine signs with `~/.ssh/id_ed25519_signing.pub`.                                                                                                                                                          |
 | Apps                 | Minimum viable, add on demand           | Only what blocks day-one work gets installed. Everything else waits until first reach.                                                                                                                                                                                                                  |
 | Node package manager | npm                                     | Every JS repo in play ships `package-lock.json`. Measured: npm 580, pnpm 0, bun 0, yarn 0.                                                                                                                                                                                                              |
 
@@ -40,11 +40,20 @@ Recent webawesome-app commits, through 2026-07-29, are all `hi.talbs@gmail.com`.
 
 SSH signing follows from the same goal. GPG only grants Verified when the committer email matches a UID on the key, so a single identity plus GPG means maintaining UIDs; SSH signing has no such coupling, and it drops GPG Keychain, `pinentry-mac`, and key expiry. The repo already made this call in PR #2.
 
-Verified: `user.signingkey = ~/.ssh/id_ed25519.pub` with `gpg.format = ssh` produces a real `SSH SIGNATURE` block in the commit object, validating as good for `hi.talbs@gmail.com`.
+Verified: `user.signingkey = ~/.ssh/id_ed25519_signing.pub` with `gpg.format = ssh` produces a real `SSH SIGNATURE` block in the commit object, validating as good for `hi.talbs@gmail.com`.
 
 **Retroactive credit, worth doing separately.** Adding `brian@fortawesome.com`, `talbs@fortawesome.com`, and `brian@awesome.me` as verified emails on the GitHub account retroactively attributes the ~320 commits currently authored under them. That is an account settings change, not a dotfiles one.
 
-**Standardize the key filename.** The config references `~/.ssh/id_ed25519.pub`, so generating the new machine's key at that exact path makes the config work with no edit.
+**One key per machine, reached through a stable name.** Each Mac generates its own ed25519 rather than sharing one, so retiring a machine means revoking a single key instead of rotating it everywhere it was copied. But `.gitconfig` is shared, and a machine-specific path in it is fatal on every other machine: with `gpgsign = true`, a `signingkey` that does not resolve produces `fatal: failed to write commit object` and every commit aborts.
+
+So the config names a pointer, not a key. `signingkey` is always `~/.ssh/id_ed25519_signing.pub`, and each machine symlinks that to its own real key:
+
+```sh
+ln -sfn id_ed25519_lane8 ~/.ssh/id_ed25519_signing
+ln -sfn id_ed25519_lane8.pub ~/.ssh/id_ed25519_signing.pub
+```
+
+Per-machine keys, one shared config, no per-machine edit. `install.sh` warns when the pointer is missing rather than letting the first commit fail with an opaque error.
 
 ## What does not come across
 
@@ -126,7 +135,7 @@ Identity is deliberately absent. It arrives via directory-scoped includes, which
 [user]
   name = Brian Talbot
   email = hi.talbs@gmail.com
-  signingkey = ~/.ssh/id_ed25519.pub
+  signingkey = ~/.ssh/id_ed25519_signing.pub
 [gpg]
   format = ssh
 [commit]
@@ -135,9 +144,9 @@ Identity is deliberately absent. It arrives via directory-scoped includes, which
 
 Two things to know about that block.
 
-`signingkey` points at the **public** key and uses `~`, not an absolute path. The version currently on `main` says `/Users/brian/.ssh/id_ed25519_github` — a file that does not exist. With `gpgsign = true` that is not a warning, it is a hard failure: `fatal: failed to write commit object`, and every commit aborts. Anyone running `install.sh` before this fix could not commit at all.
+`signingkey` points at the **public** key and uses `~`, not an absolute path. An earlier revision said `/Users/brian/.ssh/id_ed25519_github` — a file that does not exist. With `gpgsign = true` that is not a warning, it is a hard failure: `fatal: failed to write commit object`, and every commit aborts. Anyone running `install.sh` before that fix could not commit at all.
 
-Local verification of SSH signatures needs `gpg.ssh.allowedSignersFile`; without it `git log --show-signature` reports no signature even though one is present. GitHub's Verified badge does not depend on it, so it is optional — add it if you want `git verify-commit` to work offline.
+Local verification of SSH signatures needs `gpg.ssh.allowedSignersFile`; without it `git log --show-signature` reports no signature even though one is present. GitHub's Verified badge does not depend on it, but `git verify-commit` does, so it is wired up here. The file is machine-local at `~/.ssh/allowed_signers` — one line of `<email> <public key>`, naming a specific machine's key, so it is not in this repo. `install.sh` derives it from the signing pointer rather than asking anyone to write it by hand. A missing one is only cosmetic: commits still sign, but `--show-signature` cannot name the principal.
 
 Note `origin/main` in the `fixup` alias — the current version still says `origin/master`.
 
@@ -345,12 +354,12 @@ Most of a machine setup is parallel. This part is not.
 1. **Xcode Command Line Tools** — `xcode-select --install`. Nothing else installs before this.
 2. **Homebrew** — from brew.sh.
 3. **1Password + CLI**, signed in. Enable the SSH agent for auth keys.
-4. **SSH key** — generate ed25519 **at `~/.ssh/id_ed25519`**, the exact path `git/gitconfig` expects. Store it in 1Password. Test with `ssh -T git@github.com`.
+4. **SSH key** — generate a machine-specific ed25519 named for the machine; this one uses `~/.ssh/id_ed25519_lane8`. Give it a passphrase, store it in 1Password, and symlink `~/.ssh/id_ed25519_signing{,.pub}` to it so the shared `.gitconfig` resolves. Test with `ssh -T git@github.com`. `AddKeysToAgent` and `UseKeychain` in `~/.ssh/config` mean you type the passphrase once.
 5. **Register the same key twice on GitHub** — once as an Authentication key, once as a **Signing** key. Two separate entries in Settings → SSH and GPG keys, one public key. Skipping the second means commits sign locally but never show Verified.
 6. **Test the key before cloning anything.** Nothing is set up yet, so pass the config inline and throw the repo away afterwards:
 
    ```bash
-   D=$(mktemp -d) && git -C "$D" init -q && GIT_CONFIG_GLOBAL=/dev/null git -C "$D" -c user.name="Brian Talbot" -c user.email="hi.talbs@gmail.com" -c gpg.format=ssh -c user.signingkey="$HOME/.ssh/id_ed25519.pub" -c commit.gpgsign=true commit -q --allow-empty -m "signing test" && { git -C "$D" cat-file commit HEAD | grep -q "BEGIN SSH SIGNATURE" && echo "signing works"; }; rm -rf "$D"
+   D=$(mktemp -d) && git -C "$D" init -q && GIT_CONFIG_GLOBAL=/dev/null git -C "$D" -c user.name="Brian Talbot" -c user.email="hi.talbs@gmail.com" -c gpg.format=ssh -c user.signingkey="$HOME/.ssh/id_ed25519_signing.pub" -c commit.gpgsign=true commit -q --allow-empty -m "signing test" && { git -C "$D" cat-file commit HEAD | grep -q "BEGIN SSH SIGNATURE" && echo "signing works"; }; rm -rf "$D"
    ```
 
    Check for the signature with `grep`, not `head` — `gpgsig` is the fourth header line at the earliest, after `tree`, `author`, and `committer`.

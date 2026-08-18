@@ -34,6 +34,21 @@ link ".claude/hooks"        "$HOME/.claude/hooks"
 link ".claude/commands"     "$HOME/.claude/commands"
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
+# Signing key pointer — .gitconfig names id_ed25519_signing.pub on every
+# machine, so each one symlinks it to its own key. Missing, commits abort with
+# "failed to write commit object", which reads like a git bug rather than setup.
+if [ ! -e "$HOME/.ssh/id_ed25519_signing.pub" ]; then
+  echo "  WARNING: ~/.ssh/id_ed25519_signing.pub is missing — commits will fail to sign"
+  echo "           point it at this machine's key:"
+  echo "           ln -sfn id_ed25519_<machine> ~/.ssh/id_ed25519_signing"
+  echo "           ln -sfn id_ed25519_<machine>.pub ~/.ssh/id_ed25519_signing.pub"
+elif [ ! -e "$HOME/.ssh/allowed_signers" ]; then
+  # Derived, not authored — regenerating beats remembering to hand-write it
+  email=$(git config --file "$DOTFILES/.gitconfig" user.email)
+  printf '%s %s\n' "$email" "$(cat "$HOME/.ssh/id_ed25519_signing.pub")" > "$HOME/.ssh/allowed_signers"
+  echo "  wrote ~/.ssh/allowed_signers for $email"
+fi
+
 # Homebrew
 if command -v brew &>/dev/null; then
   echo "running brew bundle..."
