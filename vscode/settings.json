@@ -15,5 +15,5 @@
   },
   "workbench.activityBar.compact": true,
   "workbench.startupEditor": "none",
-  "editor.minimap.enabled": false,
+  "editor.minimap.enabled": false
 }
