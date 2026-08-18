@@ -29,14 +29,15 @@ Personal development environment configuration for macOS.
 
 | File                   | Description                                                          |
 | ---------------------- | -------------------------------------------------------------------- |
-| `install.sh`           | One-command setup — symlinks configs, runs Brew bundle               |
+| `install.sh`           | Setup — `./install.sh work\|personal [--dry-run]`                     |
 | `prune-extensions.sh`  | Removes VS Code extensions not in the Brewfile (dry-run by default)  |
 | `.gitconfig`           | Git preferences (rebase, aliases, VS Code as editor, rerere)         |
 | `.gitignore_global`    | Global gitignore for macOS, editors, `.warp/`, `.claude/`            |
 | `.zshrc`               | Plain zsh for Warp — mise, atuin, completions, plugins, aliases      |
 | `.prettierrc`          | Global Prettier formatting rules                                     |
 | `.editorconfig`        | Universal editor defaults                                            |
-| `Brewfile`             | Homebrew packages, CLI tools, and the canonical VS Code extension list |
+| `Brewfile`             | Shared Homebrew packages, CLI tools, and the canonical VS Code extension list |
+| `Brewfile.work`        | Work-only extras — OrbStack, Vagrant, AWS CLI                        |
 | `CLAUDE.md`            | Global preferences for Claude Code                                   |
 | `claude-settings.json` | Claude Code settings — wires hooks, plugins, preferences             |
 | `.claude/hooks/`       | Claude Code hook scripts (safety guard, session context, formatters) |
@@ -50,8 +51,8 @@ Personal development environment configuration for macOS.
 | ---- | ---------------------------------------------------------- |
 | 1    | Install [Homebrew](https://brew.sh)                        |
 | 2    | `git clone git@github.com:talbs/dotfiles.git ~/Projects/talbs/dotfiles` |
-| 3    | `cd ~/Projects/talbs/dotfiles && ./install.sh`             |
+| 3    | `cd ~/Projects/talbs/dotfiles && ./install.sh work`        |
 | 4    | Sign into Copilot and the Claude Code extension in VS Code |
 | 5    | Import Raycast snippets and quicklinks from `raycast/`     |
 
-`install.sh` symlinks all configs (backing up existing files) and runs `brew bundle`.
+`install.sh` takes a profile and symlinks all configs, backing up existing files. It runs `brew bundle` against the shared `Brewfile`, then against `Brewfile.<profile>` for that machine's extras. Pass `--dry-run` first to see every link and brew action without performing any.

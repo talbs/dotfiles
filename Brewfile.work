@@ -1,0 +1,11 @@
+# Work machine extras. Installed on top of the shared Brewfile by
+# ./install.sh work
+
+# Containers and VMs — order matters, OrbStack must exist before devenv runs
+# or devenv's install-docker.sh downloads Docker Desktop instead
+cask "orbstack"
+# Plain cask on purpose — hashicorp/tap is flagged Untrusted and refuses to load
+cask "vagrant"
+
+# Cloud
+brew "awscli"
