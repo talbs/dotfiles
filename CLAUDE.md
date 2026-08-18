@@ -81,9 +81,33 @@ Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anyth
 # Git
 
 - Write commit messages in lowercase, present participle voice (e.g., "adding README", "revising login UI", "fixing nav spacing")
-- Keep commit message bodies tight. Default to **no body at all** — the subject line is usually enough. If a body is needed, use a short bulleted list naming what changed at a glance. Never narrate the walkthrough (no "previously X did Y, so we…", no "this means…", no "result: …"). The diff and PR description carry the detail; the body is a one-glance pointer, not a story.
+- **Commit bodies: default to none.** The subject line alone is right for the large majority of commits. Write the subject, stop, move on.
+- Add a body **only** when the subject genuinely can't carry it — several unrelated changes in one commit, or a non-obvious behavior/API change a future reader must know about. "The reasoning is interesting" is not a reason. If you're unsure, there's no body.
+- When there is a body it is **only a bulleted list**: every line starts with `- `, one line per bullet, **4 bullets max**. Never prose paragraphs. Never a paragraph plus bullets.
+- Each bullet names **what changed** — not why, not how, not the effect. Delete any bullet containing cause or mechanism ("previously…", "so that…", "this means…", "it now…", "which fixes…"). Root cause and rationale go in the PR description or a code comment, never the commit.
+- Bad (prose narrating cause and effect — do not do this):
+
+  ```
+  rounding the anatomy stage where it meets the card edge
+
+  The stage sits flush in the card body (no padding), so its square corners poked past the card's
+  rounded ones. It now carries the card's inner radius on the bottom, and on the top too when there's
+  no state-toggle header. Radius resolves via one --stage-radius token: wa-card's own value when
+  present, else the same formula rebuilt from public tokens.
+  ```
+
+  Good:
+
+  ```
+  rounding the anatomy stage where it meets the card edge
+
+  - carrying the card's inner radius on the stage's outer corners
+  - hoisting the value to a single --stage-radius token
+  ```
+
 - Never push branches automatically (no `git push`, `git push --force`, etc.). Always wait for me to push myself, even when I've explicitly approved the local commits. After committing, just say so and wait.
 - Never post comments, replies, or reviews on GitHub PRs/issues as me automatically (no `gh pr comment`, `gh pr review`, `gh issue comment`, etc.). When responding to PR feedback, output the proposed comment text in a code-fenced markdown block for me to post manually.
+- Branch names: keep a `<prefix>/<name>` shape, but make `<name>` a witty/pop-cultural play on what the branch does (song titles, movie/TV references, puns on the actual identifiers involved). **Lean dad-joke: groan-worthy puns and wordplay on the domain terms (arrow, hover, tooltip, seam) are the house style** — the more it makes you wince, the better (`bow-and-error`, `hover-achiever`, `arrow-dynamic`). Lead with the deeper cut — a name that rewards a second read (fits the real change, not just the topic) beats a surface-level one. `butter-late-than-never` (a toast component's belated docs pass) is the bar: it puns on the PR's own word (toast getting _buttered_) **and** lands "better late than never" for the catch-up work — two hits, both load-bearing. Aim for that double-lock. Don't just pick one: offer a few candidates with a one-line why for each, flag my recommendation, and let me choose before renaming.
 
 ## PR descriptions
 
