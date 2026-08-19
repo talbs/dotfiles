@@ -64,7 +64,8 @@
   },
   "enabledPlugins": {
     "superpowers@claude-plugins-official": true,
-    "impeccable@impeccable": true
+    "impeccable@impeccable": true,
+    "warp@claude-code-warp": true
   },
   "extraKnownMarketplaces": {
     "superpowers-marketplace": {
@@ -77,6 +78,12 @@
       "source": {
         "source": "github",
         "repo": "pbakaus/impeccable"
+      }
+    },
+    "claude-code-warp": {
+      "source": {
+        "source": "github",
+        "repo": "warpdotdev/claude-code-warp"
       }
     }
   },
