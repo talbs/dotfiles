@@ -88,5 +88,7 @@
     }
   },
   "alwaysThinkingEnabled": true,
+  "tui": "fullscreen",
+  "theme": "auto",
   "skipAutoPermissionPrompt": true
 }
