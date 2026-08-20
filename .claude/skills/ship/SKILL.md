@@ -34,8 +34,8 @@ This stage exists because I asked for it seven times in four days. If I have to 
 Present, in this order:
 
 1. **The split.** Which changes group into which branch, and why. Unrelated concerns get separate branches. If the work stacks (branch B depends on branch A), say so and name the base explicitly.
-2. **Base branches.** For each branch, what it forks from. Check the repo's default — `next` on webawesome, `main` elsewhere. Do not guess.
-3. **Branch names.** Three candidates per branch, `talbs/` prefix, following the branch-name rules in CLAUDE.md. One line of why each. Flag your recommendation. I pick.
+2. **Base branches.** For each branch, what it forks from. Check the repo's actual default rather than assuming `main`.
+3. **Branch names.** Three candidates per branch, following the branch-name rules in CLAUDE.md (including its prefix exceptions). One line of why each. Flag your recommendation. I pick.
 4. **Commit plan.** The subject line for each commit, in lowercase present participle. Bodies only where the subject genuinely can't carry it.
 5. **Leftovers.** Any `nit` or `nice-to-have` from Stage 1 not being addressed.
 
