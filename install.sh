@@ -65,20 +65,38 @@ link ".claude/hooks"        "$HOME/.claude/hooks"
 link ".claude/commands"     "$HOME/.claude/commands"
 
 # Skills link one at a time so ~/.claude/skills stays a real directory. Linking the
-# whole directory into this repo makes installers (npx skills add, plugins) write into
-# a synced git repo, and makes Claude Code register every skill twice — once globally
-# and once scoped to this repo's path.
+# whole directory into this repo makes installers (npx skills add, plugins) write their
+# skills into a synced git repo.
+skills_dir="$HOME/.claude/skills"
 if [ -n "$DRY_RUN" ]; then
-  [ -L "$HOME/.claude/skills" ] && echo "  would replace symlink $HOME/.claude/skills with a real directory"
-  echo "  would ensure directory $HOME/.claude/skills"
+  [ -L "$skills_dir" ] && echo "  would replace symlink $skills_dir with a real directory"
+  echo "  would ensure directory $skills_dir"
 else
-  [ -L "$HOME/.claude/skills" ] && rm "$HOME/.claude/skills"
-  mkdir -p "$HOME/.claude/skills"
+  [ -L "$skills_dir" ] && rm "$skills_dir"
+  mkdir -p "$skills_dir"
+  # Prune links to skills that no longer exist. The loop below only adds, so a skill
+  # removed from this repo would otherwise leave a dangling entry in the scan path.
+  find "$skills_dir" -maxdepth 1 -type l ! -exec test -e {} \; -print -delete 2>/dev/null
 fi
 for skill_dir in "$DOTFILES"/.claude/skills/*/; do
   [ -d "$skill_dir" ] || continue
   skill=$(basename "$skill_dir")
-  link ".claude/skills/$skill" "$HOME/.claude/skills/$skill"
+  dst="$skills_dir/$skill"
+  # In a dry run the old directory symlink is still in place, so $dst resolves through it
+  # into the repo and link() would wrongly report a backup. The real run removes it first.
+  if [ -n "$DRY_RUN" ] && [ -L "$skills_dir" ]; then
+    echo "  would link $dst -> $DOTFILES/.claude/skills/$skill"
+    continue
+  fi
+  # A real directory here is someone else's skill of the same name. Back it up OUTSIDE
+  # the scan path — link()'s sibling .backup would register as a duplicate skill.
+  if [ -z "$DRY_RUN" ] && [ -d "$dst" ] && [ ! -L "$dst" ]; then
+    mkdir -p "$HOME/.claude/skills-backup"
+    echo "  backing up $dst -> $HOME/.claude/skills-backup/$skill"
+    rm -rf "$HOME/.claude/skills-backup/$skill"
+    mv "$dst" "$HOME/.claude/skills-backup/$skill"
+  fi
+  link ".claude/skills/$skill" "$dst"
 done
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 

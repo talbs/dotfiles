@@ -125,7 +125,7 @@ The bar: a smart 13-year-old reads it once and can say what changed.
 
   The stage sits flush in the card body (no padding), so its square corners poked past the card's
   rounded ones. It now carries the card's inner radius on the bottom, and on the top too when there's
-  no state-toggle header. Radius resolves via one --stage-radius token: wa-card's own value when
+  no state-toggle header. Radius resolves via one --stage-radius token: the card's own value when
   present, else the same formula rebuilt from public tokens.
   ```
 
