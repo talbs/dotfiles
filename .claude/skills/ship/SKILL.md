@@ -21,13 +21,7 @@ Fix `blocker` findings before continuing. Surface `nit` and `nice-to-have` in th
 
 ## Stage 2 — Comment audit
 
-Re-read every comment added or touched in this session. For each one, answer: does it explain a non-obvious WHY that a better name couldn't carry?
-
-If no, delete it. Do not ask permission to delete a comment that restates its own code.
-
-Report one line: `Comments: N added, M kept.` List what was kept and why, in a few words each.
-
-This stage exists because I asked for it seven times in four days. If I have to ask again, this skill failed.
+CLAUDE.md already mandates a comment check at the end of every turn that wrote code. This stage adds the part that rule can't do: re-run it across **the whole session's diff**, not just the last turn, and report one line — `Comments: N added, M kept.`
 
 ## Stage 3 — Propose the plan, then STOP
 

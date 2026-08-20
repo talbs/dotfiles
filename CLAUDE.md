@@ -71,7 +71,7 @@ Before declaring a task done — whether you did the work, another agent did, or
 
 # Writing in my voice
 
-Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anything written as me. Not code, commit messages, or PR descriptions; those have their own rules below.
+Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anything written as me. Commit messages and PR descriptions have their own rules below; the **AI tells** list applies everywhere.
 
 **My voice** (match this, don't ask me to re-describe it each time): blunt, leads with the point, no warm-up. Short declaratives, with asides carried by parentheses or a period rather than a dash. Go easy on em-dashes; break the sentence or use parens instead. Plain strong verbs (kill, sand off, fold, fire) over soft ones. A concrete example in parens right after a claim. Fragments for emphasis are fine. "Personality over polish." Bold the load-bearing phrase, not whole sentences. Lowercase in casual/chat contexts; sentence case in docs. Allergic to hedging and throat-clearing.
 
@@ -81,7 +81,7 @@ Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anyth
 - After a draft, name the weakest line yourself and say why. Don't assert it's fixed.
 - I edit the final 10%. Leave it slightly rough rather than over-polished; don't sand it into corporate-smooth.
 
-## AI tells
+# AI tells
 
 Canonical list. `.claude/commands/humanize.md` and the `ship` skill reference this section instead of keeping their own copies — edit here, nowhere else.
 

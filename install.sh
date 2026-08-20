@@ -66,38 +66,62 @@ link ".claude/commands"     "$HOME/.claude/commands"
 
 # Skills link one at a time so ~/.claude/skills stays a real directory. Linking the
 # whole directory into this repo makes installers (npx skills add, plugins) write their
-# skills into a synced git repo.
+# skills into a synced git repo. hooks/ and commands/ stay whole-directory links above
+# because nothing else writes into them.
 skills_dir="$HOME/.claude/skills"
+
+# Links one skill into the scan path. A real directory there belongs to something else,
+# so it moves OUT of the scan path — a sibling .backup would register as a duplicate skill.
+link_skill() {
+  local src="$1" dst="$skills_dir/$2"
+  if [ -n "$DRY_RUN" ]; then
+    [ -d "$dst" ] && [ ! -L "$dst" ] && echo "  would back up $dst -> $HOME/.claude/skills-backup/$2"
+    echo "  would link $dst -> $src"
+    return
+  fi
+  if [ -d "$dst" ] && [ ! -L "$dst" ]; then
+    mkdir -p "$HOME/.claude/skills-backup"
+    rm -rf "$HOME/.claude/skills-backup/$2"
+    mv "$dst" "$HOME/.claude/skills-backup/$2"
+    echo "  backing up $dst -> $HOME/.claude/skills-backup/$2"
+  fi
+  ln -sfn "$src" "$dst"
+  echo "  $dst -> $src"
+}
+
 if [ -n "$DRY_RUN" ]; then
   [ -L "$skills_dir" ] && echo "  would replace symlink $skills_dir with a real directory"
   echo "  would ensure directory $skills_dir"
 else
   [ -L "$skills_dir" ] && rm "$skills_dir"
   mkdir -p "$skills_dir"
-  # Prune links to skills that no longer exist. The loop below only adds, so a skill
-  # removed from this repo would otherwise leave a dangling entry in the scan path.
-  find "$skills_dir" -maxdepth 1 -type l ! -exec test -e {} \; -print -delete 2>/dev/null
 fi
+
+# The loop below only adds, so a skill removed from this repo would leave a dangling link.
+if [ -d "$skills_dir" ] && [ ! -L "$skills_dir" ]; then
+  for stale in "$skills_dir"/*; do
+    [ -L "$stale" ] && [ ! -e "$stale" ] || continue
+    if [ -n "$DRY_RUN" ]; then
+      echo "  would prune stale link $stale"
+    else
+      rm "$stale"
+      echo "  pruning stale link $stale"
+    fi
+  done
+fi
+
 for skill_dir in "$DOTFILES"/.claude/skills/*/; do
   [ -d "$skill_dir" ] || continue
   skill=$(basename "$skill_dir")
-  dst="$skills_dir/$skill"
-  # In a dry run the old directory symlink is still in place, so $dst resolves through it
-  # into the repo and link() would wrongly report a backup. The real run removes it first.
+  # In a dry run the old directory symlink is still in place, so the destination resolves
+  # through it into the repo and would wrongly report a backup. The real run removes it first.
   if [ -n "$DRY_RUN" ] && [ -L "$skills_dir" ]; then
-    echo "  would link $dst -> $DOTFILES/.claude/skills/$skill"
+    echo "  would link $skills_dir/$skill -> $DOTFILES/.claude/skills/$skill"
     continue
   fi
-  # A real directory here is someone else's skill of the same name. Back it up OUTSIDE
-  # the scan path — link()'s sibling .backup would register as a duplicate skill.
-  if [ -z "$DRY_RUN" ] && [ -d "$dst" ] && [ ! -L "$dst" ]; then
-    mkdir -p "$HOME/.claude/skills-backup"
-    echo "  backing up $dst -> $HOME/.claude/skills-backup/$skill"
-    rm -rf "$HOME/.claude/skills-backup/$skill"
-    mv "$dst" "$HOME/.claude/skills-backup/$skill"
-  fi
-  link ".claude/skills/$skill" "$dst"
+  link_skill "$DOTFILES/.claude/skills/$skill" "$skill"
 done
+
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Web Awesome's own component skill is generated build output, so it is not versioned
@@ -107,12 +131,7 @@ if [ "$PROFILE" = work ]; then
   wa_skill="$HOME/.agents/skills/webawesome"
   wa_src="$HOME/Projects/shoelace-style/webawesome-app/webawesome/packages/webawesome/dist/skills/webawesome"
   if [ -d "$wa_skill" ]; then
-    if [ -n "$DRY_RUN" ]; then
-      echo "  would link $HOME/.claude/skills/webawesome -> $wa_skill"
-    else
-      ln -sfn "$wa_skill" "$HOME/.claude/skills/webawesome"
-      echo "  $HOME/.claude/skills/webawesome -> $wa_skill"
-    fi
+    link_skill "$wa_skill" webawesome
   else
     echo "  skipping webawesome skill — not installed. To add it, build the component"
     echo "  package, then: npx skills add $wa_src"

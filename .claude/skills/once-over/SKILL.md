@@ -13,11 +13,11 @@ One bounded pass, not a polishing loop. That is what the name is for.
 
 Read `package.json` scripts and take the first of `dev`, `start`, `serve`, `preview` that actually starts a server. If none of them do, say so and ask rather than guessing. If the project has no web UI at all, this skill does not apply — say that and stop.
 
-A repo-specific rule may name the exact command and port range. When one has loaded, it wins over guessing.
+The repo's own `CLAUDE.md` or a path-scoped rule may name the exact command and port range. When one has loaded, it wins over guessing.
 
 ## Booting
 
-1. **Check for a running server first.** `lsof -nP -iTCP -sTCP:LISTEN | grep -E ':(3000|[45][0-9]{3})'`. If the right one is already up, reuse it. Do not boot a second copy.
+1. **Check for a running server first.** `lsof -nP -iTCP -sTCP:LISTEN | grep -E ':(3000|4[0-9]{3}|5173)\b'` (avoid a bare `5[0-9]{3}` — macOS AirPlay sits on 5000 and Postgres on 5432, and both would read as "already running"). If the right one is already up, reuse it. Do not boot a second copy.
 2. Start it in the background.
 3. **Read the port out of the server output, don't guess.** Many dev servers take the first free port in a range instead of a fixed one. Poll the log for the first `http://localhost:<port>` it emits, or until 90s passes.
 4. `preview_start` with the resolved URL.
