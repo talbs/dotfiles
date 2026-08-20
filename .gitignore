@@ -1,7 +1,5 @@
 # global gitignore excludes .claude/ — but versioning it is the point of this repo
 !.claude/
-# machine-local: work-only skill, absolute symlink to ~/.agents — not synced
-.claude/skills/webawesome
 docs/superpowers/
 .claude/settings.local.json
 .extensions-before-prune.txt

@@ -63,9 +63,43 @@ link "CLAUDE.md"            "$HOME/.claude/CLAUDE.md"
 link "claude-settings.json" "$HOME/.claude/settings.json"
 link ".claude/hooks"        "$HOME/.claude/hooks"
 link ".claude/commands"     "$HOME/.claude/commands"
-link ".claude/skills"       "$HOME/.claude/skills"
-link ".claude/rules"        "$HOME/.claude/rules"
+
+# Skills link one at a time so ~/.claude/skills stays a real directory. Linking the
+# whole directory into this repo makes installers (npx skills add, plugins) write into
+# a synced git repo, and makes Claude Code register every skill twice — once globally
+# and once scoped to this repo's path.
+if [ -n "$DRY_RUN" ]; then
+  [ -L "$HOME/.claude/skills" ] && echo "  would replace symlink $HOME/.claude/skills with a real directory"
+  echo "  would ensure directory $HOME/.claude/skills"
+else
+  [ -L "$HOME/.claude/skills" ] && rm "$HOME/.claude/skills"
+  mkdir -p "$HOME/.claude/skills"
+fi
+for skill_dir in "$DOTFILES"/.claude/skills/*/; do
+  [ -d "$skill_dir" ] || continue
+  skill=$(basename "$skill_dir")
+  link ".claude/skills/$skill" "$HOME/.claude/skills/$skill"
+done
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
+
+# Web Awesome's own component skill is generated build output, so it is not versioned
+# here. It lives at ~/.agents/skills/ via `npx skills add` and is linked in on work
+# machines only. Re-run the add command after a Web Awesome release to refresh it.
+if [ "$PROFILE" = work ]; then
+  wa_skill="$HOME/.agents/skills/webawesome"
+  wa_src="$HOME/Projects/shoelace-style/webawesome-app/webawesome/packages/webawesome/dist/skills/webawesome"
+  if [ -d "$wa_skill" ]; then
+    if [ -n "$DRY_RUN" ]; then
+      echo "  would link $HOME/.claude/skills/webawesome -> $wa_skill"
+    else
+      ln -sfn "$wa_skill" "$HOME/.claude/skills/webawesome"
+      echo "  $HOME/.claude/skills/webawesome -> $wa_skill"
+    fi
+  else
+    echo "  skipping webawesome skill — not installed. To add it, build the component"
+    echo "  package, then: npx skills add $wa_src"
+  fi
+fi
 
 # Signing key pointer — .gitconfig names id_ed25519_signing.pub on every
 # machine, so each one symlinks it to its own key. Missing, commits abort with
