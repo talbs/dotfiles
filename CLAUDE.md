@@ -69,13 +69,6 @@ Before declaring a task done — whether you did the work, another agent did, or
 - System font stacks as fallbacks; favor lesser-known alternatives over the usual open source standards (Inter, Roboto, etc.)
 - Library and framework choices vary by project — ask, don't assume
 
-# Web Awesome repos
-
-Component, utility, and token knowledge comes from the `webawesome` skill, installed on this machine only from the package's own `dist/skills/`. Don't restate any of it here. It's versioned with the library; this file isn't.
-
-- Default branches differ: `next` on `webawesome`, `main` on `webawesome-app` and `dotfiles`. Confirm before branching, don't assume.
-- The repos nest: `webawesome-app` contains `webawesome`, which contains `packages/webawesome` and `packages/webawesome-pro`. One change can span three repos and need three PRs. Cross-link them.
-
 # Writing in my voice
 
 Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anything written as me. Not code, commit messages, or PR descriptions; those have their own rules below.

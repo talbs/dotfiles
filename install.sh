@@ -64,6 +64,7 @@ link "claude-settings.json" "$HOME/.claude/settings.json"
 link ".claude/hooks"        "$HOME/.claude/hooks"
 link ".claude/commands"     "$HOME/.claude/commands"
 link ".claude/skills"       "$HOME/.claude/skills"
+link ".claude/rules"        "$HOME/.claude/rules"
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Signing key pointer — .gitconfig names id_ed25519_signing.pub on every
