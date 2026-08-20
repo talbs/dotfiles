@@ -37,7 +37,7 @@ Superpowers is installed. It fires on judgment, not reflex.
 - **Single-file CSS, copy, token, or markup tweak** → skip both. Make the edit. Ceremony on a two-line change wastes both our time.
 - **Any claim that something is done, fixed, or passing** → `superpowers:verification-before-completion`, always, no size threshold. Show the command output.
 - **Work that's finished and needs to land** → the `ship` skill.
-- **A visual change that needs looking at** → the `preview` skill, before you ask me to look.
+- **A visual change that needs looking at** → the `once-over` skill, before you ask me to look.
 
 If you can't tell whether something is a tweak or a feature, it's a feature.
 

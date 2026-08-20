@@ -42,7 +42,7 @@ Personal development environment configuration for macOS.
 | `claude-settings.json` | Claude Code settings — wires hooks, plugins, preferences             |
 | `.claude/hooks/`       | Claude Code hook scripts (safety guard, session context, formatters) |
 | `.claude/commands/`    | Claude Code slash commands — `/humanize`, `/pr-feedback`             |
-| `.claude/skills/`      | Claude Code skills — `ship`, `preview`. `npx skills add` installs here too, so gitignore anything machine-specific |
+| `.claude/skills/`      | Claude Code skills — `ship`, `once-over`. `npx skills add` installs here too, so gitignore anything machine-specific |
 | `.claude/rules/`       | Path-scoped instructions — load only in matching repos, so work context never reaches personal machines |
 | `vscode/settings.json` | VS Code editor settings                                              |
 | `mise/config.toml`     | Global tool versions (Node)                                          |
