@@ -47,4 +47,6 @@ For voice, apply **Plain language** and the prose half of **AI tells** from CLAU
 
 Do not apply the full **Writing in my voice** treatment. A PR description is not a blog post: no persona, no fragments-for-emphasis, no deliberate roughing up.
 
-One summary per repo touched. If there are companion PRs across repos, cross-link them.
+Before showing me the summary, check it: no sentence over 25 words, no em-dash where a period would do, every piece of jargon glossed on first use. Report the sentence count and any you could not get under 25 words, with the reason. Do not just assert it reads simply — count.
+
+One summary per repo touched. Cross-link companion PRs only when they are in repos with the same audience; never link a personal repo from a work PR.
