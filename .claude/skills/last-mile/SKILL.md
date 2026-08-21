@@ -11,11 +11,25 @@ There is exactly **one approval gate** and it sits before anything is committed.
 
 **Never push.** Never open the PR. Never post to GitHub. Output the summary and stop.
 
+## Stage 0 — Work out what state the work is in
+
+Look before you run anything. Check **every repo the work touches and every branch in them**, not just the branch you happen to be standing on. The most common miss is a branch that exists locally and nowhere else, in a repo currently checked out on `main`.
+
+Ignore dirt that predates this work and is unrelated to it — a stray lockfile does not make this a full run. Say which files you are ignoring and why.
+
+- **Uncommitted changes that belong to this work** — the full flow applies. Continue to Stage 1.
+- **Committed, but unpushed or pushed without a PR** — the split already happened. Run Stages 1 and 2, then treat Stage 3 as a review of the existing split rather than a proposal for a new one. Stage 4 does nothing unless Stage 3 found something to change.
+- **Nothing uncommitted, nothing unpushed, PRs already open** — say so in one line, report where each branch stands, and stop. Do not walk the remaining stages to look busy.
+
+Report which of the three you found, per repo, before continuing.
+
 ## Stage 1 — Wrap-up review
 
 Run the Wrap-up review from CLAUDE.md: design hat, dev hat, severity-tagged findings in `path:line — [severity] [hat] issue + suggestion` form.
 
 If it's clean, say so in one line. Don't manufacture critique to look thorough.
+
+If a real review already ran on this work — a code review, another agent, a colleague — skip this stage and say which review you're relying on. A third pass over the same diff finds nothing and costs a turn.
 
 Fix `blocker` findings before continuing. Surface `nit` and `nice-to-have` in the Stage 3 plan and let me choose.
 
@@ -24,6 +38,8 @@ Fix `blocker` findings before continuing. Surface `nit` and `nice-to-have` in th
 CLAUDE.md already mandates a comment check at the end of every turn that wrote code. This stage adds the part that rule can't do: re-run it across **the whole session's diff**, not just the last turn, and report one line — `Comments: N added, M kept.`
 
 ## Stage 3 — Propose the plan, then STOP
+
+If Stage 0 found the work already committed, answer each of these about what exists rather than proposing something new. Say plainly whether the existing split is right; do not rewrite history to look tidier when the repo squash-merges anyway.
 
 Present, in this order:
 
@@ -38,6 +54,8 @@ Then stop and wait. Do not create a branch, stage a file, or commit anything unt
 ## Stage 4 — Execute
 
 Create the branches, make the commits. If a commit doesn't apply cleanly, stop and say so rather than improvising a different split.
+
+When the work was already committed and Stage 3 found nothing to change, this stage does nothing. Say so and move to Stage 5.
 
 ## Stage 5 — PR summary
 
