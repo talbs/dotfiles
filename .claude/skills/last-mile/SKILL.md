@@ -59,6 +59,22 @@ When the work was already committed and Stage 3 found nothing to change, this st
 
 ## Stage 5 — PR summary
 
+**Title.** Title Case, matching what I already ship:
+
+- Capitalize the first word, the last word, and every major word.
+- Lowercase articles (`a`, `an`, `the`), coordinating conjunctions (`and`, `but`, `or`), and prepositions of four letters or fewer (`of`, `to`, `in`, `on`, `for`, `with`, `from`, `into`) unless they start or end the title.
+- Anything in backticks keeps its literal casing. `.claude/rules` and `wa-prose` never become `.Claude/Rules` or `Wa-Prose`.
+- A leading scope is fine and common in the work repos, for example `Workspaces: Outline Role Badges` or `Switch: Move Focus Ring from thumb to control`.
+- `+` reads better than "and" when joining two nouns: `Rendering + Legibility`.
+
+**Use GitHub-flavored markdown hard.** The body is a document, not a paragraph. Reach for structure whenever it makes the thing scannable:
+
+- Tables for anything comparative — before and after, option matrices, which file loads when. A table beats three sentences describing the same grid.
+- Bulleted lists for anything enumerable. One idea per bullet.
+- Backticks on every filename, identifier, flag, and token.
+- Task lists for follow-ups the reader might pick up.
+- `<details>` around long output such as logs or full file dumps, so the page stays readable.
+
 Structure and formatting:
 
 - Format as copy-pasteable GitHub-flavored markdown: title shown separately above, body in a single fenced ` ```markdown ` block. Don't wrap that block in an outer escape-fence — the visual padding from nested fencing is more annoying than the artifact.
