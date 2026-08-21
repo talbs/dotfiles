@@ -33,7 +33,7 @@ Personal development environment configuration for macOS.
 | `prune-extensions.sh`  | Removes VS Code extensions not listed in any Brewfile (dry-run by default) |
 | `.gitconfig`           | Git preferences (rebase, aliases, VS Code as editor, rerere)         |
 | `.gitignore_global`    | Global gitignore for macOS, editors, `.warp/`, `.claude/`            |
-| `.zshrc`               | Plain zsh for Warp — mise, atuin, completions, plugins, aliases      |
+| `.zshrc`               | zsh for Warp — oh-my-zsh, mise, atuin, plugins, aliases              |
 | `.prettierrc`          | Global Prettier formatting rules                                     |
 | `.editorconfig`        | Universal editor defaults                                            |
 | `Brewfile`             | Shared Homebrew packages, CLI tools, and the canonical VS Code extension list |

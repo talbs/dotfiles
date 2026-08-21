@@ -157,6 +157,23 @@ elif [ ! -e "$HOME/.ssh/allowed_signers" ]; then
   fi
 fi
 
+# Oh My Zsh — .zshrc sources it, so a machine without it gets a broken shell.
+# Cloned rather than installed via the upstream curl-pipe-sh script: that script's
+# only lasting effect is this same shallow clone once you tell it to keep your own
+# .zshrc, so running it would just execute code we never reviewed.
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  echo "  oh-my-zsh already installed"
+elif [ -n "$DRY_RUN" ]; then
+  echo "  would clone oh-my-zsh into ~/.oh-my-zsh"
+else
+  echo "  cloning oh-my-zsh..."
+  git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh" || true
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "  WARNING: oh-my-zsh did not install. Your shell will start without the"
+    echo "           git aliases until you re-run this script with a network connection."
+  fi
+fi
+
 # Homebrew — shared base first, then the profile's extras
 if command -v brew &>/dev/null; then
   for bundle in "$DOTFILES/Brewfile" "$DOTFILES/Brewfile.$PROFILE"; do
