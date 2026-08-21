@@ -42,6 +42,8 @@ Personal development environment configuration for macOS.
 | `claude-settings.json` | Claude Code settings — wires hooks, plugins, preferences             |
 | `.claude/hooks/`       | Claude Code hook scripts (safety guard, session context, formatters) |
 | `.claude/commands/`    | Claude Code slash commands — `/humanize`, `/pr-feedback`             |
+| `.claude/skills/`      | Claude Code skills — `last-mile`, `once-over`, linked in individually|
+| `~/.agents/skills/`    | Machine-local skills (not versioned here) — linked in by profile     |
 | `vscode/settings.json` | VS Code editor settings                                              |
 | `mise/config.toml`     | Global tool versions (Node)                                          |
 | `raycast/`             | Importable snippets and quicklinks                                   |
@@ -55,8 +57,8 @@ Personal development environment configuration for macOS.
 | 1    | Install [Homebrew](https://brew.sh)                        |
 | 2    | `git clone git@github.com:talbs/dotfiles.git ~/Projects/talbs/dotfiles` |
 | 3    | Generate this machine's SSH key and point the signing symlink at it (below) |
-| 4    | `cd ~/Projects/talbs/dotfiles && ./install.sh work --dry-run`, read it, then drop `--dry-run` |
-| 5    | Sign into Claude Code and Copilot in VS Code — both ship with the editor now |
+| 4    | `cd ~/Projects/talbs/dotfiles && ./install.sh work\|personal --dry-run`, read it, then drop `--dry-run` |
+| 5    | Sign into Claude Code (installed by the Brewfile) and Copilot in VS Code    |
 | 6    | Optional: `brew install --cask raycast`, then import from `raycast/` |
 
 `install.sh` takes a profile and symlinks all configs, backing up existing files. It runs `brew bundle` against the shared `Brewfile`, then against `Brewfile.<profile>` for that machine's extras. Pass `--dry-run` first to see every link and brew action without performing any.

@@ -1,3 +1,5 @@
+# global gitignore excludes .claude/ — but versioning it is the point of this repo
+!.claude/
 docs/superpowers/
 .claude/settings.local.json
 .extensions-before-prune.txt
