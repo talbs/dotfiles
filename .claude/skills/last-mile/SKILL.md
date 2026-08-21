@@ -1,5 +1,6 @@
 ---
 name: last-mile
+argument-hint: '[repo] [branch] — omit to check everything'
 description: Wrap up finished work into branches, commits, and a PR summary. Use when the work on disk is done and needs to land, or when asked to "make commits", "make logical commits", "split this into branches", "wrap this up", "review our work then commit", or "give me a PR summary".
 ---
 
@@ -13,7 +14,9 @@ There is exactly **one approval gate** and it sits before anything is committed.
 
 ## Stage 0 — Work out what state the work is in
 
-Look before you run anything. Check **every repo the work touches and every branch in them**, not just the branch you happen to be standing on. The most common miss is a branch that exists locally and nowhere else, in a repo currently checked out on `main`.
+**If I named a repo or a branch, scope to it.** Look only there, say in one line what you are skipping, and skip Stage 0's wider scan. `last-mile dotfiles chore/case-in-point` means that branch in that repo and nothing else.
+
+With no argument, check **every repo the work touches and every branch in them**, not just the branch you happen to be standing on. The most common miss is a branch that exists locally and nowhere else, in a repo currently checked out on `main`.
 
 Ignore dirt that predates this work and is unrelated to it — a stray lockfile does not make this a full run. Say which files you are ignoring and why.
 
