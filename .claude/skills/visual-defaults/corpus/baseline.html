@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account Settings</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    font-size: 14px;
+  }
+  .page { max-width: 800px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 24px; margin-bottom: 8px; }
+  .subtitle { color: #888; margin-bottom: 24px; }
+
+  .tabs {
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 24px;
+  }
+  .tab { padding: 8px 12px; color: #888; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab.active { color: #3b82f6; border-bottom-color: #3b82f6; }
+
+  .card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .card-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .card-desc { color: #888; margin-bottom: 16px; }
+
+  .field { margin-bottom: 16px; }
+  label { display: block; font-size: 14px; color: #333; margin-bottom: 4px; }
+  input[type="text"], input[type="email"], select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: inherit;
+  }
+  .help { font-size: 14px; color: #888; margin-top: 4px; }
+  .error { font-size: 14px; color: #ef4444; margin-top: 4px; }
+
+  .row { display: flex; gap: 16px; }
+  .row .field { flex: 1; }
+
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #ddd;
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-label { font-size: 14px; }
+  .toggle-desc { color: #888; font-size: 14px; }
+
+  .avatar {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: #ddd; border: 1px solid #ddd;
+    display: flex; align-items: center; justify-content: center;
+    color: #888;
+  }
+  .avatar-row { display: flex; gap: 16px; align-items: center; margin-bottom: 16px; }
+
+  .empty {
+    text-align: center;
+    padding: 24px;
+    color: #888;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+  }
+
+  .btn {
+    padding: 8px 16px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .btn-primary { background: #3b82f6; color: #fff; border-color: #3b82f6; }
+  .btn-danger { background: #ef4444; color: #fff; border-color: #ef4444; }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: 8px; border-bottom: 1px solid #ddd; font-size: 14px; }
+  th { color: #888; font-weight: 600; }
+  .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px;
+    background: #dcfce7; color: #16a34a; font-size: 14px; border: 1px solid #86efac;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>Account Settings</h1>
+  <p class="subtitle">Manage your account settings and preferences.</p>
+
+  <div class="tabs">
+    <div class="tab active">Profile</div>
+    <div class="tab">Notifications</div>
+    <div class="tab">Billing</div>
+    <div class="tab">Team</div>
+    <div class="tab">Security</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Profile</div>
+    <div class="card-desc">This information will be displayed publicly.</div>
+
+    <div class="avatar-row">
+      <div class="avatar">BT</div>
+      <div>
+        <button class="btn">Upload new photo</button>
+        <div class="help">JPG, GIF or PNG. Max size 2MB.</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label for="first">First name</label>
+        <input type="text" id="first" value="Brian">
+      </div>
+      <div class="field">
+        <label for="last">Last name</label>
+        <input type="text" id="last" value="Talbot">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email address</label>
+      <input type="email" id="email" value="brian@awesome.me">
+      <div class="help">We'll use this address for account notifications.</div>
+    </div>
+
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" value="talbs">
+      <div class="error">This username is already taken.</div>
+    </div>
+
+    <div class="field">
+      <label for="bio">Bio</label>
+      <textarea id="bio" rows="3">Product designer who codes.</textarea>
+      <div class="help">Brief description for your profile.</div>
+    </div>
+
+    <div class="field">
+      <label for="tz">Timezone</label>
+      <select id="tz">
+        <option>Eastern Time (US &amp; Canada)</option>
+        <option>Central Time (US &amp; Canada)</option>
+        <option>Pacific Time (US &amp; Canada)</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Notifications</div>
+    <div class="card-desc">Choose what you want to be notified about.</div>
+
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Comments</div>
+        <div class="toggle-desc">Get notified when someone comments on your post.</div>
+      </div>
+      <input type="checkbox" checked>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Mentions</div>
+        <div class="toggle-desc">Get notified when someone mentions you.</div>
+      </div>
+      <input type="checkbox" checked>
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Product updates</div>
+        <div class="toggle-desc">Receive news about new features and releases.</div>
+      </div>
+      <input type="checkbox">
+    </div>
+    <div class="toggle-row">
+      <div>
+        <div class="toggle-label">Weekly digest</div>
+        <div class="toggle-desc">A summary of your activity, every Monday.</div>
+      </div>
+      <input type="checkbox">
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Team members</div>
+    <div class="card-desc">People with access to this workspace.</div>
+    <table>
+      <thead>
+        <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Brian Talbot</td><td>brian@awesome.me</td><td>Owner</td><td><span class="badge">Active</span></td></tr>
+        <tr><td>Dana Reed</td><td>dana@awesome.me</td><td>Admin</td><td><span class="badge">Active</span></td></tr>
+        <tr><td>Sam Okoye</td><td>sam@awesome.me</td><td>Member</td><td><span class="badge">Active</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Connected apps</div>
+    <div class="card-desc">Third-party services linked to your account.</div>
+    <div class="empty">You haven't connected any apps yet.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Danger zone</div>
+    <div class="card-desc">Irreversible and destructive actions.</div>
+    <div class="actions" style="justify-content: flex-start;">
+      <button class="btn-danger btn">Delete account</button>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="btn">Cancel</button>
+    <button class="btn btn-primary">Save changes</button>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,917 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        color-scheme: dark;
+
+        /* text */
+        --text-primary: oklch(0.93 0.01 265);
+        --text-secondary: oklch(0.78 0.012 265);
+        --text-tertiary: oklch(0.68 0.012 265);
+        --text-on-accent: oklch(0.15 0.02 265);
+        --text-on-strong: oklch(0.95 0.005 265);
+
+        /* surfaces */
+        --surface-page: oklch(0.17 0.014 265);
+        --surface-card: oklch(0.21 0.014 265);
+        --surface-control: oklch(0.25 0.014 265);
+        --surface-control-hover: oklch(0.28 0.014 265);
+        --surface-track-off: oklch(0.35 0.014 265);
+        --surface-knob: oklch(0.95 0.005 265);
+
+        /* borders */
+        --border-container: oklch(0.32 0.014 265);
+        --border-control: oklch(0.55 0.014 265);
+        --border-control-hover: oklch(0.65 0.014 265);
+        --border-divider: oklch(0.3 0.014 265);
+
+        /* accent */
+        --accent-bg: oklch(0.72 0.14 265);
+        --accent-bg-hover: oklch(0.77 0.13 265);
+        --accent-bg-pressed: oklch(0.68 0.14 265);
+        --accent-text: oklch(0.8 0.1 265);
+        --accent-strong: oklch(0.55 0.16 265);
+        --color-focus: oklch(0.75 0.12 265);
+
+        /* danger */
+        --danger-text: oklch(0.78 0.14 25);
+        --danger-border: oklch(0.6 0.19 25);
+        --danger-soft: oklch(0.23 0.035 25);
+        --danger-soft-hover: oklch(0.28 0.06 25);
+
+        /* success */
+        --success-text: oklch(0.82 0.12 150);
+
+        /* type */
+        --type-title: 1.75rem;
+        --leading-title: 1.2;
+        --type-heading: 1.0625rem;
+        --leading-heading: 1.35;
+        --type-body: 0.9375rem;
+        --leading-body: 1.5;
+        --type-label: 0.875rem;
+        --leading-label: 1.4;
+        --type-caption: 0.8125rem;
+        --leading-caption: 1.5;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        /* spacing, named by relationship */
+        --space-tight: 0.375rem;
+        --space-related: 0.75rem;
+        --space-group: 1.25rem;
+        --space-section: 3rem;
+        --space-page: 4.5rem;
+
+        /* elevation */
+        --shadow-raise: 0 1px 2px oklch(0 0 0 / 0.45);
+        --shadow-overlay: 0 4px 16px oklch(0 0 0 / 0.4);
+
+        /* radius */
+        --radius-container: 12px;
+        --radius-control: 8px;
+        --radius-pill: 999px;
+
+        --size-tap: 2.75rem;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-page);
+        color: var(--text-primary);
+        font-family:
+          "Avenir Next", "Seravek", "Segoe UI Variable", ui-sans-serif,
+          system-ui, sans-serif;
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+      }
+
+      .wrap {
+        max-width: 46rem;
+        margin-inline: auto;
+        padding: var(--space-section) var(--space-group) var(--space-page);
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: var(--type-title);
+        line-height: var(--leading-title);
+        font-weight: var(--weight-semibold);
+        letter-spacing: -0.01em;
+      }
+
+      .subtitle {
+        margin: var(--space-tight) 0 0;
+        color: var(--text-secondary);
+      }
+
+      /* ---- tabs ---- */
+      .tabs {
+        display: flex;
+        gap: var(--space-related);
+        margin-top: var(--space-group);
+        border-bottom: 1px solid var(--border-divider);
+        overflow-x: auto;
+      }
+
+      .tab {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--size-tap);
+        padding: 0 var(--space-tight);
+        white-space: nowrap;
+        text-decoration: none;
+        color: var(--text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+      }
+
+      .tab:hover {
+        color: var(--text-primary);
+        border-bottom-color: var(--border-control);
+      }
+
+      .tab:active {
+        color: var(--text-primary);
+        border-bottom-color: var(--border-control-hover);
+      }
+
+      .tab[aria-current="page"] {
+        color: var(--accent-text);
+        font-weight: var(--weight-semibold);
+        border-bottom-color: var(--accent-bg);
+      }
+
+      /* ---- sections ---- */
+      section {
+        margin-top: var(--space-section);
+      }
+
+      h2 {
+        margin: 0;
+        font-size: var(--type-heading);
+        line-height: var(--leading-heading);
+        font-weight: var(--weight-semibold);
+      }
+
+      .section-intro {
+        margin: var(--space-tight) 0 0;
+        color: var(--text-secondary);
+      }
+
+      .section-body {
+        margin-top: var(--space-group);
+      }
+
+      /* ---- profile form ---- */
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+      }
+
+      .avatar {
+        flex: none;
+        width: 4rem;
+        height: 4rem;
+        border-radius: var(--radius-pill);
+        background: var(--accent-strong);
+        color: var(--text-on-strong);
+        display: grid;
+        place-items: center;
+        font-size: var(--type-heading);
+        line-height: var(--leading-heading);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.02em;
+      }
+
+      .avatar-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-tight);
+      }
+
+      .fields {
+        display: grid;
+        gap: var(--space-group);
+        margin-top: var(--space-group);
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+      }
+
+      .field-pair {
+        display: grid;
+        gap: var(--space-group);
+      }
+
+      @media (min-width: 40rem) {
+        .field-pair {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      label {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+      }
+
+      .hint {
+        margin: 0;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        color: var(--text-tertiary);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      textarea,
+      select {
+        width: 100%;
+        min-height: var(--size-tap);
+        padding: var(--space-tight) var(--space-related);
+        background: var(--surface-control);
+        color: var(--text-primary);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        font: inherit;
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      input[type="text"]:hover,
+      input[type="email"]:hover,
+      textarea:hover,
+      select:hover {
+        border-color: var(--border-control-hover);
+      }
+
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline-offset: 0;
+        border-color: var(--color-focus);
+      }
+
+      .field-error input {
+        border-color: var(--danger-border);
+      }
+
+      .error-msg {
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: var(--space-tight);
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-medium);
+        color: var(--danger-text);
+      }
+
+      .select-wrap {
+        position: relative;
+      }
+
+      .select-wrap select {
+        appearance: none;
+        padding-right: calc(var(--space-related) * 2 + 1rem);
+      }
+
+      .select-wrap svg {
+        position: absolute;
+        right: var(--space-related);
+        top: 50%;
+        translate: 0 -50%;
+        pointer-events: none;
+        color: var(--text-secondary);
+      }
+
+      /* ---- buttons ---- */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-tight);
+        min-height: var(--size-tap);
+        padding: 0 var(--space-group);
+        border-radius: var(--radius-control);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        font-family: inherit;
+        cursor: pointer;
+        border: 1px solid transparent;
+        background: none;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--accent-bg);
+        color: var(--text-on-accent);
+        font-weight: var(--weight-semibold);
+      }
+      .btn-primary:hover {
+        background: var(--accent-bg-hover);
+      }
+      .btn-primary:active {
+        background: var(--accent-bg-pressed);
+      }
+
+      .btn-secondary {
+        border-color: var(--border-control);
+      }
+      .btn-secondary:hover {
+        background: var(--surface-control);
+        border-color: var(--border-control-hover);
+      }
+      .btn-secondary:active {
+        background: var(--surface-control-hover);
+      }
+
+      .btn-danger {
+        border-color: var(--danger-border);
+        color: var(--danger-text);
+      }
+      .btn-danger:hover {
+        background: var(--danger-soft-hover);
+      }
+      .btn-danger:active {
+        background: var(--danger-soft);
+      }
+
+      .sr-input {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        opacity: 0;
+      }
+
+      .sr-input:focus-visible + label {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      /* ---- toggles ---- */
+      .toggles {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        padding-block: var(--space-related);
+      }
+
+      .toggle-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      .toggle-copy .hint {
+        color: var(--text-secondary);
+      }
+
+      .switch {
+        flex: none;
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: var(--size-tap);
+        min-height: var(--size-tap);
+        cursor: pointer;
+      }
+
+      .switch::before {
+        content: "";
+        width: 3rem;
+        height: 1.75rem;
+        border-radius: var(--radius-pill);
+        background: var(--surface-track-off);
+        border: 1px solid var(--border-control);
+        transition:
+          background 120ms ease,
+          border-color 120ms ease;
+      }
+
+      .switch::after {
+        content: "";
+        position: absolute;
+        left: calc(50% - 1.5rem + 0.25rem);
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: var(--radius-pill);
+        background: var(--surface-knob);
+        box-shadow: var(--shadow-raise);
+        transition: translate 120ms ease;
+      }
+
+      .sr-input:checked + .switch::before {
+        background: var(--accent-strong);
+        border-color: var(--accent-strong);
+      }
+
+      .sr-input:checked + .switch::after {
+        translate: 1.25rem 0;
+      }
+
+      .switch:hover::before {
+        border-color: var(--border-control-hover);
+      }
+      .sr-input:active + .switch::after {
+        width: 1.45rem;
+      }
+
+      /* ---- team table ---- */
+      .table-card {
+        background: var(--surface-card);
+        border: 1px solid var(--border-container);
+        border-radius: var(--radius-container);
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 34rem;
+        border-collapse: collapse;
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+      }
+
+      th {
+        text-align: left;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-medium);
+        color: var(--text-tertiary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border-divider);
+      }
+
+      th,
+      td {
+        padding: var(--space-related) var(--space-group);
+      }
+
+      td {
+        color: var(--text-secondary);
+      }
+      td:first-child {
+        color: var(--text-primary);
+        font-weight: var(--weight-medium);
+      }
+
+      tbody tr + tr td {
+        border-top: 1px solid var(--border-divider);
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-tight);
+        color: var(--success-text);
+        font-weight: var(--weight-medium);
+      }
+
+      .status::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: var(--radius-pill);
+        background: var(--success-text);
+      }
+
+      /* ---- empty state ---- */
+      .empty {
+        background: var(--surface-card);
+        border: 1px solid var(--border-container);
+        border-radius: var(--radius-container);
+        padding: var(--space-section) var(--space-group);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-related);
+        text-align: center;
+      }
+
+      .empty svg {
+        color: var(--text-tertiary);
+      }
+
+      .empty-title {
+        margin: 0;
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+        font-weight: var(--weight-semibold);
+      }
+
+      .empty .hint {
+        max-width: 24rem;
+      }
+
+      /* ---- danger zone ---- */
+      .danger-card {
+        background: var(--danger-soft);
+        border: 1px solid var(--danger-border);
+        border-radius: var(--radius-container);
+        padding: var(--space-group);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+      }
+
+      .danger-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      .danger-copy strong {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-semibold);
+      }
+
+      .danger-copy .hint {
+        color: var(--text-secondary);
+      }
+
+      /* ---- page actions ---- */
+      .actions {
+        margin-top: var(--space-section);
+        padding-top: var(--space-group);
+        border-top: 1px solid var(--border-divider);
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-related);
+      }
+
+      @media (forced-colors: active) {
+        .switch::before {
+          border: 1px solid ButtonText;
+        }
+        .switch::after {
+          background: ButtonText;
+          box-shadow: none;
+        }
+        .sr-input:checked + .switch::before {
+          background: Highlight;
+          border-color: Highlight;
+        }
+        .sr-input:checked + .switch::after {
+          background: Canvas;
+        }
+        .tab[aria-current="page"] {
+          border-bottom-color: Highlight;
+        }
+        .status::before {
+          background: CanvasText;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <h1>Account Settings</h1>
+        <p class="subtitle">Manage your profile, team, and preferences.</p>
+        <nav aria-label="Settings sections">
+          <div class="tabs">
+            <a class="tab" href="#profile" aria-current="page">Profile</a>
+            <a class="tab" href="#notifications">Notifications</a>
+            <a class="tab" href="#billing">Billing</a>
+            <a class="tab" href="#team">Team</a>
+            <a class="tab" href="#security">Security</a>
+          </div>
+        </nav>
+      </header>
+
+      <main>
+        <section id="profile" aria-labelledby="profile-h">
+          <h2 id="profile-h">Profile</h2>
+          <p class="section-intro">
+            This information will be displayed publicly.
+          </p>
+
+          <div class="section-body">
+            <div class="avatar-row">
+              <div class="avatar" aria-hidden="true">BT</div>
+              <div class="avatar-meta">
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  class="sr-input"
+                  accept="image/jpeg,image/gif,image/png"
+                />
+                <label for="avatar-upload" class="btn btn-secondary"
+                  >Upload new picture</label
+                >
+                <p class="hint">JPG, GIF or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="fields">
+              <div class="field-pair">
+                <div class="field">
+                  <label for="first-name">First name</label>
+                  <input
+                    type="text"
+                    id="first-name"
+                    name="first-name"
+                    value="Brian"
+                    autocomplete="given-name"
+                  />
+                </div>
+                <div class="field">
+                  <label for="last-name">Last name</label>
+                  <input
+                    type="text"
+                    id="last-name"
+                    name="last-name"
+                    value="Talbot"
+                    autocomplete="family-name"
+                  />
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="email">Email address</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  value="brian@awesome.me"
+                  autocomplete="email"
+                  aria-describedby="email-hint"
+                />
+                <p class="hint" id="email-hint">
+                  Used for account notifications and sign-in.
+                </p>
+              </div>
+
+              <div class="field field-error">
+                <label for="username">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value="talbs"
+                  autocomplete="username"
+                  aria-invalid="true"
+                  aria-describedby="username-error"
+                />
+                <p class="error-msg" id="username-error">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <circle cx="8" cy="8" r="6.5" stroke="currentColor" />
+                    <path
+                      d="M8 5v3.5"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                    />
+                    <circle cx="8" cy="11.4" r="0.8" fill="currentColor" />
+                  </svg>
+                  This username is already taken.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="bio">Bio</label>
+                <textarea
+                  id="bio"
+                  name="bio"
+                  rows="3"
+                  aria-describedby="bio-hint"
+                >
+Product designer who codes.</textarea>
+                <p class="hint" id="bio-hint">
+                  A short bio for your public profile.
+                </p>
+              </div>
+
+              <div class="field">
+                <label for="timezone">Timezone</label>
+                <div class="select-wrap">
+                  <select id="timezone" name="timezone">
+                    <option>Eastern</option>
+                    <option>Central</option>
+                    <option>Pacific</option>
+                  </select>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                    aria-hidden="true"
+                  >
+                    <path
+                      d="m4 6 4 4 4-4"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="notifications" aria-labelledby="notifications-h">
+          <h2 id="notifications-h">Notifications</h2>
+          <p class="section-intro">Choose what lands in your inbox.</p>
+
+          <ul class="toggles section-body">
+            <li class="toggle-row">
+              <div class="toggle-copy">
+                <label for="t-comments">Comments</label>
+                <p class="hint">Email me when someone comments on my work.</p>
+              </div>
+              <input type="checkbox" id="t-comments" class="sr-input" checked />
+              <label for="t-comments" class="switch" aria-hidden="true"></label>
+            </li>
+            <li class="toggle-row">
+              <div class="toggle-copy">
+                <label for="t-mentions">Mentions</label>
+                <p class="hint">Email me when someone mentions me.</p>
+              </div>
+              <input type="checkbox" id="t-mentions" class="sr-input" checked />
+              <label for="t-mentions" class="switch" aria-hidden="true"></label>
+            </li>
+            <li class="toggle-row">
+              <div class="toggle-copy">
+                <label for="t-updates">Product updates</label>
+                <p class="hint">News about new features and improvements.</p>
+              </div>
+              <input type="checkbox" id="t-updates" class="sr-input" />
+              <label for="t-updates" class="switch" aria-hidden="true"></label>
+            </li>
+            <li class="toggle-row">
+              <div class="toggle-copy">
+                <label for="t-digest">Weekly digest</label>
+                <p class="hint">
+                  A summary of your team's activity, every Monday.
+                </p>
+              </div>
+              <input type="checkbox" id="t-digest" class="sr-input" />
+              <label for="t-digest" class="switch" aria-hidden="true"></label>
+            </li>
+          </ul>
+        </section>
+
+        <section id="team" aria-labelledby="team-h">
+          <h2 id="team-h">Team members</h2>
+          <p class="section-intro">People with access to this account.</p>
+
+          <div class="table-card section-body">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Brian Talbot</td>
+                  <td>brian@awesome.me</td>
+                  <td>Owner</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Dana Reed</td>
+                  <td>dana@awesome.me</td>
+                  <td>Admin</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+                <tr>
+                  <td>Sam Okoye</td>
+                  <td>sam@awesome.me</td>
+                  <td>Member</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="connected-apps" aria-labelledby="apps-h">
+          <h2 id="apps-h">Connected apps</h2>
+          <p class="section-intro">Services with access to your account.</p>
+
+          <div class="empty section-body">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="3.75"
+                y="3.75"
+                width="7"
+                height="7"
+                rx="1.75"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="13.25"
+                y="3.75"
+                width="7"
+                height="7"
+                rx="1.75"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="3.75"
+                y="13.25"
+                width="7"
+                height="7"
+                rx="1.75"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M16.75 13.75v6M13.75 16.75h6"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <p class="empty-title">No connected apps yet</p>
+            <p class="hint">
+              Connect the tools you already use and they'll show up here.
+            </p>
+            <a class="btn btn-secondary" href="#browse">Browse integrations</a>
+          </div>
+        </section>
+
+        <section id="danger" aria-labelledby="danger-h">
+          <h2 id="danger-h">Danger zone</h2>
+
+          <div class="danger-card section-body">
+            <div class="danger-copy">
+              <strong>Delete account</strong>
+              <p class="hint">
+                Permanently removes your account and all of its data.
+              </p>
+            </div>
+            <button type="button" class="btn btn-danger">Delete account</button>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,952 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        /* surfaces */
+        --surface-page: #f6f5f2;
+        --surface-card: #ffffff;
+        --surface-sunken: #faf9f7;
+        --surface-accent-soft: #eaf2ed;
+        --surface-danger-soft: #fdf3f1;
+
+        /* text — 3 ranks (17.4 / 7.66 / 5.38 on card) */
+        --text-primary: #1b1a17;
+        --text-secondary: #57534a;
+        --text-tertiary: #6f6a5f;
+        --text-inverse: #ffffff;
+
+        /* accents */
+        --accent: #2f6b4f;
+        --accent-strong: #245540;
+        --danger: #a32b21;
+        --danger-strong: #86211a;
+
+        /* borders — 3 jobs (control edge 3.57:1, container, divider) */
+        --border-control: #8d8779;
+        --border-container: #e2ded4;
+        --border-divider: #eae6dd;
+
+        /* type — size paired with line-height */
+        --size-display: 1.75rem;
+        --lh-display: 1.2;
+        --size-heading: 1.0625rem;
+        --lh-heading: 1.35;
+        --size-body: 0.9375rem;
+        --lh-body: 1.55;
+        --size-label: 0.8125rem;
+        --lh-label: 1.4;
+        --size-help: 0.75rem;
+        --lh-help: 1.5;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-strong: 600;
+
+        /* spacing — named by relationship */
+        --space-tight: 0.25rem;
+        --space-related: 0.5rem;
+        --space-group: 1rem;
+        --space-section: 1.75rem;
+        --space-page: 3rem;
+
+        --pad-card: 1.25rem;
+        --pad-control: 0.5625rem 0.75rem;
+
+        /* elevation */
+        --shadow-raised:
+          0 1px 2px rgba(27, 26, 23, 0.06), 0 1px 1px rgba(27, 26, 23, 0.04);
+        --shadow-lifted:
+          0 6px 16px rgba(27, 26, 23, 0.09), 0 1px 2px rgba(27, 26, 23, 0.05);
+
+        /* radius */
+        --radius-container: 12px;
+        --radius-control: 7px;
+        --radius-pill: 999px;
+
+        --font-display:
+          "Charter", "Iowan Old Style", "Palatino", Georgia, ui-serif, serif;
+        --font-ui:
+          "Avenir Next", "Segoe UI Variable Text", ui-sans-serif, system-ui,
+          -apple-system, sans-serif;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        padding: var(--space-section) var(--space-group) var(--space-page);
+        background: var(--surface-page);
+        color: var(--text-primary);
+        font-family: var(--font-ui);
+        font-size: var(--size-body);
+        line-height: var(--lh-body);
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        max-width: 46rem;
+        margin: 0 auto;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+        border-radius: var(--radius-control);
+      }
+
+      /* ---------- masthead ---------- */
+      .masthead {
+        margin-bottom: var(--space-group);
+      }
+      .masthead h1 {
+        margin: 0 0 var(--space-tight);
+        font-family: var(--font-display);
+        font-size: var(--size-display);
+        line-height: var(--lh-display);
+        font-weight: var(--weight-strong);
+        letter-spacing: -0.015em;
+      }
+      .masthead p {
+        margin: 0;
+        color: var(--text-secondary);
+      }
+
+      /* ---------- tabs ---------- */
+      .tabs {
+        display: flex;
+        gap: var(--space-related);
+        margin-bottom: var(--space-section);
+        padding-bottom: var(--space-tight);
+        overflow-x: auto;
+        scrollbar-width: none;
+        box-shadow: inset 0 -1px 0 var(--border-divider);
+      }
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+      .tab {
+        flex: 0 0 auto;
+        padding: var(--space-related) var(--space-related) 0.6875rem;
+        border: 0;
+        border-bottom: 2px solid transparent;
+        background: none;
+        color: var(--text-secondary);
+        font: inherit;
+        font-size: var(--size-label);
+        font-weight: var(--weight-medium);
+        line-height: var(--lh-label);
+        cursor: pointer;
+      }
+      .tab:hover {
+        color: var(--text-primary);
+        border-bottom-color: var(--border-container);
+      }
+      .tab:active {
+        color: var(--accent-strong);
+      }
+      .tab:focus-visible {
+        outline-offset: -2px;
+      }
+      .tab[aria-current="page"] {
+        color: var(--accent-strong);
+        font-weight: var(--weight-strong);
+        border-bottom-color: var(--accent);
+      }
+      .tab:disabled {
+        color: var(--text-tertiary);
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      /* ---------- cards ---------- */
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-raised);
+        padding: var(--pad-card);
+      }
+      .stack > * + * {
+        margin-top: var(--space-section);
+      }
+
+      .card-head {
+        margin-bottom: var(--space-group);
+      }
+      .card-head h2 {
+        margin: 0;
+        font-size: var(--size-heading);
+        line-height: var(--lh-heading);
+        font-weight: var(--weight-strong);
+        letter-spacing: -0.005em;
+      }
+      .card-head p {
+        margin: var(--space-tight) 0 0;
+        color: var(--text-secondary);
+        font-size: var(--size-label);
+        line-height: var(--lh-label);
+      }
+
+      /* ---------- form ---------- */
+      .fields {
+        display: grid;
+        gap: var(--space-group);
+      }
+      .field {
+        display: grid;
+        gap: var(--space-tight);
+      }
+      .row {
+        display: grid;
+        gap: var(--space-group);
+      }
+
+      label,
+      .label {
+        font-size: var(--size-label);
+        line-height: var(--lh-label);
+        font-weight: var(--weight-medium);
+        color: var(--text-primary);
+      }
+      .help {
+        margin: 0;
+        font-size: var(--size-help);
+        line-height: var(--lh-help);
+        color: var(--text-tertiary);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      textarea,
+      select {
+        width: 100%;
+        padding: var(--pad-control);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        background: var(--surface-card);
+        color: var(--text-primary);
+        font: inherit;
+        line-height: 1.4;
+      }
+      textarea {
+        resize: vertical;
+        min-height: 5.5rem;
+        line-height: var(--lh-body);
+      }
+      input:hover,
+      textarea:hover,
+      select:hover {
+        border-color: var(--text-tertiary);
+      }
+      input:focus-visible,
+      textarea:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 1px;
+        border-color: var(--accent);
+      }
+      input:active,
+      textarea:active {
+        background: var(--surface-card);
+      }
+      input:disabled,
+      textarea:disabled,
+      select:disabled {
+        background: var(--surface-sunken);
+        color: var(--text-tertiary);
+        border-style: dashed;
+        cursor: not-allowed;
+      }
+      input[aria-busy="true"],
+      select[aria-busy="true"] {
+        background: var(--surface-sunken);
+        color: var(--text-tertiary);
+      }
+
+      select {
+        appearance: none;
+        padding-right: 2.25rem;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%2357534a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+      }
+
+      .field-error input {
+        border-color: var(--danger);
+        border-width: 2px;
+        padding: calc(0.5625rem - 1px) calc(0.75rem - 1px);
+      }
+      .field-error input:focus-visible {
+        outline-color: var(--danger);
+        border-color: var(--danger);
+      }
+      .error-text {
+        display: flex;
+        align-items: center;
+        gap: var(--space-tight);
+        margin: 0;
+        color: var(--danger);
+        font-size: var(--size-help);
+        line-height: var(--lh-help);
+        font-weight: var(--weight-medium);
+      }
+      .error-text svg {
+        flex: 0 0 auto;
+      }
+
+      /* ---------- avatar ---------- */
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+        flex-wrap: wrap;
+      }
+      .avatar {
+        display: grid;
+        place-items: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: var(--radius-pill);
+        background: #3d5a4c;
+        color: var(--text-inverse);
+        font-family: var(--font-display);
+        font-size: 1.375rem;
+        font-weight: var(--weight-strong);
+        letter-spacing: 0.02em;
+      }
+      .avatar-copy {
+        display: grid;
+        gap: var(--space-tight);
+        justify-items: start;
+      }
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      /* ---------- buttons ---------- */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-related);
+        padding: var(--pad-control);
+        border: 1px solid transparent;
+        border-radius: var(--radius-control);
+        font: inherit;
+        font-size: var(--size-label);
+        font-weight: var(--weight-medium);
+        line-height: var(--lh-label);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .btn-quiet {
+        background: var(--surface-card);
+        border-color: var(--border-control);
+        color: var(--text-primary);
+      }
+      .btn-quiet:hover {
+        background: var(--surface-sunken);
+        border-color: var(--text-tertiary);
+      }
+      .btn-quiet:active {
+        background: var(--surface-page);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: var(--text-inverse);
+        box-shadow: var(--shadow-raised);
+      }
+      .btn-primary:hover {
+        background: var(--accent-strong);
+        box-shadow: var(--shadow-lifted);
+      }
+      .btn-primary:active {
+        background: var(--accent-strong);
+        box-shadow: none;
+        transform: translateY(1px);
+      }
+
+      .btn-danger {
+        background: var(--surface-card);
+        border-color: var(--danger);
+        color: var(--danger);
+        font-weight: var(--weight-strong);
+      }
+      .btn-danger:hover {
+        background: var(--danger);
+        color: var(--text-inverse);
+      }
+      .btn-danger:active {
+        background: var(--danger-strong);
+        border-color: var(--danger-strong);
+        color: var(--text-inverse);
+      }
+
+      .btn:disabled,
+      .btn[aria-disabled="true"] {
+        background: var(--surface-sunken);
+        border-color: var(--border-container);
+        color: var(--text-tertiary);
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+      .btn[aria-busy="true"] {
+        color: transparent;
+        position: relative;
+        pointer-events: none;
+      }
+      .btn[aria-busy="true"]::after {
+        content: "";
+        position: absolute;
+        width: 0.875rem;
+        height: 0.875rem;
+        border: 2px solid currentColor;
+        border-top-color: var(--text-inverse);
+        border-radius: var(--radius-pill);
+        color: rgba(255, 255, 255, 0.4);
+        animation: spin 0.6s linear infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(1turn);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .btn[aria-busy="true"]::after {
+          animation-duration: 2s;
+        }
+        .btn-primary:active {
+          transform: none;
+        }
+      }
+
+      /* ---------- toggles ---------- */
+      .toggles {
+        display: grid;
+        gap: var(--space-group);
+      }
+      .toggle {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: start;
+        gap: var(--space-group);
+      }
+      .toggle + .toggle {
+        padding-top: var(--space-group);
+        box-shadow: inset 0 1px 0 var(--border-divider);
+      }
+      .toggle-copy {
+        display: grid;
+        gap: var(--space-tight);
+      }
+      .switch {
+        position: relative;
+        flex: 0 0 auto;
+      }
+      .switch input {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        opacity: 0;
+        cursor: pointer;
+      }
+      .switch-track {
+        display: block;
+        width: 2.75rem;
+        height: 1.5rem;
+        border-radius: var(--radius-pill);
+        background: var(--surface-page);
+        border: 1px solid var(--border-control);
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease;
+      }
+      .switch-track::after {
+        content: "";
+        display: block;
+        width: 1rem;
+        height: 1rem;
+        margin: 0.1875rem;
+        border-radius: var(--radius-pill);
+        background: var(--text-secondary);
+        box-shadow: var(--shadow-raised);
+        transition:
+          transform 0.15s ease,
+          background 0.15s ease;
+      }
+      .switch input:checked + .switch-track {
+        background: var(--accent);
+        border-color: var(--accent-strong);
+      }
+      .switch input:checked + .switch-track::after {
+        transform: translateX(1.25rem);
+        background: var(--surface-card);
+      }
+      .switch input:hover + .switch-track {
+        border-color: var(--text-secondary);
+      }
+      .switch input:focus-visible + .switch-track {
+        outline: 2px solid var(--accent);
+        outline-offset: 2px;
+      }
+      .switch input:active + .switch-track::after {
+        width: 1.25rem;
+      }
+      .switch input:disabled + .switch-track {
+        opacity: 0.5;
+      }
+      .switch input:disabled {
+        cursor: not-allowed;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .switch-track,
+        .switch-track::after {
+          transition: none;
+        }
+      }
+
+      /* ---------- table ---------- */
+      .table-scroll {
+        overflow-x: auto;
+        margin: 0 calc(var(--pad-card) * -1);
+        padding: 0 var(--pad-card);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--size-label);
+        line-height: var(--lh-label);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: var(--space-related) var(--space-group) var(--space-related) 0;
+        white-space: nowrap;
+      }
+      th:last-child,
+      td:last-child {
+        padding-right: 0;
+      }
+      thead th {
+        color: var(--text-tertiary);
+        font-size: var(--size-help);
+        font-weight: var(--weight-strong);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        padding-top: 0;
+      }
+      tbody tr + tr td {
+        box-shadow: inset 0 1px 0 var(--border-divider);
+      }
+      .cell-name {
+        font-weight: var(--weight-medium);
+        color: var(--text-primary);
+      }
+      .cell-muted {
+        color: var(--text-secondary);
+      }
+      .role {
+        color: var(--text-secondary);
+      }
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-tight);
+        padding: 0.125rem 0.5rem 0.125rem 0.375rem;
+        border-radius: var(--radius-pill);
+        background: var(--surface-accent-soft);
+        color: var(--accent-strong);
+        font-size: var(--size-help);
+        font-weight: var(--weight-medium);
+      }
+      .status::before {
+        content: "";
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: var(--radius-pill);
+        background: currentColor;
+      }
+
+      /* ---------- empty state ---------- */
+      .empty {
+        display: grid;
+        justify-items: center;
+        gap: var(--space-related);
+        padding: var(--space-section) var(--space-group);
+        border: 1px dashed var(--border-control);
+        border-radius: var(--radius-control);
+        background: var(--surface-sunken);
+        text-align: center;
+      }
+      .empty p {
+        margin: 0;
+      }
+      .empty .empty-title {
+        font-weight: var(--weight-medium);
+      }
+      .empty .btn {
+        margin-top: var(--space-tight);
+      }
+
+      /* ---------- danger zone ---------- */
+      .danger {
+        background: var(--surface-danger-soft);
+      }
+      .danger h2 {
+        color: var(--danger-strong);
+      }
+      .card-head-flush {
+        margin-bottom: 0;
+      }
+      .danger-row {
+        display: grid;
+        gap: var(--space-group);
+        align-items: center;
+      }
+
+      /* ---------- footer actions ---------- */
+      .actions {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: var(--space-related);
+        margin-top: var(--space-section);
+      }
+      .actions .btn {
+        width: 100%;
+      }
+
+      @media (min-width: 40rem) {
+        body {
+          padding: var(--space-page) var(--space-section);
+        }
+        :root {
+          --pad-card: 1.5rem;
+        }
+        .row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .toggle {
+          grid-template-columns: 1fr auto;
+        }
+        .danger-row {
+          grid-template-columns: 1fr auto;
+        }
+        .actions {
+          flex-direction: row;
+          justify-content: flex-end;
+        }
+        .actions .btn {
+          width: auto;
+          padding-inline: var(--space-group);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="masthead">
+        <h1>Account Settings</h1>
+        <p>Manage your profile, notifications, and team access.</p>
+      </header>
+
+      <nav class="tabs" aria-label="Settings sections">
+        <button type="button" class="tab" aria-current="page">Profile</button>
+        <button type="button" class="tab">Notifications</button>
+        <button type="button" class="tab">Billing</button>
+        <button type="button" class="tab">Team</button>
+        <button type="button" class="tab">Security</button>
+      </nav>
+
+      <form class="stack" action="#" method="post">
+        <section class="card" aria-labelledby="profile-heading">
+          <div class="card-head">
+            <h2 id="profile-heading">Profile</h2>
+            <p>This information will be displayed publicly.</p>
+          </div>
+
+          <div class="fields">
+            <div class="avatar-row">
+              <span class="avatar" aria-hidden="true">BT</span>
+              <div class="avatar-copy">
+                <label class="btn btn-quiet" for="avatar"
+                  >Upload photo
+                  <input
+                    class="visually-hidden"
+                    type="file"
+                    id="avatar"
+                    name="avatar"
+                    accept="image/jpeg,image/gif,image/png"
+                  />
+                </label>
+                <p class="help">JPG, GIF or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  value="Brian"
+                  autocomplete="given-name"
+                />
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  value="Talbot"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="brian@awesome.me"
+                autocomplete="email"
+                aria-describedby="email-help"
+              />
+              <p class="help" id="email-help">
+                Account notifications are sent to this address.
+              </p>
+            </div>
+
+            <div class="field field-error">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="talbs"
+                autocomplete="username"
+                aria-invalid="true"
+                aria-describedby="username-error"
+              />
+              <p class="error-text" id="username-error">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  aria-hidden="true"
+                  focusable="false"
+                >
+                  <circle
+                    cx="8"
+                    cy="8"
+                    r="7"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.6"
+                  ></circle>
+                  <path
+                    d="M8 4.5v4.2M8 11.2v.1"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                  ></path>
+                </svg>
+                This username is already taken.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="3"
+                aria-describedby="bio-help"
+              >
+Product designer who codes.</textarea>
+              <p class="help" id="bio-help">
+                A short description shown on your public profile.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="timezone">Timezone</label>
+              <select id="timezone" name="timezone">
+                <option selected>Eastern</option>
+                <option>Central</option>
+                <option>Pacific</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="notifications-heading">
+          <div class="card-head">
+            <h2 id="notifications-heading">Notifications</h2>
+          </div>
+
+          <div class="toggles">
+            <div class="toggle">
+              <span class="toggle-copy">
+                <label for="notify-comments">Comments</label>
+                <span class="help"
+                  >Someone replies to a thread you started.</span
+                >
+              </span>
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="notify-comments"
+                  name="notify-comments"
+                  checked
+                />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </div>
+
+            <div class="toggle">
+              <span class="toggle-copy">
+                <label for="notify-mentions">Mentions</label>
+                <span class="help">Someone tags you by name in a comment.</span>
+              </span>
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="notify-mentions"
+                  name="notify-mentions"
+                  checked
+                />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </div>
+
+            <div class="toggle">
+              <span class="toggle-copy">
+                <label for="notify-updates">Product updates</label>
+                <span class="help"
+                  >New features and improvements as they ship.</span
+                >
+              </span>
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="notify-updates"
+                  name="notify-updates"
+                />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </div>
+
+            <div class="toggle">
+              <span class="toggle-copy">
+                <label for="notify-digest">Weekly digest</label>
+                <span class="help"
+                  >A Monday summary of activity across your team.</span
+                >
+              </span>
+              <span class="switch">
+                <input
+                  type="checkbox"
+                  id="notify-digest"
+                  name="notify-digest"
+                />
+                <span class="switch-track" aria-hidden="true"></span>
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="team-heading">
+          <div class="card-head">
+            <h2 id="team-heading">Team members</h2>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cell-name">Brian Talbot</td>
+                  <td class="cell-muted">brian@awesome.me</td>
+                  <td class="role">Owner</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-name">Dana Reed</td>
+                  <td class="cell-muted">dana@awesome.me</td>
+                  <td class="role">Admin</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-name">Sam Okoye</td>
+                  <td class="cell-muted">sam@awesome.me</td>
+                  <td class="role">Member</td>
+                  <td><span class="status">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="apps-heading">
+          <div class="card-head">
+            <h2 id="apps-heading">Connected apps</h2>
+          </div>
+
+          <div class="empty">
+            <p class="empty-title">No apps connected</p>
+            <p class="help">Connect an app to sync your work automatically.</p>
+            <button type="button" class="btn btn-quiet">Browse apps</button>
+          </div>
+        </section>
+
+        <section class="card danger" aria-labelledby="danger-heading">
+          <div class="danger-row">
+            <div class="card-head card-head-flush">
+              <h2 id="danger-heading">Danger zone</h2>
+              <p>
+                Deleting your account removes all data permanently. This cannot
+                be undone.
+              </p>
+            </div>
+            <button type="button" class="btn btn-danger">Delete account</button>
+          </div>
+        </section>
+
+        <div class="actions">
+          <button type="button" class="btn btn-quiet">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

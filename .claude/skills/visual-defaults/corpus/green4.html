@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        --color-bg-page: #f6f7f9;
+        --color-bg-card: #ffffff;
+        --color-bg-subtle: #f2f3f6;
+        --color-bg-hover: #eceef2;
+
+        --color-text-primary: #1a1f2e;
+        --color-text-secondary: #4a5164;
+        --color-text-tertiary: #616879;
+        --color-text-on-brand: #ffffff;
+
+        --color-border-container: #e2e4ea;
+        --color-border-control: #7a8194;
+        --color-border-divider: #e8eaef;
+
+        --color-brand: #4f46e5;
+        --color-brand-strong: #4338ca;
+        --color-brand-pressed: #3730a3;
+        --color-brand-text: #4338ca;
+        --color-brand-soft: #e4e7fb;
+
+        --color-danger-text: #b42318;
+        --color-danger-strong: #d92d20;
+        --color-danger-soft: #fef3f2;
+        --color-danger-pressed: #912018;
+
+        --color-success-text: #067647;
+        --color-success-soft: #ecfdf3;
+        --color-success-border: #a6ceba;
+
+        --color-focus: #4338ca;
+
+        --type-title: 1.5rem;
+        --leading-title: 1.25;
+        --type-section: 1.0625rem;
+        --leading-section: 1.35;
+        --type-body: 0.9375rem;
+        --leading-body: 1.5;
+        --type-label: 0.875rem;
+        --leading-label: 1.4;
+        --type-meta: 0.8125rem;
+        --leading-meta: 1.5;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        --space-tight: 0.375rem;
+        --space-related: 0.625rem;
+        --space-group: 1rem;
+        --space-section: 1.75rem;
+        --space-page: 2.75rem;
+
+        --shadow-card: 0 1px 2px rgb(20 24 40 / 0.05);
+        --shadow-raised: 0 4px 12px rgb(20 24 40 / 0.08);
+
+        --radius-container: 12px;
+        --radius-control: 8px;
+        --radius-pill: 999px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--color-bg-page);
+        color: var(--color-text-primary);
+        font-family:
+          "Avenir Next",
+          "Seravek",
+          ui-sans-serif,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          sans-serif;
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .page {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: var(--space-section) var(--space-group) var(--space-page);
+      }
+
+      .page-header {
+        margin-bottom: var(--space-section);
+      }
+
+      .page-header h1 {
+        margin: 0 0 var(--space-tight);
+        font-size: var(--type-title);
+        line-height: var(--leading-title);
+        font-weight: var(--weight-semibold);
+        letter-spacing: -0.01em;
+      }
+
+      .page-header p {
+        margin: 0;
+        color: var(--color-text-secondary);
+      }
+
+      .tabs {
+        display: flex;
+        gap: var(--space-group);
+        margin-bottom: var(--space-section);
+        border-bottom: 1px solid var(--color-border-divider);
+        overflow-x: auto;
+      }
+
+      .tabs a {
+        flex-shrink: 0;
+        padding: var(--space-related) var(--space-tight);
+        margin-bottom: -1px;
+        border-bottom: 2px solid transparent;
+        color: var(--color-text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        text-decoration: none;
+      }
+
+      .tabs a:hover {
+        color: var(--color-text-primary);
+        border-bottom-color: var(--color-border-control);
+      }
+
+      .tabs a[aria-current="page"] {
+        color: var(--color-brand-text);
+        font-weight: var(--weight-semibold);
+        border-bottom-color: var(--color-brand);
+      }
+
+      .card {
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border-container);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-card);
+        padding: var(--space-section);
+      }
+
+      .card + .card {
+        margin-top: var(--space-section);
+      }
+
+      .card-header {
+        margin-bottom: var(--space-group);
+      }
+
+      .card-header h2 {
+        margin: 0 0 var(--space-tight);
+        font-size: var(--type-section);
+        line-height: var(--leading-section);
+        font-weight: var(--weight-semibold);
+      }
+
+      .card-header p {
+        margin: 0;
+        color: var(--color-text-secondary);
+      }
+
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+        margin-bottom: var(--space-section);
+      }
+
+      .avatar {
+        display: grid;
+        place-items: center;
+        width: 4rem;
+        height: 4rem;
+        flex-shrink: 0;
+        border-radius: var(--radius-pill);
+        background: var(--color-brand-soft);
+        color: var(--color-brand-pressed);
+        font-size: 1.25rem;
+        line-height: 1;
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.02em;
+      }
+
+      .avatar-upload input[type="file"] {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        border: 0;
+      }
+
+      .avatar-upload input[type="file"]:focus-visible + label {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .avatar-upload label {
+        display: inline-block;
+        padding: 0.5rem 0.875rem;
+        border: 1px solid var(--color-border-control);
+        border-radius: var(--radius-control);
+        background: var(--color-bg-card);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        cursor: pointer;
+      }
+
+      .avatar-upload label:hover {
+        background: var(--color-bg-subtle);
+      }
+
+      .avatar-upload label:active {
+        background: var(--color-bg-hover);
+      }
+
+      .avatar-upload .constraint {
+        margin: var(--space-tight) 0 0;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+      }
+
+      .field-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--space-group);
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+      }
+
+      .field label {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+      }
+
+      .field input,
+      .field textarea,
+      .field select {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--color-border-control);
+        border-radius: var(--radius-control);
+        background: var(--color-bg-card);
+        color: var(--color-text-primary);
+        font: inherit;
+      }
+
+      .field input:hover,
+      .field textarea:hover,
+      .field select:hover {
+        border-color: var(--color-text-secondary);
+      }
+
+      .field textarea {
+        resize: vertical;
+        min-height: 5.5rem;
+      }
+
+      .select-wrap {
+        position: relative;
+      }
+
+      .select-wrap select {
+        appearance: none;
+        padding-right: 2.25rem;
+      }
+
+      .select-wrap::after {
+        content: "";
+        position: absolute;
+        right: 0.875rem;
+        top: 50%;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-right: 2px solid var(--color-text-secondary);
+        border-bottom: 2px solid var(--color-text-secondary);
+        transform: translateY(-70%) rotate(45deg);
+        pointer-events: none;
+      }
+
+      .field .help {
+        margin: 0;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+      }
+
+      .field.is-invalid input {
+        border-color: var(--color-danger-strong);
+      }
+
+      .field .error {
+        display: flex;
+        align-items: center;
+        gap: var(--space-tight);
+        margin: 0;
+        color: var(--color-danger-text);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+        font-weight: var(--weight-medium);
+      }
+
+      .field .error svg {
+        flex-shrink: 0;
+      }
+
+      .switch-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--space-group);
+        padding-block: var(--space-related);
+      }
+
+      .switch-row + .switch-row {
+        border-top: 1px solid var(--color-border-divider);
+      }
+
+      .switch-copy label {
+        display: block;
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+      }
+
+      .switch-copy p {
+        margin: 0.125rem 0 0;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+      }
+
+      .switch {
+        appearance: none;
+        flex-shrink: 0;
+        width: 2.75rem;
+        height: 1.5rem;
+        margin: 0.125rem 0 0;
+        border: 1px solid var(--color-border-control);
+        border-radius: var(--radius-pill);
+        background: var(--color-bg-subtle);
+        position: relative;
+        cursor: pointer;
+      }
+
+      .switch::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-bg-card);
+        border: 1px solid var(--color-border-control);
+        transition: transform 120ms ease;
+      }
+
+      .switch:hover {
+        border-color: var(--color-text-secondary);
+      }
+
+      .switch:checked {
+        background: var(--color-brand);
+        border-color: var(--color-brand);
+      }
+
+      .switch:checked::before {
+        transform: translateX(1.25rem);
+        border-color: var(--color-brand);
+      }
+
+      .switch:checked:hover {
+        background: var(--color-brand-strong);
+        border-color: var(--color-brand-strong);
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+
+      th {
+        padding: var(--space-related) var(--space-related) var(--space-related)
+          0;
+        text-align: left;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+        font-weight: var(--weight-medium);
+        border-bottom: 1px solid var(--color-border-divider);
+        white-space: nowrap;
+      }
+
+      td {
+        padding: var(--space-related) var(--space-related) var(--space-related)
+          0;
+        border-bottom: 1px solid var(--color-border-divider);
+        white-space: nowrap;
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      td.member-name {
+        font-weight: var(--weight-medium);
+      }
+
+      td.member-email {
+        color: var(--color-text-secondary);
+      }
+
+      td.member-role {
+        color: var(--color-text-secondary);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 0.125rem 0.625rem;
+        border: 1px solid var(--color-success-border);
+        border-radius: var(--radius-pill);
+        background: var(--color-success-soft);
+        color: var(--color-success-text);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+        font-weight: var(--weight-medium);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-related);
+        padding: var(--space-section) var(--space-group);
+        text-align: center;
+      }
+
+      .empty-state svg {
+        color: var(--color-text-tertiary);
+      }
+
+      .empty-state h3 {
+        margin: 0;
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+        font-weight: var(--weight-semibold);
+      }
+
+      .empty-state p {
+        margin: 0;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-meta);
+        line-height: var(--leading-meta);
+      }
+
+      .card.danger {
+        border-color: var(--color-danger-strong);
+      }
+
+      .danger-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        flex-wrap: wrap;
+      }
+
+      .danger-row p {
+        margin: 0;
+        color: var(--color-text-secondary);
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-control);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        font-family: inherit;
+        cursor: pointer;
+      }
+
+      .btn-primary {
+        border: 1px solid var(--color-brand);
+        background: var(--color-brand);
+        color: var(--color-text-on-brand);
+      }
+
+      .btn-primary:hover {
+        background: var(--color-brand-strong);
+        border-color: var(--color-brand-strong);
+      }
+
+      .btn-primary:active {
+        background: var(--color-brand-pressed);
+        border-color: var(--color-brand-pressed);
+      }
+
+      .btn-secondary {
+        border: 1px solid var(--color-border-control);
+        background: var(--color-bg-card);
+        color: var(--color-text-primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--color-bg-subtle);
+      }
+
+      .btn-secondary:active {
+        background: var(--color-bg-hover);
+      }
+
+      .btn-danger {
+        border: 1px solid var(--color-danger-strong);
+        background: var(--color-bg-card);
+        color: var(--color-danger-text);
+      }
+
+      .btn-danger:hover {
+        background: var(--color-danger-soft);
+        color: var(--color-danger-pressed);
+      }
+
+      .btn-danger:active {
+        background: var(--color-danger-soft);
+        border-color: var(--color-danger-pressed);
+        color: var(--color-danger-pressed);
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-related);
+        margin-top: var(--space-section);
+      }
+
+      @media (min-width: 40rem) {
+        .field-grid.two-up {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      @media (forced-colors: active) {
+        .switch::before {
+          background: ButtonText;
+          border-color: ButtonText;
+        }
+        .switch:checked {
+          border-color: Highlight;
+        }
+        .switch:checked::before {
+          background: Highlight;
+          border-color: Highlight;
+        }
+        .tabs a[aria-current="page"] {
+          border-bottom-color: Highlight;
+        }
+        .badge {
+          border-color: CanvasText;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your profile, notifications, and team.</p>
+      </header>
+
+      <nav class="tabs" aria-label="Settings sections">
+        <a href="#profile" aria-current="page">Profile</a>
+        <a href="#notifications">Notifications</a>
+        <a href="#billing">Billing</a>
+        <a href="#team">Team</a>
+        <a href="#security">Security</a>
+      </nav>
+
+      <form action="#" method="post">
+        <section class="card" id="profile" aria-labelledby="profile-title">
+          <div class="card-header">
+            <h2 id="profile-title">Profile</h2>
+            <p>This information will be displayed publicly.</p>
+          </div>
+
+          <div class="avatar-row">
+            <div class="avatar" aria-hidden="true">BT</div>
+            <div class="avatar-upload">
+              <input
+                type="file"
+                id="avatar-file"
+                accept=".jpg,.jpeg,.gif,.png"
+              />
+              <label for="avatar-file">Upload new photo</label>
+              <p class="constraint">JPG, GIF or PNG. Max size 2MB.</p>
+            </div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field-grid two-up">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  value="Brian"
+                  autocomplete="given-name"
+                />
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  value="Talbot"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="brian@awesome.me"
+                autocomplete="email"
+                aria-describedby="email-help"
+              />
+              <p class="help" id="email-help">
+                We&rsquo;ll use this address for account notifications.
+              </p>
+            </div>
+
+            <div class="field is-invalid">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="talbs"
+                autocomplete="username"
+                aria-invalid="true"
+                aria-describedby="username-error"
+              />
+              <p class="error" id="username-error">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="7"
+                    cy="7"
+                    r="6.25"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M7 3.75v4"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="7" cy="10" r="0.875" fill="currentColor" />
+                </svg>
+                This username is already taken.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="3"
+                aria-describedby="bio-help"
+              >
+Product designer who codes.</textarea>
+              <p class="help" id="bio-help">
+                A short description for your public profile.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="timezone">Timezone</label>
+              <div class="select-wrap">
+                <select id="timezone" name="timezone">
+                  <option>Eastern</option>
+                  <option>Central</option>
+                  <option>Pacific</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="card"
+          id="notifications"
+          aria-labelledby="notifications-title"
+        >
+          <div class="card-header">
+            <h2 id="notifications-title">Notifications</h2>
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <label for="notify-comments">Comments</label>
+              <p>Get notified when someone comments on your work.</p>
+            </div>
+            <input
+              type="checkbox"
+              id="notify-comments"
+              name="notify-comments"
+              class="switch"
+              checked
+            />
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <label for="notify-mentions">Mentions</label>
+              <p>Get notified when someone mentions you.</p>
+            </div>
+            <input
+              type="checkbox"
+              id="notify-mentions"
+              name="notify-mentions"
+              class="switch"
+              checked
+            />
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <label for="notify-product">Product updates</label>
+              <p>News about new features and improvements.</p>
+            </div>
+            <input
+              type="checkbox"
+              id="notify-product"
+              name="notify-product"
+              class="switch"
+            />
+          </div>
+
+          <div class="switch-row">
+            <div class="switch-copy">
+              <label for="notify-digest">Weekly digest</label>
+              <p>A summary of your team&rsquo;s activity, every Monday.</p>
+            </div>
+            <input
+              type="checkbox"
+              id="notify-digest"
+              name="notify-digest"
+              class="switch"
+            />
+          </div>
+        </section>
+
+        <section class="card" id="team" aria-labelledby="team-title">
+          <div class="card-header">
+            <h2 id="team-title">Team members</h2>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="member-name">Brian Talbot</td>
+                  <td class="member-email">brian@awesome.me</td>
+                  <td class="member-role">Owner</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="member-name">Dana Reed</td>
+                  <td class="member-email">dana@awesome.me</td>
+                  <td class="member-role">Admin</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="member-name">Sam Okoye</td>
+                  <td class="member-email">sam@awesome.me</td>
+                  <td class="member-role">Member</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card" id="connected-apps" aria-labelledby="apps-title">
+          <div class="card-header">
+            <h2 id="apps-title">Connected apps</h2>
+          </div>
+
+          <div class="empty-state">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 32 32"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="4"
+                y="4"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="18"
+                y="4"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="4"
+                y="18"
+                width="10"
+                height="10"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M23 18v10M18 23h10"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>No apps connected</h3>
+            <p>Connect an app to sync your work across tools.</p>
+            <button type="button" class="btn btn-secondary">
+              Connect an app
+            </button>
+          </div>
+        </section>
+
+        <section
+          class="card danger"
+          id="danger-zone"
+          aria-labelledby="danger-title"
+        >
+          <div class="card-header">
+            <h2 id="danger-title">Danger zone</h2>
+          </div>
+
+          <div class="danger-row">
+            <p>Permanently remove your account and all of its data.</p>
+            <button type="button" class="btn btn-danger">Delete account</button>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
