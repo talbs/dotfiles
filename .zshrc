@@ -14,7 +14,8 @@ plugins=(brew common-aliases docker git github macos node npm web-search yarn)
 if [ -r "$ZSH/oh-my-zsh.sh" ]; then
   source "$ZSH/oh-my-zsh.sh"
 else
-  echo "oh-my-zsh missing — run ~/Projects/talbs/dotfiles/install.sh to restore git aliases"
+  # %N is this file, :A resolves the symlink to the real repo, :h takes its directory
+  echo "oh-my-zsh missing — run ${${(%):-%N}:A:h}/install.sh to restore git aliases"
 fi
 
 # Runtimes and history — no prompt init, Warp draws its own
