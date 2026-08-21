@@ -28,7 +28,7 @@ If the server will not come up, its backing services are probably down. Say so r
 
 1. Navigate to the page the change actually affects. Work it out from the diff; ask only if genuinely ambiguous.
 2. Screenshot.
-3. Judge it against what I asked for. Be specific: is the spacing what I said, is the ring cropped to the control, did the badge change appearance.
+3. Judge it against what I asked for. Be specific: is the spacing what I said, is the ring cropped to the control, did the badge change appearance. Then run squint questions 1–5 from the visual-defaults skill's `look.md` against the screenshot, and write the five-line report it requires — it structures the judgment you're weakest at. Question 6 and the moves palette are out of scope here: they are design work, and this is a bounded pass. If the squint says "assembled," report that; don't fix it.
 4. If it is obviously wrong, fix and re-shoot.
 5. **Stop after 3 iterations**, whatever the state. Surface what you have.
 6. Report with the screenshot and the diff together.
