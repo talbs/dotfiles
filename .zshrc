@@ -4,8 +4,14 @@ eval "$(/opt/homebrew/bin/brew shellenv)"
 # Path
 export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
-# Completions
-autoload -Uz compinit && compinit
+# Oh My Zsh — empty theme so Warp keeps drawing its own prompt. It runs compinit
+# itself, so there is no separate autoload here. zsh-autosuggestions and
+# zsh-syntax-highlighting are Homebrew installs sourced below, not omz plugins,
+# and `osx` is the old name for `macos`.
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME=""
+plugins=(brew common-aliases docker git github macos node npm web-search yarn)
+source "$ZSH/oh-my-zsh.sh"
 
 # Runtimes and history — no prompt init, Warp draws its own
 eval "$(mise activate zsh)"

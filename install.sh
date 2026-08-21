@@ -157,6 +157,20 @@ elif [ ! -e "$HOME/.ssh/allowed_signers" ]; then
   fi
 fi
 
+# Oh My Zsh — .zshrc sources it, so a machine without it gets a broken shell.
+# --keep-zshrc is required: the default installer moves .zshrc aside and writes
+# its own, which would replace the symlink made above.
+if [ -d "$HOME/.oh-my-zsh" ]; then
+  echo "  oh-my-zsh already installed"
+elif [ -n "$DRY_RUN" ]; then
+  echo "  would install oh-my-zsh (unattended, keeping this repo's .zshrc)"
+else
+  echo "  installing oh-my-zsh..."
+  RUNZSH=no KEEP_ZSHRC=yes sh -c \
+    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+    "" --unattended --keep-zshrc
+fi
+
 # Homebrew — shared base first, then the profile's extras
 if command -v brew &>/dev/null; then
   for bundle in "$DOTFILES/Brewfile" "$DOTFILES/Brewfile.$PROFILE"; do
