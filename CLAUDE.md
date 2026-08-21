@@ -36,7 +36,7 @@ Superpowers is installed. It fires on judgment, not reflex.
 - **A bug whose cause you don't already know** → `superpowers:systematic-debugging` first. "I think it's probably X" is not knowing.
 - **Single-file CSS, copy, token, or markup tweak** → skip both. Make the edit. Ceremony on a two-line change wastes both our time.
 - **Any claim that something is done, fixed, or passing** → `superpowers:verification-before-completion`, always, no size threshold. Show the command output.
-- **Work that's finished and needs to land** → the `ship` skill.
+- **Work that's finished and needs to land** → the `last-mile` skill.
 - **A visual change that needs looking at** → the `once-over` skill, before you ask me to look.
 
 If you can't tell whether something is a tweak or a feature, it's a feature.
@@ -83,7 +83,7 @@ Applies to **human-facing prose only** — docs, READMEs, longform, Slack, anyth
 
 # AI tells
 
-Canonical list. `.claude/commands/humanize.md` and the `ship` skill reference this section instead of keeping their own copies — edit here, nowhere else.
+Canonical list. `.claude/commands/humanize.md` and the `last-mile` skill reference this section instead of keeping their own copies — edit here, nowhere else.
 
 **In replies to me (chat):** "Great question", "You're absolutely right", "That makes a lot of sense", "Absolutely", "Definitely". Also warm-up paragraphs ("There are several ways to look at this").
 
@@ -144,14 +144,7 @@ The bar: a smart 13-year-old reads it once and can say what changed.
 
 ## PR descriptions
 
-- Format as copy-pasteable GitHub-flavored markdown: title shown separately above, body in a single fenced ` ```markdown ` block. Don't wrap that block in an outer escape-fence — the visual padding from nested fencing is more annoying than the artifact.
-- Open with a lead paragraph (one or two sentences) framing what the PR does. If it's a follow-up to another PR, link the prior PR by URL inline.
-- Use `### Topic` (h3) headings for grouped changes. **Aim for tight** — the diff carries detail, the body just explains intent. Reach for bulleted lists when a section enumerates distinct items; stay in prose when it's one continuous thought.
-- Inline `code` liberally for filenames, identifiers, attributes, and tokens.
-- **No `## Summary` or `## Test plan` headers** — just the lead paragraph and the topic sections.
-- If there are companion PRs in other repos, list them under a `## Companion PRs` (h2) heading at the bottom with bulleted GitHub URLs.
-- Don't add Claude/co-author footers unless I ask.
-- Write the body to **Plain language** above, every time. I should never have to follow up asking for it simpler or more human-readable.
+The formatting rules live in the `last-mile` skill, Stage 5 — that's the only place they apply, so they load when I invoke it or ask for a PR summary rather than every session.
 
 ## Markdown formatting
 

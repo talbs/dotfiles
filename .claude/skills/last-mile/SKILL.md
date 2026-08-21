@@ -1,11 +1,11 @@
 ---
-name: ship
+name: last-mile
 description: Wrap up finished work into branches, commits, and a PR summary. Use when the work on disk is done and needs to land, or when asked to "make commits", "make logical commits", "split this into branches", "wrap this up", "review our work then commit", or "give me a PR summary".
 ---
 
-# Ship
+# Last mile
 
-Takes finished work from "it's done on disk" to "branches and commits, ready for me to push".
+Takes finished work from "it's done on disk" to "branches and commits, ready for me to push". The work already exists; this is the delivery leg.
 
 There is exactly **one approval gate** and it sits before anything is committed. Everything before the gate is analysis. Everything after it is mechanical.
 
@@ -41,7 +41,18 @@ Create the branches, make the commits. If a commit doesn't apply cleanly, stop a
 
 ## Stage 5 — PR summary
 
-Follow the PR descriptions rules in CLAUDE.md for structure and formatting.
+Structure and formatting:
+
+- Format as copy-pasteable GitHub-flavored markdown: title shown separately above, body in a single fenced ` ```markdown ` block. Don't wrap that block in an outer escape-fence — the visual padding from nested fencing is more annoying than the artifact.
+- Open with a lead paragraph (one or two sentences) framing what the PR does. If it's a follow-up to another PR, link the prior PR by URL inline.
+- Use `### Topic` (h3) headings for grouped changes. **Aim for tight** — the diff carries detail, the body just explains intent. Reach for bulleted lists when a section enumerates distinct items; stay in prose when it's one continuous thought.
+- Inline `code` liberally for filenames, identifiers, attributes, and tokens.
+- **No `## Summary` or `## Test plan` headers** — just the lead paragraph and the topic sections.
+- If there are companion PRs in other repos, list them under a `## Companion PRs` (h2) heading at the bottom with bulleted GitHub URLs.
+- Don't add Claude/co-author footers unless I ask.
+- Write the body to **Plain language** above, every time. I should never have to follow up asking for it simpler or more human-readable.
+
+Also follow **Markdown formatting** in CLAUDE.md — no hard wrapping in anything bound for GitHub or Slack.
 
 For voice, apply **Plain language** and the prose half of **AI tells** from CLAUDE.md. Both, every time — I should never have to ask for "simpler" or "more human-readable" as a follow-up.
 
