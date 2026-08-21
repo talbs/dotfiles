@@ -166,9 +166,15 @@ elif [ -n "$DRY_RUN" ]; then
   echo "  would install oh-my-zsh (unattended, keeping this repo's .zshrc)"
 else
   echo "  installing oh-my-zsh..."
-  RUNZSH=no KEEP_ZSHRC=yes sh -c \
-    "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
-    "" --unattended --keep-zshrc
+  # Capture first. Piping a failed curl straight into sh runs an empty script and
+  # exits 0, so a network blip would look like a successful install.
+  if omz_installer=$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh); then
+    RUNZSH=no KEEP_ZSHRC=yes sh -c "$omz_installer" "" --unattended --keep-zshrc
+  fi
+  if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "  WARNING: oh-my-zsh did not install. Your shell will start without the"
+    echo "           git aliases until you re-run this script with a network connection."
+  fi
 fi
 
 # Homebrew — shared base first, then the profile's extras
