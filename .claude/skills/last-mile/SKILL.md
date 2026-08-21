@@ -1,5 +1,6 @@
 ---
 name: last-mile
+argument-hint: '[repo] [branch] — omit to check everything'
 description: Wrap up finished work into branches, commits, and a PR summary. Use when the work on disk is done and needs to land, or when asked to "make commits", "make logical commits", "split this into branches", "wrap this up", "review our work then commit", or "give me a PR summary".
 ---
 
@@ -13,7 +14,9 @@ There is exactly **one approval gate** and it sits before anything is committed.
 
 ## Stage 0 — Work out what state the work is in
 
-Look before you run anything. Check **every repo the work touches and every branch in them**, not just the branch you happen to be standing on. The most common miss is a branch that exists locally and nowhere else, in a repo currently checked out on `main`.
+**If I named a repo or a branch, scope to it.** Look only there, say in one line what you are skipping, and skip Stage 0's wider scan. `last-mile dotfiles chore/case-in-point` means that branch in that repo and nothing else.
+
+With no argument, check **every repo the work touches and every branch in them**, not just the branch you happen to be standing on. The most common miss is a branch that exists locally and nowhere else, in a repo currently checked out on `main`.
 
 Ignore dirt that predates this work and is unrelated to it — a stray lockfile does not make this a full run. Say which files you are ignoring and why.
 
@@ -58,6 +61,22 @@ Create the branches, make the commits. If a commit doesn't apply cleanly, stop a
 When the work was already committed and Stage 3 found nothing to change, this stage does nothing. Say so and move to Stage 5.
 
 ## Stage 5 — PR summary
+
+**Title.** Title Case, matching what I already ship:
+
+- Capitalize the first word, the last word, and every major word.
+- Lowercase articles (`a`, `an`, `the`), coordinating conjunctions (`and`, `but`, `or`), and prepositions of four letters or fewer (`of`, `to`, `in`, `on`, `for`, `with`, `from`, `into`) unless they start or end the title.
+- Anything in backticks keeps its literal casing. `.claude/rules` and `wa-prose` never become `.Claude/Rules` or `Wa-Prose`.
+- A leading scope is fine and common in the work repos, for example `Workspaces: Outline Role Badges` or `Switch: Move Focus Ring from thumb to control`.
+- `+` reads better than "and" when joining two nouns: `Rendering + Legibility`.
+
+**Use GitHub-flavored markdown hard.** The body is a document, not a paragraph. Reach for structure whenever it makes the thing scannable:
+
+- Tables for anything comparative — before and after, option matrices, which file loads when. A table beats three sentences describing the same grid.
+- Bulleted lists for anything enumerable. One idea per bullet.
+- Backticks on every filename, identifier, flag, and token.
+- Task lists for follow-ups the reader might pick up.
+- `<details>` around long output such as logs or full file dumps, so the page stays readable.
 
 Structure and formatting:
 
