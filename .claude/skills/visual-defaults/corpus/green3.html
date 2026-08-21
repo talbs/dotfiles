@@ -1,0 +1,902 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        --font-sans:
+          "Avenir Next", "Seravek", ui-sans-serif, system-ui, "Helvetica Neue",
+          sans-serif;
+
+        --color-page: oklch(97.3% 0.004 265);
+        --color-surface: oklch(100% 0 0);
+        --color-surface-sunken: oklch(96% 0.005 265);
+
+        --color-text-primary: oklch(25% 0.02 265);
+        --color-text-secondary: oklch(45% 0.016 265);
+        --color-text-tertiary: oklch(54% 0.014 265);
+        --color-text-inverse: oklch(100% 0 0);
+
+        --color-border-container: oklch(90% 0.006 265);
+        --color-border-control: oklch(62% 0.014 265);
+        --color-border-divider: oklch(93% 0.005 265);
+
+        --color-accent: oklch(50% 0.2 275);
+        --color-accent-strong: oklch(44% 0.2 275);
+        --color-accent-soft: oklch(93.5% 0.045 275);
+        --color-accent-text: oklch(44% 0.2 275);
+        --color-focus: oklch(50% 0.2 275);
+
+        --color-danger-text: oklch(46% 0.17 25);
+        --color-danger-strong: oklch(41% 0.16 25);
+        --color-danger-border: oklch(58% 0.17 25);
+        --color-danger-soft: oklch(96.5% 0.018 25);
+
+        --color-success-text: oklch(42% 0.11 152);
+        --color-success-soft: oklch(95.5% 0.045 152);
+        --color-success-dot: oklch(52% 0.13 152);
+
+        --color-track-off: oklch(59% 0.014 265);
+
+        --type-title: 1.625rem;
+        --leading-title: 1.25;
+        --type-heading: 1.0625rem;
+        --leading-heading: 1.4;
+        --type-body: 0.9375rem;
+        --leading-body: 1.5;
+        --type-label: 0.8125rem;
+        --leading-label: 1.4;
+        --type-caption: 0.75rem;
+        --leading-caption: 1.45;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        --space-tight: 0.375rem;
+        --space-related: 0.75rem;
+        --space-group: 1.25rem;
+        --space-section: 2rem;
+        --space-page: 3rem;
+        --space-card-inset: 1.5rem;
+
+        --elevation-card:
+          0 1px 2px oklch(25% 0.02 265 / 0.05),
+          0 2px 6px oklch(25% 0.02 265 / 0.06);
+        --elevation-raised: 0 1px 2px oklch(25% 0.02 265 / 0.25);
+
+        --radius-container: 12px;
+        --radius-control: 8px;
+        --radius-pill: 999px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+        color: var(--color-text-primary);
+        background: var(--color-page);
+      }
+
+      .page {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: var(--space-section) 1rem var(--space-page);
+      }
+
+      .page-header h1 {
+        margin: 0;
+        font-size: var(--type-title);
+        line-height: var(--leading-title);
+        font-weight: var(--weight-semibold);
+        letter-spacing: -0.01em;
+      }
+
+      .page-header p {
+        margin: var(--space-tight) 0 0;
+        color: var(--color-text-secondary);
+      }
+
+      .tabs {
+        margin-top: var(--space-group);
+        border-bottom: 1px solid var(--color-border-divider);
+        overflow-x: auto;
+      }
+
+      .tabs ul {
+        display: flex;
+        gap: var(--space-group);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tabs a {
+        display: block;
+        padding: var(--space-related) 0.125rem;
+        border-bottom: 3px solid transparent;
+        margin-bottom: -1px;
+        font-size: var(--type-body);
+        font-weight: var(--weight-medium);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .tabs a:hover {
+        color: var(--color-text-primary);
+        border-bottom-color: var(--color-border-control);
+      }
+
+      .tabs a:active {
+        color: var(--color-accent-strong);
+      }
+
+      .tabs a[aria-current="page"] {
+        color: var(--color-accent-text);
+        font-weight: var(--weight-semibold);
+        border-bottom-color: var(--color-accent);
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-section);
+        margin-top: var(--space-section);
+      }
+
+      .card {
+        background: var(--color-surface);
+        border-radius: var(--radius-container);
+        box-shadow: var(--elevation-card);
+        padding: var(--space-card-inset);
+      }
+
+      @media (forced-colors: active) {
+        .card {
+          border: 1px solid CanvasText;
+        }
+      }
+
+      .card > h2 {
+        margin: 0;
+        font-size: var(--type-heading);
+        line-height: var(--leading-heading);
+        font-weight: var(--weight-semibold);
+      }
+
+      .card-lede {
+        margin: var(--space-tight) 0 0;
+        color: var(--color-text-secondary);
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-group);
+        margin-top: var(--space-group);
+      }
+
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+      }
+
+      .avatar {
+        flex: none;
+        display: grid;
+        place-items: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-accent-soft);
+        color: var(--color-accent-text);
+        font-size: 1.25rem;
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.02em;
+      }
+
+      .avatar-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-tight);
+      }
+
+      .constraint {
+        margin: 0;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        color: var(--color-text-tertiary);
+      }
+
+      .field-grid {
+        display: grid;
+        gap: var(--space-group);
+      }
+
+      @media (min-width: 40rem) {
+        .field-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+      }
+
+      .field label {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        color: var(--color-text-primary);
+      }
+
+      .help {
+        margin: 0;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        color: var(--color-text-tertiary);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font: inherit;
+        color: var(--color-text-primary);
+        background: var(--color-surface);
+        border: 1px solid var(--color-border-control);
+        border-radius: var(--radius-control);
+      }
+
+      input:hover,
+      textarea:hover,
+      select:hover {
+        border-color: var(--color-text-secondary);
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 4.75rem;
+      }
+
+      select {
+        appearance: none;
+        padding-right: 2.25rem;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%235d5f6d' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .field-invalid input {
+        border-color: var(--color-danger-border);
+        background: var(--color-danger-soft);
+      }
+
+      .field-invalid input:focus-visible {
+        outline-color: var(--color-danger-border);
+      }
+
+      .field-error {
+        display: flex;
+        align-items: center;
+        gap: var(--space-tight);
+        margin: 0;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-medium);
+        color: var(--color-danger-text);
+      }
+
+      .field-error svg {
+        flex: none;
+      }
+
+      .toggle-list {
+        display: flex;
+        flex-direction: column;
+        margin-top: var(--space-related);
+      }
+
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        padding: var(--space-related) 0;
+      }
+
+      .toggle-row + .toggle-row {
+        border-top: 1px solid var(--color-border-divider);
+      }
+
+      .toggle-copy {
+        display: flex;
+        flex-direction: column;
+        gap: 0.125rem;
+      }
+
+      .toggle-copy label {
+        font-weight: var(--weight-medium);
+      }
+
+      .toggle-copy p {
+        margin: 0;
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        color: var(--color-text-secondary);
+      }
+
+      .switch {
+        appearance: none;
+        flex: none;
+        width: 2.5rem;
+        height: 1.375rem;
+        margin: 0;
+        border: none;
+        border-radius: var(--radius-pill);
+        background: var(--color-track-off);
+        position: relative;
+        cursor: pointer;
+        transition: background-color 120ms ease;
+      }
+
+      .switch::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-surface);
+        box-shadow: var(--elevation-raised);
+        transition: translate 120ms ease;
+      }
+
+      .switch:hover {
+        background: var(--color-text-secondary);
+      }
+
+      .switch:checked {
+        background: var(--color-accent);
+      }
+
+      .switch:checked:hover {
+        background: var(--color-accent-strong);
+      }
+
+      .switch:checked::before {
+        translate: 1.125rem 0;
+      }
+
+      .switch:active::before {
+        width: 1.25rem;
+      }
+
+      .table-scroll {
+        margin-top: var(--space-group);
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        min-width: 34rem;
+        border-collapse: collapse;
+      }
+
+      th {
+        padding: 0 var(--space-related) var(--space-tight) var(--space-related);
+        text-align: left;
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        color: var(--color-text-tertiary);
+      }
+
+      td {
+        padding: var(--space-related);
+        border-top: 1px solid var(--color-border-divider);
+      }
+
+      th:first-child,
+      td:first-child {
+        padding-left: 0;
+      }
+      th:last-child,
+      td:last-child {
+        padding-right: 0;
+      }
+
+      td.cell-name {
+        font-weight: var(--weight-medium);
+      }
+
+      td.cell-secondary {
+        color: var(--color-text-secondary);
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-tight);
+        padding: 0.125rem 0.625rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-success-soft);
+        color: var(--color-success-text);
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-medium);
+      }
+
+      .badge::before {
+        content: "";
+        width: 0.375rem;
+        height: 0.375rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-success-dot);
+      }
+
+      .empty-state {
+        margin-top: var(--space-group);
+        padding: var(--space-section) var(--space-group);
+        border-radius: var(--radius-control);
+        background: var(--color-surface-sunken);
+        text-align: center;
+      }
+
+      .empty-state svg {
+        color: var(--color-text-tertiary);
+      }
+
+      .empty-state h3 {
+        margin: var(--space-related) 0 0;
+        font-size: var(--type-body);
+        font-weight: var(--weight-semibold);
+      }
+
+      .empty-state p {
+        margin: var(--space-tight) 0 0;
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        color: var(--color-text-secondary);
+      }
+
+      .card-danger {
+        border: 1px solid var(--color-danger-border);
+        box-shadow: none;
+      }
+
+      .card-danger > h2 {
+        color: var(--color-danger-text);
+      }
+
+      .danger-row {
+        margin-top: var(--space-group);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-control);
+        border: 1px solid transparent;
+        font: inherit;
+        font-weight: var(--weight-medium);
+        line-height: var(--leading-label);
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .btn-primary {
+        background: var(--color-accent);
+        color: var(--color-text-inverse);
+      }
+
+      .btn-primary:hover {
+        background: var(--color-accent-strong);
+      }
+
+      .btn-primary:active {
+        background: oklch(39% 0.19 275);
+      }
+
+      .btn-secondary {
+        background: var(--color-surface);
+        border-color: var(--color-border-control);
+        color: var(--color-text-primary);
+      }
+
+      .btn-secondary:hover {
+        background: var(--color-surface-sunken);
+        border-color: var(--color-text-secondary);
+      }
+
+      .btn-secondary:active {
+        background: var(--color-border-divider);
+      }
+
+      .btn-danger {
+        background: var(--color-surface);
+        border-color: var(--color-danger-border);
+        color: var(--color-danger-text);
+      }
+
+      .btn-danger:hover {
+        background: var(--color-danger-soft);
+        border-color: var(--color-danger-strong);
+        color: var(--color-danger-strong);
+      }
+
+      .btn-danger:active {
+        background: oklch(93% 0.03 25);
+      }
+
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+      }
+
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-related);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your profile and account preferences.</p>
+      </header>
+
+      <nav class="tabs" aria-label="Settings sections">
+        <ul>
+          <li><a href="#profile" aria-current="page">Profile</a></li>
+          <li><a href="#notifications">Notifications</a></li>
+          <li><a href="#billing">Billing</a></li>
+          <li><a href="#team">Team</a></li>
+          <li><a href="#security">Security</a></li>
+        </ul>
+      </nav>
+
+      <main>
+        <section class="card" id="profile" aria-labelledby="profile-heading">
+          <h2 id="profile-heading">Profile</h2>
+          <p class="card-lede">This information will be displayed publicly.</p>
+
+          <div class="card-body">
+            <div class="avatar-row">
+              <span class="avatar" aria-hidden="true">BT</span>
+              <div class="avatar-meta">
+                <input
+                  type="file"
+                  id="avatar-upload"
+                  class="visually-hidden"
+                  accept="image/jpeg,image/gif,image/png"
+                />
+                <label for="avatar-upload" class="btn btn-secondary"
+                  >Upload photo</label
+                >
+                <p class="constraint">JPG, GIF or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="field-grid">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  value="Brian"
+                  autocomplete="given-name"
+                />
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  value="Talbot"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="brian@awesome.me"
+                autocomplete="email"
+                aria-describedby="email-help"
+              />
+              <p class="help" id="email-help">
+                We&rsquo;ll use this address for account notifications.
+              </p>
+            </div>
+
+            <div class="field field-invalid">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="talbs"
+                autocomplete="username"
+                aria-invalid="true"
+                aria-describedby="username-error"
+              />
+              <p class="field-error" id="username-error">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 14 14"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <circle
+                    cx="7"
+                    cy="7"
+                    r="6.25"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  />
+                  <path
+                    d="M7 3.75v3.75"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    stroke-linecap="round"
+                  />
+                  <circle cx="7" cy="10.1" r="0.9" fill="currentColor" />
+                </svg>
+                This username is already taken.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="3"
+                aria-describedby="bio-help"
+              >
+Product designer who codes.</textarea>
+              <p class="help" id="bio-help">
+                A short description for your public profile.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="timezone">Timezone</label>
+              <select id="timezone" name="timezone">
+                <option selected>Eastern</option>
+                <option>Central</option>
+                <option>Pacific</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section
+          class="card"
+          id="notifications"
+          aria-labelledby="notifications-heading"
+        >
+          <h2 id="notifications-heading">Notifications</h2>
+
+          <div class="toggle-list">
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-comments">Comments</label>
+                <p id="notify-comments-desc">
+                  Get notified when someone comments on your work.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                role="switch"
+                class="switch"
+                id="notify-comments"
+                aria-describedby="notify-comments-desc"
+                checked
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-mentions">Mentions</label>
+                <p id="notify-mentions-desc">
+                  Get notified when someone mentions you.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                role="switch"
+                class="switch"
+                id="notify-mentions"
+                aria-describedby="notify-mentions-desc"
+                checked
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-product">Product updates</label>
+                <p id="notify-product-desc">
+                  News about new features and improvements.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                role="switch"
+                class="switch"
+                id="notify-product"
+                aria-describedby="notify-product-desc"
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-digest">Weekly digest</label>
+                <p id="notify-digest-desc">
+                  A summary of activity, every Monday morning.
+                </p>
+              </div>
+              <input
+                type="checkbox"
+                role="switch"
+                class="switch"
+                id="notify-digest"
+                aria-describedby="notify-digest-desc"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="team" aria-labelledby="team-heading">
+          <h2 id="team-heading">Team members</h2>
+
+          <div
+            class="table-scroll"
+            role="region"
+            aria-labelledby="team-heading"
+            tabindex="0"
+          >
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cell-name">Brian Talbot</td>
+                  <td class="cell-secondary">brian@awesome.me</td>
+                  <td class="cell-secondary">Owner</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-name">Dana Reed</td>
+                  <td class="cell-secondary">dana@awesome.me</td>
+                  <td class="cell-secondary">Admin</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-name">Sam Okoye</td>
+                  <td class="cell-secondary">sam@awesome.me</td>
+                  <td class="cell-secondary">Member</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section
+          class="card"
+          id="connected-apps"
+          aria-labelledby="apps-heading"
+        >
+          <h2 id="apps-heading">Connected apps</h2>
+
+          <div class="empty-state">
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 28 28"
+              fill="none"
+              aria-hidden="true"
+            >
+              <rect
+                x="3.5"
+                y="3.5"
+                width="9"
+                height="9"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="15.5"
+                y="3.5"
+                width="9"
+                height="9"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <rect
+                x="3.5"
+                y="15.5"
+                width="9"
+                height="9"
+                rx="2"
+                stroke="currentColor"
+                stroke-width="1.5"
+              />
+              <path
+                d="M20 16v8M16 20h8"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+              />
+            </svg>
+            <h3>No apps connected</h3>
+            <p>Apps you connect to your account will appear here.</p>
+          </div>
+        </section>
+
+        <section
+          class="card card-danger"
+          id="danger-zone"
+          aria-labelledby="danger-heading"
+        >
+          <h2 id="danger-heading">Danger zone</h2>
+
+          <div class="danger-row">
+            <button type="button" class="btn btn-danger">Delete account</button>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

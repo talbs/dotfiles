@@ -1,0 +1,865 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Deploy Overview</title>
+    <style>
+      :root {
+        --surface-page: oklch(0.972 0.003 255);
+        --surface-card: oklch(1 0 0);
+        --surface-sunken: oklch(0.945 0.005 255);
+        --surface-hover: oklch(0.965 0.005 255);
+
+        --text-primary: oklch(0.27 0.02 255);
+        --text-secondary: oklch(0.46 0.02 255);
+        --text-tertiary: oklch(0.54 0.015 255);
+        --text-disabled: oklch(0.65 0.01 255);
+
+        --border-container: oklch(0.89 0.007 255);
+        --border-control: oklch(0.62 0.015 255);
+        --border-control-hover: oklch(0.46 0.02 255);
+        --border-divider: oklch(0.92 0.005 255);
+
+        --color-accent: oklch(0.5 0.15 255);
+        --color-focus: oklch(0.55 0.16 255);
+
+        --success-text: oklch(0.47 0.12 150);
+        --success-strong: oklch(0.55 0.14 150);
+        --success-soft: oklch(0.96 0.025 150);
+
+        --danger-text: oklch(0.47 0.16 25);
+        --danger-strong: oklch(0.55 0.19 25);
+        --danger-soft: oklch(0.96 0.018 25);
+
+        --info-text: oklch(0.48 0.13 255);
+        --info-strong: oklch(0.55 0.16 255);
+        --info-soft: oklch(0.95 0.02 255);
+
+        --warning-text: oklch(0.5 0.11 65);
+        --warning-soft: oklch(0.97 0.03 85);
+
+        --type-caption: 12px;
+        --type-caption-line: 16px;
+        --type-body: 14px;
+        --type-body-line: 20px;
+        --type-heading: 16px;
+        --type-heading-line: 22px;
+        --type-title: 20px;
+        --type-title-line: 28px;
+        --type-stat: 26px;
+        --type-stat-line: 32px;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        --space-tight: 4px;
+        --space-related: 8px;
+        --space-group: 12px;
+        --space-section: 24px;
+        --space-page: 32px;
+
+        --shadow-card:
+          0 1px 2px oklch(0.27 0.02 255 / 0.05),
+          0 2px 6px oklch(0.27 0.02 255 / 0.05);
+        --shadow-control: 0 1px 2px oklch(0.27 0.02 255 / 0.12);
+
+        --radius-container: 10px;
+        --radius-control: 7px;
+        --radius-pill: 999px;
+
+        --font-ui:
+          "Avenir Next", "Segoe UI Variable", ui-sans-serif, system-ui,
+          sans-serif;
+
+        --control-height: 36px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-page);
+        color: var(--text-primary);
+        font-family: var(--font-ui);
+        font-size: var(--type-body);
+        line-height: var(--type-body-line);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .page {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: var(--space-section) var(--space-group) var(--space-page);
+      }
+
+      .page-header {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        margin-bottom: var(--space-section);
+      }
+
+      .page-title {
+        margin: 0;
+        font-size: var(--type-title);
+        line-height: var(--type-title-line);
+        font-weight: var(--weight-semibold);
+        letter-spacing: -0.01em;
+      }
+
+      .segmented {
+        border: 0;
+        margin: 0;
+        display: inline-flex;
+        gap: var(--space-tight);
+        padding: 3px;
+        background: var(--surface-sunken);
+        border-radius: var(--radius-control);
+      }
+
+      .segmented label {
+        display: inline-flex;
+        align-items: center;
+        min-height: var(--control-height);
+        padding: 0 var(--space-group);
+        border-radius: calc(var(--radius-control) - 3px);
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        font-weight: var(--weight-medium);
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+
+      .segmented label:hover {
+        color: var(--text-primary);
+      }
+
+      .segmented input:checked + label {
+        background: var(--surface-card);
+        color: var(--text-primary);
+        font-weight: var(--weight-semibold);
+        box-shadow: var(--shadow-control);
+      }
+
+      .segmented input:focus-visible + label {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-group);
+        margin-bottom: var(--space-section);
+      }
+
+      .stat {
+        background: var(--surface-card);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-card);
+        padding: var(--space-group) var(--space-section) var(--space-group)
+          var(--space-group);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+      }
+
+      .stat-label {
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        font-weight: var(--weight-medium);
+        color: var(--text-secondary);
+      }
+
+      .stat-value {
+        font-size: var(--type-stat);
+        line-height: var(--type-stat-line);
+        font-weight: var(--weight-semibold);
+        font-variant-numeric: tabular-nums;
+        letter-spacing: -0.01em;
+      }
+
+      .stat-delta {
+        margin: 0;
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        font-weight: var(--weight-medium);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .delta-good {
+        color: var(--success-text);
+      }
+      .delta-bad {
+        color: var(--danger-text);
+      }
+
+      .delta-note {
+        font-weight: var(--weight-regular);
+        color: var(--text-tertiary);
+      }
+
+      .layout {
+        display: grid;
+        gap: var(--space-section);
+        align-items: start;
+      }
+
+      .layout > * {
+        min-width: 0;
+      }
+
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-card);
+      }
+
+      .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--space-related);
+        padding: var(--space-group);
+        border-bottom: 1px solid var(--border-divider);
+      }
+
+      .filter-search {
+        flex: 1 1 220px;
+        min-height: var(--control-height);
+        padding: 0 var(--space-group);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        background: var(--surface-card);
+        color: var(--text-primary);
+        font: inherit;
+      }
+
+      .filter-search::placeholder {
+        color: var(--text-tertiary);
+      }
+
+      .filter-select {
+        min-height: var(--control-height);
+        padding: 0 var(--space-related);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        background: var(--surface-card);
+        color: var(--text-primary);
+        font: inherit;
+      }
+
+      .filter-search:hover,
+      .filter-select:hover {
+        border-color: var(--border-control-hover);
+      }
+
+      .filter-check {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-related);
+        min-height: var(--control-height);
+        padding: 0 var(--space-related);
+        font-weight: var(--weight-medium);
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+
+      .filter-check:hover {
+        color: var(--text-primary);
+      }
+
+      .filter-check input {
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        accent-color: var(--color-accent);
+      }
+
+      .table-scroll {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--type-body);
+        line-height: var(--type-body-line);
+      }
+
+      th {
+        text-align: left;
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        padding: var(--space-related) var(--space-group);
+        border-bottom: 1px solid var(--border-divider);
+        white-space: nowrap;
+      }
+
+      td {
+        padding: 7px var(--space-group);
+        border-bottom: 1px solid var(--border-divider);
+        white-space: nowrap;
+      }
+
+      tbody tr:hover {
+        background: var(--surface-hover);
+      }
+
+      .cell-service {
+        font-weight: var(--weight-medium);
+      }
+
+      .cell-env,
+      .cell-started,
+      .cell-actor {
+        color: var(--text-secondary);
+      }
+
+      .cell-duration {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        color: var(--text-secondary);
+      }
+
+      th.cell-duration {
+        text-align: right;
+      }
+
+      .cell-started {
+        font-variant-numeric: tabular-nums;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 1px 8px;
+        border-radius: var(--radius-pill);
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        font-weight: var(--weight-medium);
+      }
+
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: var(--radius-pill);
+        flex: none;
+      }
+
+      .badge-success {
+        background: var(--success-soft);
+        color: var(--success-text);
+      }
+      .badge-success .dot {
+        background: var(--success-strong);
+      }
+
+      .badge-failed {
+        background: var(--danger-soft);
+        color: var(--danger-text);
+      }
+      .badge-failed .dot {
+        background: var(--danger-strong);
+      }
+
+      .badge-progress {
+        background: var(--info-soft);
+        color: var(--info-text);
+      }
+      .badge-progress .dot {
+        background: transparent;
+        border: 2px solid var(--info-strong);
+        width: 5px;
+        height: 5px;
+      }
+
+      .badge-sev2 {
+        background: var(--warning-soft);
+        color: var(--warning-text);
+      }
+      .badge-sev3 {
+        background: var(--surface-sunken);
+        color: var(--text-secondary);
+      }
+
+      .table-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-related);
+        padding: var(--space-related) var(--space-group);
+      }
+
+      .table-count {
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        color: var(--text-secondary);
+        font-variant-numeric: tabular-nums;
+      }
+
+      .pager {
+        display: flex;
+        gap: var(--space-related);
+      }
+
+      .pager-btn {
+        min-height: var(--control-height);
+        padding: 0 var(--space-group);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        background: var(--surface-card);
+        color: var(--text-primary);
+        font: inherit;
+        font-weight: var(--weight-medium);
+        cursor: pointer;
+      }
+
+      .pager-btn:hover {
+        background: var(--surface-hover);
+      }
+      .pager-btn:active {
+        background: var(--surface-sunken);
+      }
+
+      .pager-btn:disabled {
+        color: var(--text-disabled);
+        border-color: var(--border-divider);
+        background: var(--surface-card);
+        cursor: not-allowed;
+      }
+
+      .incidents {
+        padding: var(--space-group);
+      }
+
+      .incidents-title {
+        margin: 0 0 var(--space-group);
+        font-size: var(--type-heading);
+        line-height: var(--type-heading-line);
+        font-weight: var(--weight-semibold);
+      }
+
+      .incident-list {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-group);
+      }
+
+      .incident {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+        padding: var(--space-related);
+        border-radius: var(--radius-control);
+        background: var(--surface-page);
+      }
+
+      .incident-head {
+        display: flex;
+        align-items: center;
+        gap: var(--space-related);
+      }
+
+      .incident-time {
+        margin-left: auto;
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        color: var(--text-tertiary);
+        white-space: nowrap;
+      }
+
+      .incident-title {
+        font-weight: var(--weight-medium);
+      }
+
+      .incident-service {
+        font-size: var(--type-caption);
+        line-height: var(--type-caption-line);
+        color: var(--text-secondary);
+      }
+
+      @media (min-width: 640px) {
+        .page {
+          padding-inline: var(--space-section);
+        }
+        .stats {
+          grid-template-columns: repeat(4, 1fr);
+        }
+      }
+
+      @media (min-width: 980px) {
+        .layout {
+          grid-template-columns: 1fr 300px;
+        }
+      }
+
+      @media (forced-colors: active) {
+        .card,
+        .stat,
+        .incident,
+        .badge {
+          border: 1px solid CanvasText;
+        }
+        .segmented input:checked + label {
+          border: 1px solid ButtonText;
+        }
+        .dot {
+          background: CanvasText;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1 class="page-title">Deploy Overview</h1>
+        <fieldset class="segmented">
+          <legend class="sr-only">Date range</legend>
+          <input
+            class="sr-only"
+            type="radio"
+            name="range"
+            id="range-7"
+            checked
+          />
+          <label for="range-7">Last 7 days</label>
+          <input class="sr-only" type="radio" name="range" id="range-30" />
+          <label for="range-30">Last 30 days</label>
+          <input class="sr-only" type="radio" name="range" id="range-90" />
+          <label for="range-90">Last 90 days</label>
+        </fieldset>
+      </header>
+
+      <section class="stats" aria-label="Summary">
+        <div class="stat">
+          <span class="stat-label">Deploys</span>
+          <span class="stat-value">247</span>
+          <p class="stat-delta delta-good">
+            &uarr; 12% <span class="delta-note">vs prior period</span>
+          </p>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Success rate</span>
+          <span class="stat-value">98.2%</span>
+          <p class="stat-delta delta-good">
+            &uarr; 0.4pt <span class="delta-note">vs prior period</span>
+          </p>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Median duration</span>
+          <span class="stat-value">4m 32s</span>
+          <p class="stat-delta delta-good">
+            &darr; 18s <span class="delta-note">vs prior period</span>
+          </p>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Rollbacks</span>
+          <span class="stat-value">3</span>
+          <p class="stat-delta delta-bad">
+            &uarr; 2 <span class="delta-note">vs prior period</span>
+          </p>
+        </div>
+      </section>
+
+      <div class="layout">
+        <section class="card" aria-label="Deploys">
+          <form class="filter-bar">
+            <label class="sr-only" for="filter-service"
+              >Filter by service</label
+            >
+            <input
+              class="filter-search"
+              type="search"
+              id="filter-service"
+              placeholder="Filter by service&hellip;"
+            />
+            <label class="sr-only" for="filter-env">Environment</label>
+            <select class="filter-select" id="filter-env">
+              <option>All</option>
+              <option>Production</option>
+              <option>Staging</option>
+            </select>
+            <label class="filter-check">
+              <input type="checkbox" />
+              Failures only
+            </label>
+          </form>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Service</th>
+                  <th scope="col">Environment</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="cell-duration">Duration</th>
+                  <th scope="col">Started</th>
+                  <th scope="col">Triggered by</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="cell-service">web-app</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-progress"
+                      ><span class="dot"></span>In progress</span
+                    >
+                  </td>
+                  <td class="cell-duration">&mdash;</td>
+                  <td class="cell-started">Today 15:09</td>
+                  <td class="cell-actor">dana</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">api-gateway</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-progress"
+                      ><span class="dot"></span>In progress</span
+                    >
+                  </td>
+                  <td class="cell-duration">&mdash;</td>
+                  <td class="cell-started">Today 15:02</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">web-app</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">3m 12s</td>
+                  <td class="cell-started">Today 14:32</td>
+                  <td class="cell-actor">brian</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">billing-worker</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-failed"
+                      ><span class="dot"></span>Failed</span
+                    >
+                  </td>
+                  <td class="cell-duration">1m 48s</td>
+                  <td class="cell-started">Today 14:05</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">auth-service</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">2m 41s</td>
+                  <td class="cell-started">Today 13:47</td>
+                  <td class="cell-actor">dana</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">search-indexer</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">12m 47s</td>
+                  <td class="cell-started">Today 12:30</td>
+                  <td class="cell-actor">sam</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">notifications</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">58s</td>
+                  <td class="cell-started">Today 11:52</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">cdn-purge</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">45s</td>
+                  <td class="cell-started">Today 11:20</td>
+                  <td class="cell-actor">brian</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">etl-nightly</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-failed"
+                      ><span class="dot"></span>Failed</span
+                    >
+                  </td>
+                  <td class="cell-duration">24m 05s</td>
+                  <td class="cell-started">Today 03:15</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">api-gateway</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">2m 58s</td>
+                  <td class="cell-started">Yesterday 18:44</td>
+                  <td class="cell-actor">dana</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">billing-worker</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">1m 52s</td>
+                  <td class="cell-started">Yesterday 16:21</td>
+                  <td class="cell-actor">sam</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">auth-service</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">4m 06s</td>
+                  <td class="cell-started">Yesterday 15:03</td>
+                  <td class="cell-actor">brian</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">notifications</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-failed"
+                      ><span class="dot"></span>Failed</span
+                    >
+                  </td>
+                  <td class="cell-duration">3m 33s</td>
+                  <td class="cell-started">Yesterday 13:40</td>
+                  <td class="cell-actor">sam</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">search-indexer</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">9m 18s</td>
+                  <td class="cell-started">Yesterday 11:07</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">web-app</td>
+                  <td class="cell-env">Production</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">5m 24s</td>
+                  <td class="cell-started">Yesterday 09:15</td>
+                  <td class="cell-actor">dana</td>
+                </tr>
+                <tr>
+                  <td class="cell-service">cdn-purge</td>
+                  <td class="cell-env">Staging</td>
+                  <td>
+                    <span class="badge badge-success"
+                      ><span class="dot"></span>Success</span
+                    >
+                  </td>
+                  <td class="cell-duration">51s</td>
+                  <td class="cell-started">Yesterday 08:02</td>
+                  <td class="cell-actor">deploy-bot</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <nav class="table-footer" aria-label="Pagination">
+            <span class="table-count">Showing 1&ndash;16 of 247</span>
+            <div class="pager">
+              <button class="pager-btn" type="button" disabled>Prev</button>
+              <button class="pager-btn" type="button">Next</button>
+            </div>
+          </nav>
+        </section>
+
+        <aside class="card incidents" aria-label="Recent incidents">
+          <h2 class="incidents-title">Recent incidents</h2>
+          <ul class="incident-list">
+            <li class="incident">
+              <div class="incident-head">
+                <span class="badge badge-sev2">SEV-2</span>
+                <span class="incident-time">2h ago</span>
+              </div>
+              <span class="incident-title"
+                >Elevated 5xx after rollout to EU region</span
+              >
+              <span class="incident-service">billing-worker</span>
+            </li>
+            <li class="incident">
+              <div class="incident-head">
+                <span class="badge badge-sev3">SEV-3</span>
+                <span class="incident-time">Yesterday</span>
+              </div>
+              <span class="incident-title"
+                >Stale assets served during cache purge</span
+              >
+              <span class="incident-service">cdn-purge</span>
+            </li>
+          </ul>
+        </aside>
+      </div>
+    </div>
+  </body>
+</html>

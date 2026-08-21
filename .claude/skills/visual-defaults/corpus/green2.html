@@ -1,0 +1,839 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        /* text */
+        --text-primary: oklch(
+          24% 0.02 260
+        ); /* #24262e-ish, 4.5:1+ on all surfaces */
+        --text-secondary: oklch(
+          45% 0.02 260
+        ); /* labels' quieter sibling, 7.4:1 on white */
+        --text-tertiary: oklch(55% 0.015 260); /* help text, 4.9:1 on white */
+        --text-inverse: #fff;
+
+        /* borders */
+        --border-container: oklch(90% 0.01 260);
+        --border-control: oklch(
+          78% 0.015 260
+        ); /* 3:1 against white for control edges */
+        --border-divider: oklch(93% 0.008 260);
+
+        /* surfaces */
+        --surface-page: oklch(97.5% 0.005 260);
+        --surface-card: #fff;
+        --surface-inset: oklch(96% 0.008 260);
+
+        /* brand + semantic (different jobs, different hues) */
+        --brand: oklch(48% 0.16 262); /* indigo-blue, 6.3:1 on white */
+        --brand-strong: oklch(42% 0.17 262);
+        --brand-soft: oklch(95% 0.03 262);
+        --danger-text: oklch(48% 0.19 27); /* 5.9:1 on white */
+        --danger-strong: oklch(52% 0.2 27);
+        --danger-soft: oklch(96% 0.02 27);
+        --danger-border: oklch(80% 0.08 27);
+        --success-strong: oklch(52% 0.14 155);
+        --success-soft: oklch(95% 0.04 155);
+        --success-text: oklch(40% 0.11 155);
+
+        /* type scale (size / line-height) */
+        --type-xs: 0.75rem;
+        --leading-xs: 1.35;
+        --type-sm: 0.8125rem;
+        --leading-sm: 1.45;
+        --type-base: 0.875rem;
+        --leading-base: 1.55;
+        --type-lg: 1.0625rem;
+        --leading-lg: 1.4;
+        --type-xl: 1.5rem;
+        --leading-xl: 1.25;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        /* spacing by relationship */
+        --space-tight: 0.25rem;
+        --space-related: 0.5rem;
+        --space-group: 1rem;
+        --space-section: 2rem;
+        --space-page: 3rem;
+
+        /* elevation */
+        --shadow-raised: 0 1px 2px oklch(30% 0.02 260 / 0.06);
+        --shadow-overlay: 0 4px 16px oklch(30% 0.02 260 / 0.12);
+
+        /* radius */
+        --radius-container: 12px;
+        --radius-control: 7px;
+        --radius-pill: 999px;
+
+        --focus-ring: 0 0 0 2px var(--surface-card), 0 0 0 4px var(--brand);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--surface-page);
+        color: var(--text-primary);
+        font-family:
+          "Avenir Next", "Segoe UI Variable", ui-sans-serif, system-ui,
+          sans-serif;
+        font-size: var(--type-base);
+        line-height: var(--leading-base);
+      }
+
+      .page {
+        max-width: 46rem;
+        margin: 0 auto;
+        padding: var(--space-section) var(--space-group) var(--space-page);
+      }
+
+      /* ---------- header ---------- */
+      .page-header {
+        margin-bottom: var(--space-section);
+      }
+      .page-header h1 {
+        margin: 0 0 var(--space-tight);
+        font-size: var(--type-xl);
+        line-height: var(--leading-xl);
+        font-weight: var(--weight-semibold);
+        letter-spacing: -0.01em;
+      }
+      .page-header p {
+        margin: 0;
+        color: var(--text-secondary);
+      }
+
+      /* ---------- tabs ---------- */
+      .tabs {
+        display: flex;
+        gap: var(--space-tight);
+        overflow-x: auto;
+        border-bottom: 1px solid var(--border-divider);
+        margin-bottom: var(--space-section);
+      }
+      .tab {
+        appearance: none;
+        background: none;
+        border: 0;
+        font: inherit;
+        font-weight: var(--weight-medium);
+        color: var(--text-secondary);
+        padding: var(--space-related) var(--space-group);
+        border-bottom: 2px solid transparent;
+        margin-bottom: -1px;
+        cursor: pointer;
+        white-space: nowrap;
+        border-radius: var(--radius-control) var(--radius-control) 0 0;
+      }
+      .tab:hover {
+        color: var(--text-primary);
+        background: var(--surface-inset);
+      }
+      .tab:focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+      .tab[aria-selected="true"] {
+        color: var(--brand);
+        font-weight: var(--weight-semibold);
+        border-bottom-color: var(--brand);
+      }
+
+      /* ---------- sections ---------- */
+      .settings {
+        display: grid;
+        gap: var(--space-section);
+      }
+
+      .card {
+        background: var(--surface-card);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-raised);
+        padding: var(--space-section);
+      }
+      @media (forced-colors: active) {
+        .card {
+          border: 1px solid CanvasText;
+        }
+      }
+
+      .card-header {
+        margin-bottom: var(--space-section);
+      }
+      .card-header h2 {
+        margin: 0 0 var(--space-tight);
+        font-size: var(--type-lg);
+        line-height: var(--leading-lg);
+        font-weight: var(--weight-semibold);
+      }
+      .card-header p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+      }
+
+      /* ---------- form primitives ---------- */
+      .form-grid {
+        display: grid;
+        gap: var(--space-group);
+      }
+
+      .field {
+        display: grid;
+        gap: var(--space-tight);
+      }
+      .field label {
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+        font-weight: var(--weight-medium);
+        color: var(--text-primary);
+      }
+      .field .help {
+        margin: 0;
+        font-size: var(--type-xs);
+        line-height: var(--leading-xs);
+        color: var(--text-tertiary);
+      }
+
+      .input,
+      .select,
+      .textarea {
+        font: inherit;
+        color: var(--text-primary);
+        background: var(--surface-card);
+        border: 1px solid var(--border-control);
+        border-radius: var(--radius-control);
+        padding: 0.5rem 0.75rem;
+        width: 100%;
+      }
+      .textarea {
+        resize: vertical;
+        min-height: 5.5rem;
+      }
+      .input:hover,
+      .select:hover,
+      .textarea:hover {
+        border-color: var(--text-tertiary);
+      }
+      .input:focus-visible,
+      .select:focus-visible,
+      .textarea:focus-visible {
+        outline: none;
+        border-color: var(--brand);
+        box-shadow: var(--focus-ring);
+      }
+
+      .field-row {
+        display: grid;
+        gap: var(--space-group);
+      }
+      @media (min-width: 480px) {
+        .field-row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      /* username error state */
+      .field.is-invalid .input {
+        border-color: var(--danger-strong);
+        background: no-repeat right 0.75rem center / 1rem
+          url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="%23b3261e" stroke-width="1.5"/><path d="M8 4.5v4.2" stroke="%23b3261e" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.4" r="1" fill="%23b3261e"/></svg>')
+          var(--surface-card);
+        padding-right: 2.5rem;
+      }
+      .field.is-invalid .input:focus-visible {
+        box-shadow:
+          0 0 0 2px var(--surface-card),
+          0 0 0 4px var(--danger-strong);
+      }
+      .field .error {
+        margin: 0;
+        font-size: var(--type-xs);
+        line-height: var(--leading-xs);
+        font-weight: var(--weight-medium);
+        color: var(--danger-text);
+      }
+
+      /* avatar row */
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+        flex-wrap: wrap;
+      }
+      .avatar {
+        width: 4rem;
+        height: 4rem;
+        flex: none;
+        border-radius: var(--radius-pill);
+        display: grid;
+        place-items: center;
+        background: var(--brand-soft);
+        color: var(--brand);
+        font-size: var(--type-lg);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.02em;
+        border: 1px solid var(--border-container);
+      }
+      .avatar-meta {
+        display: grid;
+        gap: var(--space-tight);
+      }
+
+      /* ---------- buttons ---------- */
+      .btn {
+        appearance: none;
+        font: inherit;
+        font-weight: var(--weight-medium);
+        border-radius: var(--radius-control);
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border: 1px solid transparent;
+      }
+      .btn:focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+
+      .btn-primary {
+        background: var(--brand);
+        border-color: var(--brand);
+        color: var(--text-inverse);
+      }
+      .btn-primary:hover {
+        background: var(--brand-strong);
+        border-color: var(--brand-strong);
+      }
+      .btn-primary:active {
+        background: var(--brand-strong);
+        transform: translateY(1px);
+      }
+
+      .btn-secondary {
+        background: var(--surface-card);
+        border-color: var(--border-control);
+        color: var(--text-primary);
+      }
+      .btn-secondary:hover {
+        background: var(--surface-inset);
+      }
+      .btn-secondary:active {
+        background: var(--surface-inset);
+        transform: translateY(1px);
+      }
+
+      .btn-danger {
+        background: var(--surface-card);
+        border-color: var(--danger-border);
+        color: var(--danger-text);
+      }
+      .btn-danger:hover {
+        background: var(--danger-soft);
+        border-color: var(--danger-strong);
+      }
+      .btn-danger:active {
+        background: var(--danger-soft);
+        transform: translateY(1px);
+      }
+      .btn-danger:focus-visible {
+        box-shadow:
+          0 0 0 2px var(--surface-card),
+          0 0 0 4px var(--danger-strong);
+      }
+
+      /* ---------- toggles ---------- */
+      .toggle-list {
+        display: grid;
+      }
+      .toggle-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--space-group);
+        padding-block: var(--space-group);
+      }
+      .toggle-row + .toggle-row {
+        border-top: 1px solid var(--border-divider);
+      }
+      .toggle-row:first-child {
+        padding-top: 0;
+      }
+      .toggle-row:last-child {
+        padding-bottom: 0;
+      }
+      .toggle-copy {
+        display: grid;
+        gap: 2px;
+      }
+      .toggle-copy label {
+        font-weight: var(--weight-medium);
+        font-size: var(--type-base);
+      }
+      .toggle-copy p {
+        margin: 0;
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+        color: var(--text-secondary);
+      }
+
+      .switch {
+        appearance: none;
+        flex: none;
+        width: 2.5rem;
+        height: 1.5rem;
+        margin: 2px 0 0;
+        border-radius: var(--radius-pill);
+        background: oklch(70% 0.015 260);
+        border: 1px solid var(--border-control);
+        position: relative;
+        cursor: pointer;
+        transition: background 120ms ease;
+      }
+      .switch::before {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 1.125rem;
+        height: 1.125rem;
+        border-radius: var(--radius-pill);
+        background: #fff;
+        box-shadow: var(--shadow-raised);
+        transition: transform 120ms ease;
+      }
+      .switch:checked {
+        background: var(--brand);
+        border-color: var(--brand);
+      }
+      .switch:checked::before {
+        transform: translateX(1rem);
+      }
+      .switch:hover {
+        border-color: var(--text-tertiary);
+      }
+      .switch:checked:hover {
+        background: var(--brand-strong);
+        border-color: var(--brand-strong);
+      }
+      .switch:focus-visible {
+        outline: none;
+        box-shadow: var(--focus-ring);
+      }
+
+      /* ---------- team table ---------- */
+      .table-scroll {
+        overflow-x: auto;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+      }
+      th {
+        text-align: left;
+        font-size: var(--type-xs);
+        line-height: var(--leading-xs);
+        font-weight: var(--weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--text-secondary);
+        padding: 0 var(--space-group) var(--space-related) 0;
+        border-bottom: 1px solid var(--border-divider);
+      }
+      td {
+        padding: var(--space-related) var(--space-group) var(--space-related) 0;
+        white-space: nowrap;
+      }
+      tr + tr td {
+        border-top: 1px solid var(--border-divider);
+      }
+      td.member-name {
+        font-weight: var(--weight-medium);
+      }
+      td.member-email {
+        color: var(--text-secondary);
+      }
+      td.member-role {
+        color: var(--text-secondary);
+      }
+      th:last-child,
+      td:last-child {
+        padding-right: 0;
+      }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-tight);
+        font-size: var(--type-xs);
+        line-height: var(--leading-xs);
+        font-weight: var(--weight-medium);
+        color: var(--success-text);
+        background: var(--success-soft);
+        border: 1px solid oklch(85% 0.07 155);
+        border-radius: var(--radius-pill);
+        padding: 2px 0.5rem;
+      }
+      .badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: var(--radius-pill);
+        background: var(--success-strong);
+      }
+
+      /* ---------- empty state ---------- */
+      .empty {
+        display: grid;
+        justify-items: center;
+        gap: var(--space-related);
+        text-align: center;
+        background: var(--surface-inset);
+        border-radius: var(--radius-control);
+        padding: var(--space-section) var(--space-group);
+      }
+      .empty svg {
+        color: var(--text-tertiary);
+      }
+      .empty h3 {
+        margin: 0;
+        font-size: var(--type-base);
+        font-weight: var(--weight-semibold);
+      }
+      .empty p {
+        margin: 0;
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+        color: var(--text-secondary);
+        max-width: 28rem;
+      }
+      .empty .btn {
+        margin-top: var(--space-tight);
+      }
+
+      /* ---------- danger zone ---------- */
+      .card-danger {
+        border: 1px solid var(--danger-border);
+        box-shadow: none;
+      }
+      .danger-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        flex-wrap: wrap;
+      }
+      .danger-copy {
+        display: grid;
+        gap: 2px;
+      }
+      .danger-copy h3 {
+        margin: 0;
+        font-size: var(--type-base);
+        font-weight: var(--weight-semibold);
+      }
+      .danger-copy p {
+        margin: 0;
+        font-size: var(--type-sm);
+        line-height: var(--leading-sm);
+        color: var(--text-secondary);
+      }
+
+      /* ---------- footer actions ---------- */
+      .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-related);
+        padding-top: var(--space-group);
+        border-top: 1px solid var(--border-divider);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <header class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your profile, notifications, and team.</p>
+      </header>
+
+      <nav class="tabs" aria-label="Settings sections">
+        <button class="tab" type="button" aria-selected="true">Profile</button>
+        <button class="tab" type="button" aria-selected="false">
+          Notifications
+        </button>
+        <button class="tab" type="button" aria-selected="false">Billing</button>
+        <button class="tab" type="button" aria-selected="false">Team</button>
+        <button class="tab" type="button" aria-selected="false">
+          Security
+        </button>
+      </nav>
+
+      <form class="settings" action="#" method="post">
+        <section class="card" aria-labelledby="profile-heading">
+          <div class="card-header">
+            <h2 id="profile-heading">Profile</h2>
+            <p>This information will be displayed publicly.</p>
+          </div>
+
+          <div class="form-grid">
+            <div class="avatar-row">
+              <span class="avatar" aria-hidden="true">BT</span>
+              <div class="avatar-meta">
+                <button class="btn btn-secondary" type="button">
+                  Upload new photo
+                </button>
+                <p class="help">JPG, GIF or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  class="input"
+                  id="first-name"
+                  name="first-name"
+                  type="text"
+                  value="Brian"
+                  autocomplete="given-name"
+                />
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  class="input"
+                  id="last-name"
+                  name="last-name"
+                  type="text"
+                  value="Talbot"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input
+                class="input"
+                id="email"
+                name="email"
+                type="email"
+                value="brian@awesome.me"
+                autocomplete="email"
+                aria-describedby="email-help"
+              />
+              <p class="help" id="email-help">
+                We'll send account notifications to this address.
+              </p>
+            </div>
+
+            <div class="field is-invalid">
+              <label for="username">Username</label>
+              <input
+                class="input"
+                id="username"
+                name="username"
+                type="text"
+                value="talbs"
+                autocomplete="username"
+                aria-invalid="true"
+                aria-describedby="username-error"
+              />
+              <p class="error" id="username-error">
+                This username is already taken.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea
+                class="textarea"
+                id="bio"
+                name="bio"
+                aria-describedby="bio-help"
+              >
+Product designer who codes.</textarea>
+              <p class="help" id="bio-help">
+                A short introduction shown on your public profile.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="timezone">Timezone</label>
+              <select class="select" id="timezone" name="timezone">
+                <option>Eastern</option>
+                <option>Central</option>
+                <option>Pacific</option>
+              </select>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="notifications-heading">
+          <div class="card-header">
+            <h2 id="notifications-heading">Notifications</h2>
+            <p>Choose what you want to hear about, and how often.</p>
+          </div>
+
+          <div class="toggle-list">
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-comments">Comments</label>
+                <p>Get notified when someone comments on your work.</p>
+              </div>
+              <input
+                class="switch"
+                type="checkbox"
+                id="notify-comments"
+                name="notify-comments"
+                checked
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-mentions">Mentions</label>
+                <p>Get notified when someone mentions you by name.</p>
+              </div>
+              <input
+                class="switch"
+                type="checkbox"
+                id="notify-mentions"
+                name="notify-mentions"
+                checked
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-updates">Product updates</label>
+                <p>Occasional news about new features and improvements.</p>
+              </div>
+              <input
+                class="switch"
+                type="checkbox"
+                id="notify-updates"
+                name="notify-updates"
+              />
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-copy">
+                <label for="notify-digest">Weekly digest</label>
+                <p>
+                  A summary of activity across your workspace, every Monday.
+                </p>
+              </div>
+              <input
+                class="switch"
+                type="checkbox"
+                id="notify-digest"
+                name="notify-digest"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="team-heading">
+          <div class="card-header">
+            <h2 id="team-heading">Team members</h2>
+            <p>People with access to this workspace.</p>
+          </div>
+
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="member-name">Brian Talbot</td>
+                  <td class="member-email">brian@awesome.me</td>
+                  <td class="member-role">Owner</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="member-name">Dana Reed</td>
+                  <td class="member-email">dana@awesome.me</td>
+                  <td class="member-role">Admin</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="member-name">Sam Okoye</td>
+                  <td class="member-email">sam@awesome.me</td>
+                  <td class="member-role">Member</td>
+                  <td><span class="badge">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="apps-heading">
+          <div class="card-header">
+            <h2 id="apps-heading">Connected apps</h2>
+            <p>Services that can access your account.</p>
+          </div>
+
+          <div class="empty">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M9 3v4a2 2 0 0 1-2 2H3" />
+              <path d="M15 21v-4a2 2 0 0 1 2-2h4" />
+              <path d="M13.5 10.5 21 3" />
+              <path d="M3 21l7.5-7.5" />
+            </svg>
+            <h3>No apps connected</h3>
+            <p>
+              Connect an app to sync your work and get notifications where you
+              already are.
+            </p>
+            <button class="btn btn-secondary" type="button">Browse apps</button>
+          </div>
+        </section>
+
+        <section class="card card-danger" aria-labelledby="danger-heading">
+          <div class="card-header">
+            <h2 id="danger-heading">Danger zone</h2>
+            <p>Irreversible actions. Tread carefully.</p>
+          </div>
+
+          <div class="danger-row">
+            <div class="danger-copy">
+              <h3>Delete account</h3>
+              <p>Permanently remove your account and all of its data.</p>
+            </div>
+            <button class="btn btn-danger" type="button">Delete account</button>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button class="btn btn-secondary" type="button">Cancel</button>
+          <button class="btn btn-primary" type="submit">Save changes</button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,828 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Account Settings</title>
+    <style>
+      :root {
+        --font-sans:
+          "Avenir Next", Seravek, "Segoe UI Variable", "Segoe UI", system-ui,
+          sans-serif;
+
+        --color-bg-page: #f4f5f7;
+        --color-bg-surface: #ffffff;
+        --color-bg-surface-hover: #f3f4f6;
+        --color-bg-surface-pressed: #e8eaee;
+
+        --color-text-primary: #1c2024;
+        --color-text-secondary: #49505a;
+        --color-text-tertiary: #5d646e;
+        --color-text-oncolor: #ffffff;
+
+        --color-border-container: #d8dbe0;
+        --color-border-control: #717a86;
+        --color-border-control-hover: #4d545e;
+        --color-border-divider: #e7e9ec;
+
+        --color-accent: #4f46e5;
+        --color-accent-hover: #4338ca;
+        --color-accent-pressed: #3730a3;
+        --color-accent-text: #4338ca;
+        --color-accent-soft: #e8eafd;
+        --color-accent-deep: #312e81;
+
+        --color-danger-text: #b42318;
+        --color-danger-border: #d92d20;
+        --color-danger-soft: #fef3f2;
+        --color-danger-soft-pressed: #fee4e2;
+
+        --color-success-text: #067647;
+
+        --color-switch-off: #6c7480;
+        --color-switch-off-hover: #59616d;
+        --color-switch-knob: #ffffff;
+
+        --color-focus: #4f46e5;
+
+        --type-caption: 0.75rem;
+        --leading-caption: 1rem;
+        --type-label: 0.875rem;
+        --leading-label: 1.25rem;
+        --type-body: 1rem;
+        --leading-body: 1.5rem;
+        --type-heading: 1.125rem;
+        --leading-heading: 1.625rem;
+        --type-title: 1.5rem;
+        --leading-title: 2rem;
+
+        --weight-regular: 400;
+        --weight-medium: 500;
+        --weight-semibold: 600;
+
+        --space-tight: 0.25rem;
+        --space-related: 0.5rem;
+        --space-group: 1rem;
+        --space-section: 1.5rem;
+        --space-page: 2.5rem;
+
+        --shadow-low: 0 1px 2px rgba(28, 32, 36, 0.05);
+        --shadow-raised:
+          0 1px 2px rgba(28, 32, 36, 0.05), 0 2px 10px rgba(28, 32, 36, 0.06);
+
+        --radius-container: 0.75rem;
+        --radius-control: 0.5rem;
+        --radius-pill: 999px;
+
+        --control-height: 2.75rem;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--color-bg-page);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+        font-weight: var(--weight-regular);
+      }
+
+      .page {
+        max-width: 45rem;
+        margin: 0 auto;
+        padding: var(--space-page) var(--space-group);
+      }
+
+      .page-header h1 {
+        margin: 0;
+        font-size: var(--type-title);
+        line-height: var(--leading-title);
+        font-weight: var(--weight-semibold);
+      }
+
+      .page-header p {
+        margin: var(--space-tight) 0 0;
+        color: var(--color-text-secondary);
+      }
+
+      .tabs {
+        margin-top: var(--space-section);
+        border-bottom: 1px solid var(--color-border-divider);
+        overflow-x: auto;
+      }
+
+      .tabs ul {
+        display: flex;
+        gap: var(--space-section);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .tabs a {
+        display: flex;
+        align-items: center;
+        min-height: var(--control-height);
+        padding: 0 var(--space-tight);
+        border-bottom: 2px solid transparent;
+        color: var(--color-text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        text-decoration: none;
+        white-space: nowrap;
+      }
+
+      .tabs a:hover {
+        color: var(--color-text-primary);
+      }
+
+      .tabs a:active {
+        color: var(--color-accent-pressed);
+      }
+
+      .tabs a[aria-current="page"] {
+        border-bottom-color: var(--color-accent);
+        color: var(--color-accent-text);
+        font-weight: var(--weight-semibold);
+      }
+
+      :is(a, button, input, select, textarea):focus-visible {
+        outline: 2px solid var(--color-focus);
+        outline-offset: 2px;
+      }
+
+      .cards {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-section);
+        margin-top: var(--space-section);
+      }
+
+      .card {
+        background: var(--color-bg-surface);
+        border-radius: var(--radius-container);
+        box-shadow: var(--shadow-raised);
+        padding: var(--space-section);
+      }
+
+      .card h2 {
+        margin: 0;
+        font-size: var(--type-heading);
+        line-height: var(--leading-heading);
+        font-weight: var(--weight-semibold);
+      }
+
+      .card-desc {
+        margin: var(--space-tight) 0 0;
+        color: var(--color-text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-group);
+        margin-top: var(--space-section);
+      }
+
+      .avatar-row {
+        display: flex;
+        align-items: center;
+        gap: var(--space-group);
+      }
+
+      .avatar {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-accent-soft);
+        color: var(--color-accent-deep);
+        font-size: var(--type-heading);
+        font-weight: var(--weight-semibold);
+        letter-spacing: 0.02em;
+      }
+
+      .avatar-meta {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-related);
+      }
+
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-related);
+      }
+
+      .field label {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+      }
+
+      .field-row {
+        display: grid;
+        gap: var(--space-group);
+      }
+
+      input[type="text"],
+      input[type="email"],
+      textarea,
+      select {
+        width: 100%;
+        min-height: var(--control-height);
+        padding: var(--space-related) 0.75rem;
+        border: 1px solid var(--color-border-control);
+        border-radius: var(--radius-control);
+        background: var(--color-bg-surface);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+        font-size: var(--type-body);
+        line-height: var(--leading-body);
+      }
+
+      :is(input[type="text"], input[type="email"], textarea, select):hover {
+        border-color: var(--color-border-control-hover);
+      }
+
+      textarea {
+        resize: vertical;
+      }
+
+      .select-wrap {
+        position: relative;
+      }
+
+      .select-wrap select {
+        appearance: none;
+        padding-right: var(--space-page);
+      }
+
+      .select-wrap::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        right: var(--space-group);
+        width: 0.5rem;
+        height: 0.5rem;
+        border-right: 2px solid var(--color-text-secondary);
+        border-bottom: 2px solid var(--color-text-secondary);
+        transform: translateY(-70%) rotate(45deg);
+        pointer-events: none;
+      }
+
+      .help {
+        margin: 0;
+        color: var(--color-text-tertiary);
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+      }
+
+      input[aria-invalid="true"] {
+        border-color: var(--color-danger-border);
+      }
+
+      .error {
+        display: flex;
+        align-items: center;
+        gap: var(--space-tight);
+        margin: 0;
+        color: var(--color-danger-text);
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-medium);
+      }
+
+      .error svg {
+        flex-shrink: 0;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: var(--control-height);
+        padding: 0 var(--space-group);
+        border: 1px solid transparent;
+        border-radius: var(--radius-control);
+        font-family: var(--font-sans);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+        cursor: pointer;
+      }
+
+      .button-primary {
+        background: var(--color-accent);
+        color: var(--color-text-oncolor);
+      }
+      .button-primary:hover {
+        background: var(--color-accent-hover);
+      }
+      .button-primary:active {
+        background: var(--color-accent-pressed);
+      }
+
+      .button-secondary {
+        background: var(--color-bg-surface);
+        border-color: var(--color-border-control);
+        color: var(--color-text-primary);
+        box-shadow: var(--shadow-low);
+      }
+      .button-secondary:hover {
+        background: var(--color-bg-surface-hover);
+      }
+      .button-secondary:active {
+        background: var(--color-bg-surface-pressed);
+      }
+
+      .button-danger {
+        background: var(--color-bg-surface);
+        border-color: var(--color-danger-border);
+        color: var(--color-danger-text);
+        box-shadow: var(--shadow-low);
+      }
+      .button-danger:hover {
+        background: var(--color-danger-soft);
+      }
+      .button-danger:active {
+        background: var(--color-danger-soft-pressed);
+      }
+
+      .toggle-list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-group);
+      }
+
+      .toggle-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--space-group);
+        min-height: var(--control-height);
+        cursor: pointer;
+      }
+
+      .toggle-copy {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-tight);
+      }
+
+      .toggle-label {
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        font-weight: var(--weight-medium);
+      }
+
+      .toggle-desc {
+        color: var(--color-text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+      }
+
+      .switch {
+        appearance: none;
+        flex-shrink: 0;
+        width: 3rem;
+        height: 1.75rem;
+        margin: 0;
+        border: 1px solid transparent;
+        border-radius: var(--radius-pill);
+        background: var(--color-switch-off);
+        position: relative;
+        cursor: pointer;
+        transition: background-color 120ms ease;
+      }
+
+      .switch::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0.1875rem;
+        width: 1.25rem;
+        height: 1.25rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-switch-knob);
+        transform: translateY(-50%);
+        transition: left 120ms ease;
+      }
+
+      .switch:hover {
+        background: var(--color-switch-off-hover);
+      }
+      .switch:checked {
+        background: var(--color-accent);
+      }
+      .switch:checked:hover {
+        background: var(--color-accent-hover);
+      }
+      .switch:active {
+        background: var(--color-accent-pressed);
+      }
+      .switch:checked::before {
+        left: 1.4375rem;
+      }
+
+      @media (forced-colors: active) {
+        .switch {
+          border-color: ButtonText;
+        }
+        .switch::before {
+          background: ButtonText;
+        }
+        .switch:checked {
+          background: Highlight;
+        }
+        .switch:checked::before {
+          background: Canvas;
+        }
+      }
+
+      .table-wrap {
+        min-width: 0;
+        overflow-x: auto;
+      }
+
+      thead th {
+        border-bottom: 1px solid var(--color-border-container);
+      }
+
+      table {
+        width: 100%;
+        min-width: 32rem;
+        border-collapse: collapse;
+      }
+
+      th {
+        padding: var(--space-related) var(--space-group);
+        border-bottom: 1px solid var(--color-border-divider);
+        color: var(--color-text-tertiary);
+        font-size: var(--type-caption);
+        line-height: var(--leading-caption);
+        font-weight: var(--weight-semibold);
+        text-align: left;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+
+      td {
+        padding: var(--space-related) var(--space-group);
+        border-bottom: 1px solid var(--color-border-divider);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        color: var(--color-text-secondary);
+      }
+
+      tr:last-child td {
+        border-bottom: none;
+      }
+
+      td.member-name {
+        color: var(--color-text-primary);
+        font-weight: var(--weight-medium);
+      }
+
+      .status {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--space-related);
+        color: var(--color-success-text);
+        font-weight: var(--weight-medium);
+      }
+
+      .status::before {
+        content: "";
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-success-text);
+      }
+
+      .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--space-related);
+        padding: var(--space-section) var(--space-group);
+        text-align: center;
+      }
+
+      .empty-state-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem;
+        height: 3rem;
+        border-radius: var(--radius-pill);
+        background: var(--color-accent-soft);
+        color: var(--color-accent-deep);
+      }
+
+      .empty-state p {
+        margin: 0;
+        color: var(--color-text-secondary);
+        font-size: var(--type-label);
+        line-height: var(--leading-label);
+        max-width: 24rem;
+      }
+
+      .empty-state .button {
+        margin-top: var(--space-related);
+      }
+
+      .danger-zone .card-body {
+        align-items: flex-start;
+      }
+
+      .page-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--space-related);
+        margin-top: var(--space-section);
+      }
+
+      @media (min-width: 40rem) {
+        .field-row {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="page-header">
+        <h1>Account Settings</h1>
+        <p>Manage your profile and workspace preferences.</p>
+      </header>
+
+      <nav class="tabs" aria-label="Settings sections">
+        <ul>
+          <li><a href="#" aria-current="page">Profile</a></li>
+          <li><a href="#">Notifications</a></li>
+          <li><a href="#">Billing</a></li>
+          <li><a href="#">Team</a></li>
+          <li><a href="#">Security</a></li>
+        </ul>
+      </nav>
+
+      <main class="cards">
+        <section class="card" aria-labelledby="profile-heading">
+          <h2 id="profile-heading">Profile</h2>
+          <p class="card-desc">This information will be displayed publicly.</p>
+          <div class="card-body">
+            <div class="avatar-row">
+              <span class="avatar" aria-hidden="true">BT</span>
+              <div class="avatar-meta">
+                <button type="button" class="button button-secondary">
+                  Upload new photo
+                </button>
+                <p class="help">JPG, GIF or PNG. Max size 2MB.</p>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <div class="field">
+                <label for="first-name">First name</label>
+                <input
+                  type="text"
+                  id="first-name"
+                  name="first-name"
+                  value="Brian"
+                  autocomplete="given-name"
+                />
+              </div>
+              <div class="field">
+                <label for="last-name">Last name</label>
+                <input
+                  type="text"
+                  id="last-name"
+                  name="last-name"
+                  value="Talbot"
+                  autocomplete="family-name"
+                />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="email">Email address</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value="brian@awesome.me"
+                autocomplete="email"
+                aria-describedby="email-help"
+              />
+              <p class="help" id="email-help">
+                Used for sign-in and account notifications.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="username">Username</label>
+              <input
+                type="text"
+                id="username"
+                name="username"
+                value="talbs"
+                autocomplete="username"
+                aria-invalid="true"
+                aria-describedby="username-error"
+              />
+              <p class="error" id="username-error">
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 16 16"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm-.75 3.5h1.5v5h-1.5v-5ZM8 12.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"
+                  />
+                </svg>
+                This username is already taken.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="bio">Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                rows="3"
+                aria-describedby="bio-help"
+              >
+Product designer who codes.</textarea>
+              <p class="help" id="bio-help">
+                A short bio for your public profile.
+              </p>
+            </div>
+
+            <div class="field">
+              <label for="timezone">Timezone</label>
+              <div class="select-wrap">
+                <select id="timezone" name="timezone">
+                  <option>Eastern</option>
+                  <option>Central</option>
+                  <option>Pacific</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="notifications-heading">
+          <h2 id="notifications-heading">Notifications</h2>
+          <p class="card-desc">
+            Choose what you want to hear about, and where.
+          </p>
+          <div class="card-body">
+            <div class="toggle-list">
+              <label class="toggle-row">
+                <span class="toggle-copy">
+                  <span class="toggle-label">Comments</span>
+                  <span class="toggle-desc"
+                    >Get notified when someone comments on your work.</span
+                  >
+                </span>
+                <input type="checkbox" class="switch" role="switch" checked />
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-copy">
+                  <span class="toggle-label">Mentions</span>
+                  <span class="toggle-desc"
+                    >Get notified when someone mentions you.</span
+                  >
+                </span>
+                <input type="checkbox" class="switch" role="switch" checked />
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-copy">
+                  <span class="toggle-label">Product updates</span>
+                  <span class="toggle-desc"
+                    >News about new features and improvements.</span
+                  >
+                </span>
+                <input type="checkbox" class="switch" role="switch" />
+              </label>
+              <label class="toggle-row">
+                <span class="toggle-copy">
+                  <span class="toggle-label">Weekly digest</span>
+                  <span class="toggle-desc"
+                    >A summary of your team's activity, every Monday.</span
+                  >
+                </span>
+                <input type="checkbox" class="switch" role="switch" />
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="team-heading">
+          <h2 id="team-heading">Team members</h2>
+          <p class="card-desc">People with access to this workspace.</p>
+          <div class="card-body">
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="member-name">Brian Talbot</td>
+                    <td>brian@awesome.me</td>
+                    <td>Owner</td>
+                    <td><span class="status">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="member-name">Dana Reed</td>
+                    <td>dana@awesome.me</td>
+                    <td>Admin</td>
+                    <td><span class="status">Active</span></td>
+                  </tr>
+                  <tr>
+                    <td class="member-name">Sam Okoye</td>
+                    <td>sam@awesome.me</td>
+                    <td>Member</td>
+                    <td><span class="status">Active</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" aria-labelledby="apps-heading">
+          <h2 id="apps-heading">Connected apps</h2>
+          <p class="card-desc">
+            Services that can read or update your account.
+          </p>
+          <div class="card-body">
+            <div class="empty-state">
+              <span class="empty-state-icon" aria-hidden="true">
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <rect x="1" y="1" width="8" height="8" rx="2" />
+                  <rect x="11" y="1" width="8" height="8" rx="2" />
+                  <rect x="1" y="11" width="8" height="8" rx="2" />
+                  <path
+                    d="M15 11a1 1 0 0 1 1 1v2h2a1 1 0 1 1 0 2h-2v2a1 1 0 1 1-2 0v-2h-2a1 1 0 1 1 0-2h2v-2a1 1 0 0 1 1-1Z"
+                  />
+                </svg>
+              </span>
+              <p>
+                No apps connected yet. Connect your tools to sync activity and
+                get notifications where you already work.
+              </p>
+              <button type="button" class="button button-secondary">
+                Browse integrations
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card danger-zone" aria-labelledby="danger-heading">
+          <h2 id="danger-heading">Danger zone</h2>
+          <p class="card-desc">
+            Permanently deletes your account, workspaces, and all associated
+            data. This cannot be undone.
+          </p>
+          <div class="card-body">
+            <button type="button" class="button button-danger">
+              Delete account
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <div class="page-actions">
+        <button type="button" class="button button-secondary">Cancel</button>
+        <button type="button" class="button button-primary">
+          Save changes
+        </button>
+      </div>
+    </div>
+  </body>
+</html>
