@@ -122,6 +122,20 @@ for skill_dir in "$DOTFILES"/.claude/skills/*/; do
   link_skill "$DOTFILES/.claude/skills/$skill" "$skill"
 done
 
+# Work-authored skills: versioned here like the ones above, but linked on work machines
+# only so personal machines don't carry their descriptions in every session.
+if [ "$PROFILE" = work ]; then
+  for skill_dir in "$DOTFILES"/.claude/skills.work/*/; do
+    [ -d "$skill_dir" ] || continue
+    skill=$(basename "$skill_dir")
+    if [ -n "$DRY_RUN" ] && [ -L "$skills_dir" ]; then
+      echo "  would link $skills_dir/$skill -> $DOTFILES/.claude/skills.work/$skill"
+      continue
+    fi
+    link_skill "$DOTFILES/.claude/skills.work/$skill" "$skill"
+  done
+fi
+
 link "vscode/settings.json" "$HOME/Library/Application Support/Code/User/settings.json"
 
 # Web Awesome's own component skill is generated build output, so it is not versioned
