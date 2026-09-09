@@ -70,31 +70,37 @@ When the work was already committed and Stage 3 found nothing to change, this st
 - A leading scope is fine and common in the work repos, for example `Workspaces: Outline Role Badges` or `Switch: Move Focus Ring from thumb to control`.
 - `+` reads better than "and" when joining two nouns: `Rendering + Legibility`.
 
-**Use GitHub-flavored markdown hard.** The body is a document, not a paragraph. Reach for structure whenever it makes the thing scannable:
+**Body.** A body is one plain sentence and a few bullets. The reader should get the gist from the first line and the rest in five seconds. The diff carries the detail.
 
-- Tables for anything comparative — before and after, option matrices, which file loads when. A table beats three sentences describing the same grid.
-- Bulleted lists for anything enumerable. One idea per bullet.
-- Backticks on every filename, identifier, flag, and token.
-- Task lists for follow-ups the reader might pick up.
-- `<details>` around long output such as logs or full file dumps, so the page stays readable.
+Shape:
 
-Structure and formatting:
+1. **Lead.** One sentence on the value or the reason for the work: what was wrong, or what someone can do now. A second sentence for what the PR does is fine when the first can't carry both. Never a third. Each stays under 20 words and does not run on; if it needs a comma to survive, it's two sentences.
+2. **Bullets.** Two to five. Each is a fragment under twelve words, lowercase, no trailing period. Only what a reviewer needs before opening the diff: a caveat, a follow-up, a rename, a behaviour they'd trip on. Vary the count with the PR; four every time reads as a form.
+3. **Links.** One line at the end when there is one: `Stacks on <url>.`, `Closes #123.`, companion PRs. Full URL for anything in another repo. Companions only when they're in repos with the same audience; never link a personal repo from a work PR.
 
-- Format as copy-pasteable GitHub-flavored markdown: title shown separately above, body in a single fenced ` ```markdown ` block. Don't wrap that block in an outer escape-fence — the visual padding from nested fencing is more annoying than the artifact.
-- Open with a lead paragraph (one or two sentences) framing what the PR does. If it's a follow-up to another PR, link the prior PR by URL inline.
-- Use `### Topic` (h3) headings for grouped changes. **Aim for tight** — the diff carries detail, the body just explains intent. Reach for bulleted lists when a section enumerates distinct items; stay in prose when it's one continuous thought.
-- Inline `code` liberally for filenames, identifiers, attributes, and tokens.
-- **No `## Summary` or `## Test plan` headers** — just the lead paragraph and the topic sections.
-- If there are companion PRs in other repos, list them under a `## Companion PRs` (h2) heading at the bottom with bulleted GitHub URLs.
-- Don't add Claude/co-author footers unless I ask.
-- Write the body to **Plain language** above, every time. I should never have to follow up asking for it simpler or more human-readable.
+Rules:
 
-Also follow **Markdown formatting** in CLAUDE.md — no hard wrapping in anything bound for GitHub or Slack.
+- Aim for 60 words, never over 75. Count them. A two-sentence lead eats half the budget, so it usually means three bullets, not five. If the draft is over 75, cut before showing me; don't ask.
+- No headings, no tables, no "why" paragraph. Anything that reads as a section is too much.
+- A before/after screenshot replaces any bullet describing pixels. Say where it goes; I'll attach it.
+- The delete test: if a reviewer would see it in the diff, it doesn't go in a bullet. If every bullet fails that test you've written a changelog. Start over from the lead.
+- Backticks on filenames and identifiers, at most two per line.
+- No `## Summary` or `## Test plan` headers. No Claude/co-author footers unless I ask.
+- Format as copy-pasteable GitHub-flavored markdown: title shown separately above, body in a single fenced ` ```markdown ` block. Don't wrap that block in an outer escape-fence.
+- Follow **Markdown formatting** in CLAUDE.md — no hard wrapping in anything bound for GitHub.
 
-For voice, apply **Plain language** and the prose half of **AI tells** from CLAUDE.md. Both, every time — I should never have to ask for "simpler" or "more human-readable" as a follow-up.
+Voice: **Plain language** and the prose half of **AI tells** from CLAUDE.md, every time. Not the full **Writing in my voice** treatment — no persona, no fragments-for-emphasis in the lead, no deliberate roughing up. Watch for the opposite tell too: a casual tic added to sound human ("while I was in there", "heads up that") is still a tell. Cut it.
 
-Do not apply the full **Writing in my voice** treatment. A PR description is not a blog post: no persona, no fragments-for-emphasis, no deliberate roughing up.
+What this looks like. This replaced a 200-word, two-section body for the same PR:
 
-Before showing me the summary, check it: no sentence over 25 words, no em-dash where a period would do, every piece of jargon glossed on first use. Report the sentence count and any you could not get under 25 words, with the reason. Do not just assert it reads simply — count.
+```markdown
+Clicking a `#` link on the docs site could land you thousands of pixels above the target. This waits for components to load before jumping.
 
-One summary per repo touched. Cross-link companion PRs only when they are in repos with the same audience; never link a personal repo from a work PR.
+- the page is taller before components load, so the jump missed
+- `scroll.js` already did this for reload, now for `#` links too
+- back/forward and restored scroll positions still win
+```
+
+Before showing me the summary, report the word count, and any lead sentence over 20 words or bullet over twelve, with the reason. Do not just assert it reads simply — count.
+
+One summary per repo touched.
