@@ -17,5 +17,6 @@ Rewrite it against these passes. Apply them together, not as six separate output
 - **Strip the named tells.** Kill everything in **AI tells** in `~/.claude/CLAUDE.md` — that section is the canonical list, don't keep a second copy here.
 - **Take a position.** Cut the neutral-observer, please-everyone tone. Let a clear point of view, opinions, and small contradictions come through.
 - **Un-polish it.** Writing that's too clean and too precise is itself a tell. Go sentence by sentence and rough up anything that reads overcorrected — like every word was second-guessed.
+- **Rough is not mannered.** Roughing up means shorter sentences, a stated opinion, an uneven paragraph. It never means swapping a plain phrase for a figurative one. If a pass produced "this rule earns its keep" where the source said "this rule still matters", you made it worse. When a literal phrase exists, use it. Density counts too: if the rewrite has longer sentences or fewer paragraph breaks than the source, undo that.
 
 Output only the rewritten text. Then, on a separate line below a `---`, name the one line you're least sure about and why — don't claim it's fixed.
