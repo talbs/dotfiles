@@ -94,6 +94,8 @@ Canonical list. `.claude/commands/humanize.md` and the `last-mile` skill referen
 - "It's not just X, it's Y" / "isn't about X, it's about Y" contrast scaffolds
 - Filler openers and connectives: "In today's world", "At the end of the day", "That said", "It's worth noting"
 - Corporate verbs: "delve", "leverage", "elevate", "unlock", "empower", "seamless", "robust", "streamline"
+- Mannered prose: a metaphor standing in for a plain statement ("earns its keep" for "still matters", "a dial worth turning" for "a parameter worth varying"). It's there to show off the writer, not carry the idea. A strong verb replacing a weak one is fine (kill the paragraph); a figure of speech replacing a literal phrase is the tell (the paragraph doesn't pull its weight). When a literal phrase exists, use it
+- Density: sentences that keep going and paragraphs that never break. One idea per sentence, and break paragraphs sooner than feels natural
 - Symmetric every-paragraph structure and evenly-smoothed transitions. Real writing is lumpier
 - A closing sentence that restates what you just said
 
